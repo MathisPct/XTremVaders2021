@@ -1,7 +1,10 @@
 # XTremVaders2021
 ## Introduction
-Projet réalisé dans le cadre du deuxième semestre du DUT Informatique dans une équipe de 3 personnes. 
-
+Projet réalisé dans le cadre du deuxième semestre du DUT Informatique dans une équipe de 3 personnes. <br/>
+XTremVaders est un jeu en deux dimensions inspiré du célèbre jeu Space Invaders. Il s'agit d'un shoot' em fixe.
+Le principe est de détruire des vagues d'aliens au moyen de différents canons laser en se déplaçant horizontalement sur l'écran. Les ennemis tués peuvent lâcher différents bonus qui peuvent aider le joueur a gagner la partie contre les aliens. Plus la partie avance, plus le joueur a de chance de tomber sur un ennemi surpuissant.
+<br/>
+*Ce projet a été réalisé dans un cadre pédagogique. À ce titre, il n'a pas vocation à être utilisé en-dehors de ce cadre. Les différents éléments scénaristiques, lieux et personnages utilisés dans ce projet appartiennent à leurs propriétaires respectifs.*
 # 1) Mon rôle
 Durant ce projet j'ai réaliser la conception UML du jeu mais aussi de nombreuses fonctionnalités telles que:
   - Système de mouvement des Invaders
