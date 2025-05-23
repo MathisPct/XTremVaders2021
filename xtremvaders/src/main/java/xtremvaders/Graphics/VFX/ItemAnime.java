@@ -71,6 +71,7 @@ public class ItemAnime extends GameItem{
      * @return 
      */
     public int selectSprite(int totalSprite){
+        if (totalSprite == 0) return 0; //Avoid division by zero
         int ratio = (int)animation.getLifeSpan()/totalSprite;
         int sprite = ((int)lifeSpend/ratio);    
         return sprite;
