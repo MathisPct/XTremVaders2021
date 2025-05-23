@@ -150,7 +150,7 @@ public class Partie extends GameItem {
         //INTERFACE JOUEUR 
         healthBar = new HealthBar(getGame(), 0, 0);
         scoreBar = new ScoreBar(getGame(), 0, 30);
-        getGame().addItem(healthBar);
+        // getGame().addItem(healthBar); TODO: rajouter images dashboard manquante
         getGame().addItem(scoreBar);
         scoreBar.initItems(true);     
     }   
