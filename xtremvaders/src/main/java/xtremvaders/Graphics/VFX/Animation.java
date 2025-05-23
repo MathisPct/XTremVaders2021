@@ -106,12 +106,13 @@ public class Animation {
     /**
      * Cette méthode défini les valeurs et le nom des fichiers à aller chercher
      * selon le type d'animation
+     * TODO comme sur unity et sur UE, tiliser des DataTables (classeur de paramétrage)
      */
     private void updateValues(){
         switch(type){
             case EXPLOSION1: 
                 relativeName = "explosion1/explosion1_";
-                nombreFrame = 12 ;
+                nombreFrame = 12;
                 lifeSpan = 240; 
                 break;
         
