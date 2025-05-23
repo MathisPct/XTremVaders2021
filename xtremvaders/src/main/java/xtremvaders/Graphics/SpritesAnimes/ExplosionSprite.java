@@ -19,6 +19,7 @@ public class ExplosionSprite {
     /**
      * Methode permettant de récupérer le bon filepath pour l'explosion
      * classe ralisée avant le systeme d'animation. donc méthode dépréciée
+     * //TODO wesh j'etais bouré à l'époque de l'IUT, déso les gars
      * @param sprite numero du sprite que l'on désire récupérer
      * @return 
      */
