@@ -1,20 +1,19 @@
 package xtremvaders.Entites;
 
-import xtremvaders.Utilities.Sons;
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Objets.Missiles.FabriqueMissile;
-import xtremvaders.Objets.Missiles.Missile;
-import xtremvaders.Objets.BonusJoueur.Bonus;
-import xtremvaders.Graphics.VFX.Animation;
-import xtremvaders.Graphics.VFX.TypeAnimation;
-import xtremvaders.Objets.Canon;
-import xtremvaders.Objets.Missiles.TypeMissile;
-import xtremvaders.Objets.Shields.Shield;
-import iut.Game;
-import iut.GameItem;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
+
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Graphics.VFX.Animation;
+import xtremvaders.Graphics.VFX.ItemAnime;
+import xtremvaders.Graphics.VFX.TypeAnimation;
+import xtremvaders.Objets.Canon;
+import xtremvaders.Objets.Missiles.FabriqueMissile;
+import xtremvaders.Objets.Missiles.Missile;
+import xtremvaders.Objets.Missiles.TypeMissile;
+import xtremvaders.Objets.Shields.Shield;
+import xtremvaders.Utilities.Sons;
 
 /**
  * Joueur du petitjeu
@@ -157,9 +156,9 @@ public class Joueur extends Vaisseau implements KeyListener {
             itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_DEAD);
         }
         // selection des animations a lancer selon les cas
-        if(itemAnime.getAnimationType() == TypeAnimation.SPACESHIP3_COLLISION && itemAnime.AnimationFinie()){
+        if(itemAnime.getAnimationType() == TypeAnimation.SPACESHIP3_COLLISION && itemAnime.animationFinie()){
             itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_NORMAL);
-        } else if(itemAnime.getAnimationType() == TypeAnimation.SPACESHIP3_SHOOT && itemAnime.AnimationFinie()){
+        } else if(itemAnime.getAnimationType() == TypeAnimation.SPACESHIP3_SHOOT && itemAnime.animationFinie()){
             itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_NORMAL);
         }       
         

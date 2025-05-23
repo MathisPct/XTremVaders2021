@@ -42,7 +42,7 @@ public class ItemAnime extends GameItem{
         this.lifeSpend = 0;
         this.animation = new Animation(type);
         this.item = item;
-        boolean estFini = false;
+        this.estFinie = false;
     }
     
 
@@ -227,7 +227,7 @@ public class ItemAnime extends GameItem{
      * ont été consommés
      * @return 
      */
-    public boolean AnimationFinie() {
+    public boolean animationFinie() {
         return estFinie;
     }
     
