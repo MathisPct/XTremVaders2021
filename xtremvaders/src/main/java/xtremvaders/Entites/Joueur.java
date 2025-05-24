@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.VFX.Animation;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
@@ -13,7 +14,6 @@ import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import xtremvaders.Objets.Shields.Shield;
-import xtremvaders.Utilities.Sons;
 
 /**
  * Joueur du petitjeu
@@ -102,6 +102,8 @@ public class Joueur extends Vaisseau implements KeyListener {
         left                 = false;
         //définition de la première animation du vaisseau Joueur qui sera jouée
         this.itemAnime = new ItemAnime(getGame(), "transparent", 485, 690, TypeAnimation.SPACESHIP3_NORMAL, this);
+
+        
         //resetJoueur();
     }
 
@@ -111,7 +113,8 @@ public class Joueur extends Vaisseau implements KeyListener {
         if(!estActionFreeze){
             //si le joueur peut tirer
             if(this.canShoot){
-                Sons.play("newSounds/spaceShoot");
+                AudioDirector director = AudioDirector.getInstance();
+                director.playSFX("newSounds/spaceShoot");
                 this.canShoot = false;
                 this.missile = FabriqueMissile.fabriquerUnMissile(getGame(), getMiddleX()-5, getMiddleY()-50, typeMissile, this);
                 getGame().addItem(missile);
@@ -134,17 +137,17 @@ public class Joueur extends Vaisseau implements KeyListener {
                 Missile m = (Missile) (item);
                 System.out.println(getPtVie());
                 setPtVie(getPtVie() - m.getDegat(this) );
-                Sons.play("invaderKilled");
+                AudioDirector.getInstance().playSFX("invaderKilled");
                 System.out.println(getPtVie());
                 itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_COLLISION);         
             }
             else if(item.getItemType().equals("Invader")){
                 setPtVie(-getPtVie());
-                Sons.play("newSounds/playerTouched");
+                AudioDirector.getInstance().playSFX("newSounds/playerTouched");
             }
             else if(item.getItemType().equals("Debrits")){
                 setPtVie(getPtVie()-50);
-                Sons.play("newSounds/asteroidCollision");
+                AudioDirector.getInstance().playSFX("newSounds/asteroidCollision");
             }
         }
     }
@@ -167,7 +170,7 @@ public class Joueur extends Vaisseau implements KeyListener {
         
         if(this.tempsAvantTirer <= 0){
             this.canShoot = true;
-            this.tempsAvantTirer = 1000;
+            this.tempsAvantTirer = 1000; //ms
         }
         //mouvement du joueur
         appliquerMouvement(dt);
@@ -203,12 +206,16 @@ public class Joueur extends Vaisseau implements KeyListener {
                     right = true;
                     setVitesse(getVitesse() + 0.005); //accélération + on appuie
                     break;
+
                 case KeyEvent.VK_SPACE:
                    tirer();
                    break;
                 case KeyEvent.VK_A:
                    this.canon.tirer();
                    break;
+                case KeyEvent.VK_ESCAPE: // cas ECHAP
+                    //TODO incorporate a return to Menu
+                    
             }
         }catch(Exception x){}
     }

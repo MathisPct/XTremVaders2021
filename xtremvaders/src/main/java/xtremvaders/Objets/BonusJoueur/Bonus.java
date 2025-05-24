@@ -1,14 +1,15 @@
 package xtremvaders.Objets.BonusJoueur;
 
+import java.util.HashMap;
+import java.util.Random;
+
+import iut.BoxGameItem;
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Utilities.RangProba;
-import xtremvaders.Utilities.Sons;
-import iut.Game;
-import iut.GameItem;
-import iut.BoxGameItem;
-import java.util.HashMap;
-import java.util.Random;
 
 /**
  * Le bonus appartenant à un vaisseau
@@ -62,7 +63,7 @@ public abstract class Bonus extends BoxGameItem {
             //Animation du bonus débloqué
             if(this.cptCollision == 1) {
                 lancerEffet();
-                Sons.play("newSounds/bonusUnlocked");
+                AudioDirector.getInstance().playSFX("newSounds/bonusUnlocked");
                 BonusUnlocked animation = new BonusUnlocked(getGame(), getMiddleX(), getMiddleY());
                 getGame().addItem(animation);
             }

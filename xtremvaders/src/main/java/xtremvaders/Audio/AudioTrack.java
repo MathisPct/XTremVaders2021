@@ -1,16 +1,19 @@
 package xtremvaders.Audio;
 
-public enum AudioTrack {
-    LOST_LANDS("lostLands"),
-    MYSTERIOUS("tracklist/Mysterious v6");
+public class AudioTrack {
+    public final String name;
+    public final SoundType type;
+    public final int priority;
+    public final int bpm;
 
-    private final String path;
-
-    AudioTrack(String path) {
-        this.path = path;
+    public AudioTrack(String name, SoundType type, int priority, int bpm) {
+        this.name = name;
+        this.type = type;
+        this.priority = priority;
+        this.bpm = bpm;
     }
 
     public String getPath() {
-        return path;
+        return name;
     }
 }

@@ -8,8 +8,6 @@ import javax.swing.JOptionPane;
 import iut.Game;
 import iut.GameItem;
 import iut.Vector;
-import xtremvaders.Audio.AudioDirector;
-import xtremvaders.Audio.AudioTrack;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 
@@ -45,28 +43,25 @@ public class XtremVaders2021 extends Game {
      */
     public XtremVaders2021(int width, int height) {
         super(width, height, "XtremeVaders");
-        AudioDirector audioDirector = new AudioDirector();
-        audioDirector.playMusic(AudioTrack.MYSTERIOUS.getPath());
-
-        //Sons.play("lostLands");
-
-            //Debug hitboxes
+        //Debug hitboxes
         GameItem.DRAW_HITBOX=kDebugMode;
     }
-    
+
     /**
      * Crée les items au début du jeu
      */
     @Override
     protected void createItems() { 
         joueur = new Joueur(this, 0.25d);
-        //joueur.resetJoueur();
         XtremVaders2021.getJoueur().setEstActionFreeze(true);
         joueur.setPtVie(3);
+
         this.addItem(joueur);
         this.partie = new Partie(this, joueur);
-        this.addItem(partie);        
+        this.addItem(partie);
     }
+
+
 
     protected void drawBackground(Graphics g) {
         g.setColor(Color.BLACK);

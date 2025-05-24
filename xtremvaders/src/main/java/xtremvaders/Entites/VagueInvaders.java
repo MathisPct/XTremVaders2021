@@ -1,14 +1,14 @@
 package xtremvaders.Entites;
 
 
-import xtremvaders.Utilities.TypeMouvement;
-import xtremvaders.Jeu.XtremVaders2021;
-import xtremvaders.Objets.BonusJoueur.TypeBonus;
-import xtremvaders.Utilities.Sons;
-import iut.Game;
-import iut.GameItem;
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Objets.BonusJoueur.TypeBonus;
+import xtremvaders.Utilities.TypeMouvement;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -121,7 +121,7 @@ public class VagueInvaders extends GameItem{
      */
     public void genererVague(){
         nbVagues++;
-        Sons.play("newSounds/newWave");
+        AudioDirector.getInstance().playSFX("newSounds/newWave");
         System.out.println("Nb vague = " + nbVagues);
         //initialisation de la liste des bonus de la vague
         listeBonus = new ArrayList<>();

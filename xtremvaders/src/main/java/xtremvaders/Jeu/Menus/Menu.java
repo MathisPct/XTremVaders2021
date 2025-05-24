@@ -5,10 +5,12 @@
  */
 package xtremvaders.Jeu.Menus;
 
-import iut.Game;
-import iut.GameItem;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 
 /**
  *
@@ -80,28 +82,17 @@ public abstract class Menu extends GameItem implements KeyListener{
     
     @Override
     public void keyPressed(KeyEvent e) {
-        try{
-            switch(e.getKeyCode()){
-                case KeyEvent.VK_UP:
-                    this.choice--;
-                break;
-                case KeyEvent.VK_DOWN:
-                    this.choice++;
-                break;
-                case KeyEvent.VK_ENTER:
-                    this.enterPressed = true;                  
-                break;
-                case KeyEvent.VK_ESCAPE: // cas ECHAP
-                    //si on est dans le sous menu de commandes alors
-                    if(sousMenuActif){
-                        this.sousMenuActif = false;
-                        this.menuPrincipalActif = true;
-                        scenePrincipale();
-                    }
-                break;
-            }
-        }catch(Exception x){}
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_UP) choice--;
+        else if (key == KeyEvent.VK_DOWN) choice++;
+        else if (key == KeyEvent.VK_ENTER) enterPressed = true;
+        else if (key == KeyEvent.VK_ESCAPE && sousMenuActif) {
+            sousMenuActif = false;
+            menuPrincipalActif = true;
+            scenePrincipale();
+        }
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -165,9 +156,12 @@ public abstract class Menu extends GameItem implements KeyListener{
 
     public void setNouvellePartie(boolean nouvellePartie) {
         this.nouvellePartie = nouvellePartie;
+
+        if(this.nouvellePartie == false) return;
+
+        AudioDirector director = AudioDirector.getInstance();
+
+        // Récupère les pistes correspondant à la plage de BPM
+        director.playRandomTrackInRange(125, 200);
     }
-    
-    
-    
-    
 }
