@@ -7,6 +7,10 @@ import iut.Audio;
  * @author lr468444
  */
 public class Sons extends Audio{
+
+    public static void stop(String currentMusic) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
     /**
      * Constructeur

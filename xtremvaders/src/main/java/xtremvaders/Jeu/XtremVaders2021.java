@@ -1,19 +1,26 @@
 package xtremvaders.Jeu;
 
-import xtremvaders.Utilities.Sons;
-import xtremvaders.Entites.VagueInvaders;
-import xtremvaders.Entites.Joueur;
-import java.awt.Graphics;
-import iut.Vector;
-import iut.Game;
 import java.awt.Color;
+import java.awt.Graphics;
+
 import javax.swing.JOptionPane;
+
+import iut.Game;
+import iut.GameItem;
+import iut.Vector;
+import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Audio.AudioTrack;
+import xtremvaders.Entites.Joueur;
+import xtremvaders.Entites.VagueInvaders;
 
 /**
  * ReprÃ©sente un petit jeu simple
  * @author aguidet
  */
 public class XtremVaders2021 extends Game {
+
+    private boolean kDebugMode = false;
+
     /**
      * Joueur qui est initialisé au départ
      */
@@ -38,8 +45,13 @@ public class XtremVaders2021 extends Game {
      */
     public XtremVaders2021(int width, int height) {
         super(width, height, "XtremeVaders");
-        Sons.play("lostLands");
-        //GameItem.DRAW_HITBOX=true;
+        AudioDirector audioDirector = new AudioDirector();
+        audioDirector.playMusic(AudioTrack.MYSTERIOUS.getPath());
+
+        //Sons.play("lostLands");
+
+            //Debug hitboxes
+        GameItem.DRAW_HITBOX=kDebugMode;
     }
     
     /**
