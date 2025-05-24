@@ -1,13 +1,13 @@
 package xtremvaders.Objets;
 
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.Missiles.TypeMissile;
-import xtremvaders.Utilities.Sons;
-import iut.Game;
-import iut.GameItem;
 
 /**
  * Cette classe représente le Canon du joeur
@@ -71,7 +71,7 @@ public class Canon extends GameItem {
     
     public void tirer(){      
         if(this.canShoot){
-            Sons.play("newSounds/doubleShoot");
+            AudioDirector.getInstance().playSFX("newSounds/doubleShoot");
             this.canShoot = false;
             tirerCanon();
         }            

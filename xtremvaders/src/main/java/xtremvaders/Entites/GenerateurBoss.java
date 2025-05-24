@@ -1,9 +1,10 @@
 package xtremvaders.Entites;
 
-import xtremvaders.Utilities.Sons;
+import java.awt.Graphics;
+
 import iut.Game;
 import iut.GameItem;
-import java.awt.Graphics;
+import xtremvaders.Audio.AudioDirector;
 
 /**
  * Le générateur de boss ne s'affiche pas. Il sert à créer un boss suivant 
@@ -75,7 +76,7 @@ public class GenerateurBoss extends GameItem{
      * Méthode qui génère le boss et l'ajoute au jeu
      */
     private void genererBoss(){
-        Sons.play("newSounds/bossSpawn");
+        AudioDirector.getInstance().playSFX("newSounds/bossSpawn");
         this.boss = new Boss(getGame(), getGame().getWidth()/2, 5, 0.15, 60);
         getGame().addItem(boss);
     }

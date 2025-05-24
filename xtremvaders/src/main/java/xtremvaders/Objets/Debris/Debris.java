@@ -1,13 +1,13 @@
 package xtremvaders.Objets.Debris;
 
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.BonusShield;
 import xtremvaders.Objets.Missiles.Missile;
-import xtremvaders.Utilities.Sons;
 import xtremvaders.Utilities.Utilite;
-import iut.Game;
-import iut.GameItem;
 
 
 /**
@@ -44,7 +44,7 @@ public abstract class Debris extends GameItem {
     @Override
     public void collideEffect(GameItem gi) {
         if(gi.getItemType().equals("MissileJoueur")) {
-            Sons.play("newSounds/asteroidCrack");
+            AudioDirector.getInstance().playSFX("newSounds/asteroidCrack");
             Missile m = (Missile) (gi);
             this.resistance -= m.getDegat(this);
             effetDegradation();

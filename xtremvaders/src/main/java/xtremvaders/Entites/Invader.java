@@ -1,19 +1,20 @@
 package xtremvaders.Entites;
 
-import xtremvaders.Utilities.TypeMouvement;
-import xtremvaders.Utilities.Sons;
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.Animation;
+import java.util.Random;
+
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.SpritesAnimes.EnnemiExplosion;
+import xtremvaders.Graphics.VFX.Animation;
+import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Jeu.XtremVaders2021;
-import xtremvaders.Utilities.Utilite;
-import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.BonusJoueur.Bonus;
 import xtremvaders.Objets.BonusJoueur.FabriqueBonus;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
-import iut.Game;
-import iut.GameItem;
-import java.util.Random;
+import xtremvaders.Objets.Missiles.Missile;
+import xtremvaders.Utilities.TypeMouvement;
+import xtremvaders.Utilities.Utilite;
 
 /**
  * Classe général des invaders
@@ -85,7 +86,7 @@ public abstract class Invader extends Vaisseau{
         if(!estVivant()){          
             
             //suppression de l'ennemi
-            Sons.play("newSounds/explosion");
+            AudioDirector.getInstance().playSFX("newSounds/explosion");
             getGame().remove(this);
             VagueInvaders.retirerInvader(this);     
             

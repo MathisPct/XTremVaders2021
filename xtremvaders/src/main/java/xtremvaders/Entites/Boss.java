@@ -1,18 +1,19 @@
 package xtremvaders.Entites;
 
-import xtremvaders.Graphics.VFX.Animation;
+import java.util.Random;
+
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.SpritesAnimes.BossExplosion;
+import xtremvaders.Graphics.VFX.Animation;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.Missiles.TypeMissile;
-import xtremvaders.Utilities.Sons;
 import xtremvaders.Utilities.TypeMouvement;
 import xtremvaders.Utilities.Utilite;
-import iut.Game;
-import iut.GameItem;
-import java.util.Random;
 
 /**
  * Le boss du jeu qui apparaît à partir de la 7ème vague
@@ -107,7 +108,7 @@ public class Boss extends Vaisseau{
         //si le boss n'est plus vivant
         if(!estVivant()) {
             BossExplosion explosion = new BossExplosion(getGame(), this.getMiddleX(), this.getMiddleY());
-            Sons.play("newSounds/bossDeath");
+            AudioDirector.getInstance().playSFX("newSounds/bossDeath");
             getGame().addItem(explosion);
             tirerMissileMortel();
             getGame().remove(this);
