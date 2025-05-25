@@ -22,8 +22,11 @@ import xtremvaders.Jeu.Menus.MouseMotionManager;
  */
 public class XtremVaders2021 extends Game {
 
-    private boolean kDebugMode = true;
+    private boolean kDebugMode = false;
     private boolean kMouseMode = true;
+
+    MouseMotionManager motionManager;
+    MouseClickManager clickManager; 
 
     /**
      * Joueur qui est initialisé au départ
@@ -33,6 +36,8 @@ public class XtremVaders2021 extends Game {
     private Partie partie;
    
     MainMenu mainMenu;
+
+    CursorItem mousecursor;
 
     
     
@@ -46,9 +51,11 @@ public class XtremVaders2021 extends Game {
     }
 
     public void initMouseCursor() {
-        // Curseur par défaut du système
-        MouseMotionManager motionManager = new MouseMotionManager(this);
-        MouseClickManager clickManager = new MouseClickManager(
+        mousecursor = new CursorItem(this, "cursor/cursor", 200, 200);
+        this.addItem(mousecursor); 
+
+        motionManager = new MouseMotionManager(this, mousecursor);
+        clickManager = new MouseClickManager(
             motionManager.getCursor(), 
             (event, cursor) -> {
                 this.onMouseClicked(event, cursor);
@@ -66,13 +73,13 @@ public class XtremVaders2021 extends Game {
     public void launchMainMenu() {
         mainMenu = new MainMenu(
             this,
+            //ON START A NEW GAME
             () -> {
                 spawnPlayer();
                 this.partie.nouvellePartie();
-
                 AudioDirector director = AudioDirector.getInstance();
                 director.playRandomTrackInRange(125, 200);
-                
+                hideCursor();
             }
         );
 
@@ -126,6 +133,11 @@ public class XtremVaders2021 extends Game {
         if(kMouseMode==true) {
             initMouseCursor();
         }
+    }
+
+    protected void hideCursor() {
+        System.out.println("Removing cursor");
+        this.remove(motionManager.getCursor());
     }
 
     protected void drawBackground(Graphics g) {

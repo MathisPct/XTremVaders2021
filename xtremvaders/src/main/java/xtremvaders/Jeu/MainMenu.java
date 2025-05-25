@@ -27,7 +27,7 @@ public class MainMenu {
     public boolean isCollidingWithCursor(CursorItem cursor) {
          for (MenuItemClickable item : menuItems) {
             if (item instanceof MenuItemClickable && item.getBoundingBox().intersects(cursor.getBoundingBox())) {
-                ((MenuItemClickable) item).onClick(); // Déclenche le comportement du bouton
+                ((MenuItemClickable) item).onClick(); // Déclenche le'action associée du bouton
                 System.out.println("Collide with menu item");
                 return true;
             }
