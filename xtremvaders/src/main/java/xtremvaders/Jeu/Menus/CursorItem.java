@@ -21,7 +21,7 @@ public class CursorItem extends GameItem {
 
     public void udpdateCoords(int x, int y) {
         //this.get
-        System.out.println("Souris à : " + x + ", " + y);
+        //System.out.println("Souris à : " + x + ", " + y);
 
         this.getPosition().setX(x);
         this.getPosition().setY(y);
