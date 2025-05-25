@@ -7,7 +7,7 @@ public class CursorItem extends GameItem {
 
     public CursorItem(Game g, String name, double _x, double _y) {
         super(g, name, _x, _y);
-        //TODO Auto-generated constructor stub
+        
     }
 
     public void udpdateCoords(int x, int y) {
