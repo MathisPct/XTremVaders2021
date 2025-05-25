@@ -22,6 +22,8 @@ public class XtremVaders2021 extends Game {
     private boolean kDebugMode = false;
     private boolean kMouseMode = true;
 
+
+
     /**
      * Joueur qui est initialisé au départ
      */
@@ -37,16 +39,20 @@ public class XtremVaders2021 extends Game {
     public static void main(String[] aArgs) {
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
+
+
+
+
     }
 
 
 
-    public void afficherCurseur() {
+    public void debugInfos() {
         // Curseur par défaut du système
         Cursor curseur = Cursor.getDefaultCursor();
          System.out.print("Bounds: ");
         System.out.print(this.getBounds());
-        MouseMotionManager motionManager = new MouseMotionManager();
+        MouseMotionManager motionManager = new MouseMotionManager(this);
         this.addMouseMotionListener(motionManager);
         this.setCursor(curseur); // `this` = ton Canvas (ex: Jeu)
     }
@@ -88,7 +94,7 @@ public class XtremVaders2021 extends Game {
 
     protected void setupControls() {
         if(kMouseMode==true) {
-            afficherCurseur();
+            debugInfos();
         }
 
         // Give onPress callback to player, 

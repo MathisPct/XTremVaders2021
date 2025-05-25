@@ -179,6 +179,7 @@ public class Joueur extends Vaisseau implements KeyListener {
         }
         //mouvement du joueur
         appliquerMouvement(dt);
+        //applyPhysics(dt);
     }
 
     @Override
@@ -280,6 +281,49 @@ public class Joueur extends Vaisseau implements KeyListener {
             canon.deplacerCanon(dt * getVitesse(), 180);
         }
     }
+
+    // Paramètres physiques
+    private double masse = 1.0;                // masse de l'objet
+    private double vitesseX = 0;               // vitesse horizontale actuelle
+    private double force = 500;                // force de poussée (plus elle est grande, plus l'accélération est rapide)
+    private double inertie = 0.95;             // facteur de ralentissement (0.95 = 5% de perte de vitesse par frame)
+    private double vitesseMax = 400.0;         // vitesse maximale autorisée
+
+
+    /**
+     * Appliquer le mouvement horizontal avec masse et inertie
+     * @param dt Temps écoulé en millisecondes
+     */
+    private void applyPhysics(long dt) {
+        double dtSecondes = dt / 1000.0; // conversion en secondes
+
+        // Calcul de la force appliquée selon les touches
+        double accelerationX = 0;
+        if (right && this.getRight() < getGame().getWidth()) {
+            accelerationX = force / masse;
+        } else if (left && this.getLeft() > 0) {
+            accelerationX = -force / masse;
+        }
+
+        // Appliquer l'accélération à la vitesse
+        vitesseX += accelerationX * dtSecondes;
+
+        // Appliquer inertie si aucune touche n’est pressée
+        if (!right && !left) {
+            vitesseX *= inertie; // ralentit progressivement
+            if (Math.abs(vitesseX) < 1) vitesseX = 0; // éviter la glisse infinie
+        }
+
+        // Limiter la vitesse
+        if (vitesseX > vitesseMax) vitesseX = vitesseMax;
+        if (vitesseX < -vitesseMax) vitesseX = -vitesseMax;
+
+        // Appliquer le déplacement réel
+        double dx = vitesseX * dtSecondes;
+        moveDA(Math.abs(dx), dx >= 0 ? 0 : 180); // 0 = droite, 180 = gauche
+        canon.deplacerCanon(Math.abs(dx), dx >= 0 ? 0 : 180);
+    }
+
 
     /**
      * Cette méthode permet de setter le Shield du joueur et de l'ajouter au jeu
