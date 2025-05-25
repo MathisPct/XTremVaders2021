@@ -2,36 +2,24 @@ package xtremvaders.Jeu.Menus;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.List;
-
-import xtremvaders.Jeu.XtremVaders2021;
+import java.util.function.BiConsumer;
 
 public class MouseClickManager implements MouseListener {
 
-    private final XtremVaders2021 game;
     private final CursorItem cursor;
 
-    public MouseClickManager(XtremVaders2021 g, CursorItem cursor) {
-        this.game = g;
+    private final BiConsumer<MouseEvent, CursorItem> onClickAction;
+
+
+    public MouseClickManager( CursorItem cursor, BiConsumer<MouseEvent, CursorItem> onClickAction) {
         this.cursor = cursor;
+        this.onClickAction = onClickAction;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Met à jour la position du curseur
-        cursor.udpdateCoords(e.getX(), e.getY());
-
-         System.out.println("CLICK Souris à : " + e.getX() + ", " + e.getY());
-
-        // Parcourt tous les GameItems et détecte collision avec cursor
-        List<MenuItemClickable> items = game.getAllMenuItems();
-
-        for (MenuItemClickable item : items) {
-            if (item instanceof MenuItemClickable && item.getBoundingBox().intersects(cursor.getBoundingBox())) {
-                ((MenuItemClickable) item).collideEffect(cursor); // Déclenche le comportement du bouton
-                System.out.println("Collide with menu item");
-                break; // Une seule action par clic
-            }
+        if (onClickAction != null) {
+            onClickAction.accept(e, cursor);
         }
     }
 

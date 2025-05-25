@@ -2,6 +2,7 @@ package xtremvaders.Jeu;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import iut.GameItem;
 import iut.Vector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
+import xtremvaders.Jeu.Menus.CursorItem;
 import xtremvaders.Jeu.Menus.MenuItemClickable;
 import xtremvaders.Jeu.Menus.MouseClickManager;
 import xtremvaders.Jeu.Menus.MouseMotionManager;
@@ -47,12 +49,38 @@ public class XtremVaders2021 extends Game {
     public void initMouseCursor() {
         // Curseur par défaut du système
         MouseMotionManager motionManager = new MouseMotionManager(this);
-        MouseClickManager clickManager = new MouseClickManager(this, motionManager.getCursor());
+        MouseClickManager clickManager = new MouseClickManager(
+            motionManager.getCursor(), 
+            (event, cursor) -> {
+                this.onMouseClicked(event, cursor);
+            }
+        );
         this.addMouseMotionListener(motionManager);
         this.addMouseListener(clickManager);
     }
 
-     List<MenuItemClickable> menuItems;
+    public void onMouseClicked(MouseEvent e, CursorItem cursor) {
+
+
+        // Met à jour la position du curseur
+        //cursor.udpdateCoords(e.getX(), e.getY());
+
+         System.out.println("CLICK Souris à : " + e.getX() + ", " + e.getY());
+
+        // Parcourt tous les GameItems et détecte collision avec cursor
+        List<MenuItemClickable> items = this.getAllMenuItems();
+
+        for (MenuItemClickable item : items) {
+            if (item instanceof MenuItemClickable && item.getBoundingBox().intersects(cursor.getBoundingBox())) {
+                ((MenuItemClickable) item).onClick(); // Déclenche le comportement du bouton
+                System.out.println("Collide with menu item");
+
+                break; // Une seule action par clic
+            }
+        }
+    }
+
+    List<MenuItemClickable> menuItems;
 
     public void initMenu() {
     // Coordonnées de base (centré horizontalement, espacé verticalement)
@@ -66,12 +94,9 @@ public class XtremVaders2021 extends Game {
             this,
             "cursor/select", // Remplace avec sprite bouton réel si différent
             baseX, baseY,
+            "start",
             () -> {
-                /*
                 System.out.println("Action : Nouvelle partie !");
-                setNouvellePartie(true);
-                setEnterPressed(true); // Simule le comportement clavier existant
-                */
             }
         );
 
@@ -80,12 +105,9 @@ public class XtremVaders2021 extends Game {
             this,
             "cursor/select",
             baseX, baseY + ecartY,
+            "controls",
             () -> {
-                /*
                 System.out.println("Action : Affichage des contrôles !");
-                setSousMenuActif(true);
-                setEnterPressed(true);
-                */
             }
         );
 
@@ -94,11 +116,10 @@ public class XtremVaders2021 extends Game {
             this,
             "cursor/select",
             baseX, baseY + ecartY * 2,
+            "quit",
             () -> {
-                /*
                 System.out.println("Action : Quitter le jeu");
                 System.exit(0);
-                */
             }
         );
 
