@@ -1,13 +1,15 @@
-package xtremvaders.Objets.BonusJoueur;
+package xtremvaders.Objets.BonusJoueur.immediate;
 
 import xtremvaders.Jeu.XtremVaders2021;
 import iut.Game;
+import xtremvaders.Objets.BonusJoueur.BonusManager;
+import xtremvaders.Objets.BonusJoueur.TypeBonus;
 
 /**
  * Bonus donnant un point de vie au joueur
  * @author Mathis Poncet
  */
-public class BonusMedecin extends Bonus {
+public class BonusMedecin extends BonusImmediate {
     /**
      * Point de vie que le joueur va avoir en plus en récoltant le bonus
      * Ne peut pas dépasser la barre de vie max du joueur
@@ -28,7 +30,7 @@ public class BonusMedecin extends Bonus {
     public String getItemType() {
         return "BonusMedecin";
     }
-    
+
     @Override
     public TypeBonus getTypeBonus(){
         return TypeBonus.MEDECIN;
@@ -45,20 +47,12 @@ public class BonusMedecin extends Bonus {
      * posséder le joueur
      */
     @Override
-    public void lancerEffet() {
+    public void debutEffet() {
         System.out.println("effet medecin");
         if(XtremVaders2021.getJoueur().getPtVie() + pointVieARajoute > XtremVaders2021.getJoueur().getMaxPtVie()){
             pointVieARajoute = XtremVaders2021.getJoueur().getMaxPtVie() - XtremVaders2021.getJoueur().getPtVie(); 
         }
         XtremVaders2021.getJoueur().setPtVie(XtremVaders2021.getJoueur().getPtVie() + pointVieARajoute);
-    }
-    
-    /**
-     * Le bonus est permanent et n'a pas de fin
-     * @param dt l'évolution du bonus au court du temps
-     */
-    @Override
-    public void finEffet(long dt) {
-        
+        BonusManager.getInstance().desactiverBonus();
     }
 }

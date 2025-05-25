@@ -1,6 +1,8 @@
-package xtremvaders.Objets.BonusJoueur;
+package xtremvaders.Objets.BonusJoueur.immediate;
 
 import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Objets.BonusJoueur.BonusManager;
+import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Shields.ShieldBasic;
 import iut.Game;
 import iut.GameItem;
@@ -8,7 +10,7 @@ import iut.GameItem;
 /**
  * @author David Golay
  */
-public class BonusShield extends Bonus {
+public class BonusShield extends BonusImmediate {
 
     public BonusShield(Game aG, int aX, int aY) {
         super(aG, "bonus/itemsBonus/bonusShield", aX, aY);
@@ -31,20 +33,20 @@ public class BonusShield extends Bonus {
 
     @Override
     public TypeBonus getTypeBonus() {
-        return null;       
+        return null;
     }
 
     @Override
-    public void lancerEffet() {
+    public void debutEffet() {
         //magnétisme du bonus au joeur
         int cordX = XtremVaders2021.getJoueur().getMiddleX();
         int cordY = XtremVaders2021.getJoueur().getMiddleY();
         //initialisation du shield
-        XtremVaders2021.getJoueur().initShield(new ShieldBasic(getGame(), cordX, cordY));
+        XtremVaders2021.getJoueur().initShield(new ShieldBasic(getGame(), cordX, cordY, this));
     }
 
-    @Override
-    public void finEffet(long dt) {
+
+    public void finEffet() {
+        BonusManager.getInstance().desactiverBonus();
     }
-    
 }

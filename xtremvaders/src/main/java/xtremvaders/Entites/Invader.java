@@ -1,7 +1,5 @@
 package xtremvaders.Entites;
 
-import java.util.Random;
-
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
@@ -10,11 +8,13 @@ import xtremvaders.Graphics.VFX.Animation;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.Bonus;
-import xtremvaders.Objets.BonusJoueur.FabriqueBonus;
+import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Utilities.TypeMouvement;
 import xtremvaders.Utilities.Utilite;
+
+import java.util.Random;
 
 /**
  * Classe général des invaders
@@ -41,7 +41,7 @@ public abstract class Invader extends Vaisseau{
      * Lorsque le joueur le tue, si le type du bonus est différent de aucun
      * un nouveau bonus est lâché par l'invader
      */
-    private TypeBonus typeBonus; 
+    private final TypeBonus typeBonus;
     
     /**
      * La vitesse des invaders
@@ -98,10 +98,7 @@ public abstract class Invader extends Vaisseau{
             nombreEnnemi --;
             XtremVaders2021.getJoueur().addScore();
             
-            //si l'invader possède un bonus il est lâché
-            if(this.typeBonus != TypeBonus.AUCUN){
-                getGame().addItem(FabriqueBonus.fabriquerUnBonus(getGame(), getMiddleX(), getMiddleY(), typeBonus));
-            }
+            BonusManager.getInstance().lacherBonus(getGame(), typeBonus, nombreEnnemi, nombreEnnemi);
         }
     }
 

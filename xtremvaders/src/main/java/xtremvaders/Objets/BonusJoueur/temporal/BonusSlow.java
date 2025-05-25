@@ -1,24 +1,21 @@
-package xtremvaders.Objets.BonusJoueur;
+package xtremvaders.Objets.BonusJoueur.temporal;
 
 import xtremvaders.Entites.Invader;
 import xtremvaders.Entites.VagueInvaders;
 import iut.Game;
+import xtremvaders.Objets.BonusJoueur.TypeBonus;
+
 import java.util.Random;
 
 /**
  * Bonus ralentissant toute la vague des invaders
  * @author Mathis Poncet
  */
-public class BonusSlow extends Bonus {
+public class BonusSlow extends BonusTemporel {
     /**
      * Ancienne vitesse que les invaders possédaient
      */
     private double ancienneVitesse;
-    
-    /**
-     * La durée de l'effet du bonus
-     */
-    private long dureeEffet = 1000;
     
     /**
      * Constructeur par initialisation
@@ -29,7 +26,7 @@ public class BonusSlow extends Bonus {
     public BonusSlow(Game g, int x, int y) {
         super(g, "bonus/itemsBonus/bonusSlow", x, y);
         Random r = new Random();
-        dureeEffet = r.nextInt(2000)+ 3000; //entre 3s et 5s de ralentissement des ennemis 
+        this.dureeEffet = r.nextInt(2000)+ 3000; //entre 3s et 5s de ralentissement des ennemis
     }
 
     @Override
@@ -51,28 +48,17 @@ public class BonusSlow extends Bonus {
      * L'effet est lancée et diminue la vitesse des invaders
      */
     @Override
-    public void lancerEffet() {
-        if(!isEnCours()){
-            this.changeSprite("transparent");
-            this.ancienneVitesse = VagueInvaders.vitesseVague();
-            Invader.setVitesseInvaders(0.08);
-        }
-        setEnCours(true);
+    public void debutEffet() {
+        this.changeSprite("transparent");
+        this.ancienneVitesse = VagueInvaders.vitesseVague();
+        Invader.setVitesseInvaders(0.08);
     }
     
     /**
-     * Le bonus est temporaire et est arrêté suivant l'attribut qui détermine la
-     * durée de l'effet
-     * @param dt évolution du bonus au cours du temps
+     * A la fin du bonus, on reset la vitesse
      */
     @Override
-    public void finEffet(long dt) {
-        dureeEffet -= dt;
-        if(dureeEffet <= 0){
-            setEnCours(false);
-            Invader.setVitesseInvaders(ancienneVitesse);
-            //quand le bonus est fini on l'enlève du jeu
-            getGame().remove(this);
-        }
-    } 
+    public void finEffet() {
+        Invader.setVitesseInvaders(ancienneVitesse);
+    }
 }

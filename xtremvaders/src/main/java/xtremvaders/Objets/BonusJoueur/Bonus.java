@@ -25,11 +25,6 @@ public abstract class Bonus extends BoxGameItem {
      * Vitesse de déplacement d'un bonus
      */
     private double vitesse = 0.2;
-
-    /**
-     * Indique si le bonus a été déclenché ou non 
-     */
-    private boolean enCours;
     
     /**
      * Utile pour jouer l'animation de débloquage du bonus 
@@ -46,7 +41,6 @@ public abstract class Bonus extends BoxGameItem {
     public Bonus(Game aG, String sprite ,int aX, int aY) {
         super(aG, sprite, aX, aY);
         probabilitesBonus = new HashMap<>();
-        this.enCours = false; 
         this.cptCollision = 0;
     }
 
@@ -62,14 +56,13 @@ public abstract class Bonus extends BoxGameItem {
             this.cptCollision ++;          
             //Animation du bonus débloqué
             if(this.cptCollision == 1) {
-                lancerEffet();
+                this.lancerEffet();
                 AudioDirector.getInstance().playSFX("newSounds/bonusUnlocked");
                 BonusUnlocked animation = new BonusUnlocked(getGame(), getMiddleX(), getMiddleY());
                 getGame().addItem(animation);
             }
 
-            //si l'effet n'est pas en cours on peut supprimer l'item
-            if(!isEnCours()) {
+            if(this.canRemoveItem()) {
                 getGame().remove(this);
             }
         }
@@ -89,13 +82,12 @@ public abstract class Bonus extends BoxGameItem {
     @Override
     public void evolve(long dt) {
         bouger(dt);
-        if(isEnCours()){
-           finEffet(dt);
-        }
         if(!XtremVaders2021.getJoueur().estVivant()){
             getGame().remove(this);
         }
     }
+
+    protected abstract boolean canRemoveItem();
 
     /**
      * Permet au bonus de bouger vers le bas
@@ -146,27 +138,20 @@ public abstract class Bonus extends BoxGameItem {
     public abstract TypeBonus getTypeBonus();
 
     /**
-     * Lance l'effet que va produire le bonus dans le jeu lorsque le joueur
-     * le récupère
+     * Lance l'effet
      */
-    public abstract void lancerEffet();
+    public void lancerEffet() {
+        BonusManager.getInstance().activerBonus();
+        this.debutEffet();
+    }
 
     /**
-     * Les effets temporaires de certains bonus sont arrêtés suivant la valeur
-     * de dt
-     * @param dt la valeur du cours du temps
+     * Spécifie l'effet que va produire le bonus dans le jeu lorsque le joueur
+     * le récupère
      */
-    public abstract void finEffet(long dt);
+    public abstract void debutEffet();
 
     protected double getVitesse(){
         return vitesse;
     }
-
-    protected boolean isEnCours() {
-        return enCours;
-    }
-
-    protected void setEnCours(boolean enCours) {
-        this.enCours = enCours;
-    }   
 }
