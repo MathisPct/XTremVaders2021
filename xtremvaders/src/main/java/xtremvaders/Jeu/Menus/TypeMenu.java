@@ -10,6 +10,6 @@ package xtremvaders.Jeu.Menus;
  * @author David
  */
 public enum TypeMenu {
-    DEMARRAGE, FIN;
+    DEMARRAGE, PAUSE, FIN;
     
 }

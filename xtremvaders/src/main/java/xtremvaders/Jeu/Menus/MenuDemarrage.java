@@ -10,6 +10,7 @@ import iut.GameItem;
 public class MenuDemarrage extends Menu {   
     
     private MenuAnime menuAnime;
+    private boolean paused = false;
 
     public MenuDemarrage(Game g, double _x, double _y) {
         super(g, _x, _y);
