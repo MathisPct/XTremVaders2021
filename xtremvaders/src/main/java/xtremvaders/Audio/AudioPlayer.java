@@ -12,7 +12,7 @@ public class AudioPlayer {
             return;
         }
 
-        ManagedAudio managedAudio = new ManagedAudio();
+        ManagedAudio managedAudio = new ManagedAudio(name);
 
         // 🔁 callback pour nettoyer à la fin du son
         //managedAudio.setOnEnd(() -> playingSounds.remove(name));

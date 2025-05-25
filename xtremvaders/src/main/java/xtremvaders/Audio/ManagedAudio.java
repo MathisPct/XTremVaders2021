@@ -1,28 +1,59 @@
 package xtremvaders.Audio;
 
-import iut.Audio;
 
-public class ManagedAudio {
-    private String name;
-    private Audio audio;
-    private Thread thread;
-    private boolean isRunning = false;
+public class ManagedAudio implements Runnable {
+    private final AudioV2 audio;
+    private volatile boolean stopped = false;
+    private final Thread thread;
+    private Runnable onEnd; // callback appelé quand le son est fini
+    private Float pendingVolume = null; // volume à appliquer plus tard
+
+    public ManagedAudio(String name) {
+        this.audio = new AudioV2(name);
+        this.thread = new Thread(this);
+    }
+
+    public void setOnEnd(Runnable onEnd) {
+        this.onEnd = onEnd;
+    }
 
     public void play() {
-        if (isRunning) return;
-        isRunning = true;
-        thread = new Thread(() -> {
-            audio = new Audio(name);
-            audio.run();
-            isRunning = false;
-        });
         thread.start();
+
+
     }
 
     public void stop() {
-        isRunning = false;
-        if (thread != null && thread.isAlive()) {
-            thread.interrupt(); // méthode moderne
+        stopped = true;
+        thread.interrupt(); // si jamais run() fait un sleep
+        audio.stopReimplemented();
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setVolume(float volume) {
+        if (volume < 0f) volume = 0f;
+        else if (volume > 1f) volume = 1f;
+
+        if (audio != null) {
+            audio.setVolume(volume);
+        } else {
+            // Stocke le volume pour l'appliquer plus tard
+            pendingVolume = volume;
+        }
+    }
+
+    @Override
+    public void run() {
+        if (!stopped) {
+            audio.run(); // joue le son
+        }
+        if (onEnd != null) {
+            onEnd.run(); // notification de fin
         }
     }
 }
+
+//je te redonne tout, fait la migration

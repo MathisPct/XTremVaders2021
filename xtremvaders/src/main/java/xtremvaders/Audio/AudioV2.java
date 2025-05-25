@@ -8,4 +8,19 @@ package xtremvaders.Audio;
 
 class AudioV2 {
 
+    AudioV2(String name) {
+    }
+
+    public void stopReimplemented() {
+
+    }
+
+    public void setVolume(float vol) {
+
+    }
+
+    public void run() {
+        
+    }
+
 }
