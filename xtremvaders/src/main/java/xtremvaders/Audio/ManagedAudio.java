@@ -4,8 +4,8 @@ public class ManagedAudio implements Runnable {
     private final AudioV2 audio;
     private volatile boolean stopped = false;
     private final Thread thread;
-    private Runnable onEnd; // callback appelé quand le son est fini
-    private Float pendingVolume = null; // volume à appliquer plus tard
+    private Runnable onEnd;
+    private Float pendingVolume = null;
 
     public ManagedAudio(String name) {
         this.audio = new AudioV2(name);
@@ -17,14 +17,17 @@ public class ManagedAudio implements Runnable {
     }
 
     public void play() {
+        if (pendingVolume != null) {
+            audio.setVolume(pendingVolume);
+            pendingVolume = null;
+        }
         thread.start();
-
-
     }
 
     public void stop() {
         stopped = true;
-        audio.stop(); // supposé que cette méthode existe
+        thread.interrupt(); // pour interrompre un éventuel sleep dans AudioV2
+        audio.stopReimplemented(); // méthode qui interrompt proprement le son
     }
 
     public boolean isStopped() {
@@ -32,13 +35,11 @@ public class ManagedAudio implements Runnable {
     }
 
     public void setVolume(float volume) {
-        if (volume < 0f) volume = 0f;
-        else if (volume > 1f) volume = 1f;
+        volume = Math.max(0f, Math.min(1f, volume)); // Clamp entre 0 et 1
 
         if (audio != null) {
             audio.setVolume(volume);
         } else {
-            // Stocke le volume pour l'appliquer plus tard
             pendingVolume = volume;
         }
     }
@@ -46,10 +47,10 @@ public class ManagedAudio implements Runnable {
     @Override
     public void run() {
         if (!stopped) {
-            audio.run(); // joue le son
+            audio.run(); // Attention : ce run() doit gérer le "stop" proprement !
         }
         if (onEnd != null) {
-            onEnd.run(); // notification de fin
+            onEnd.run();
         }
     }
 }

@@ -34,6 +34,6 @@ public class AudioPlayer {
         for (ManagedAudio ma : playingSounds.values()) {
             ma.stop();
         }
-        playingSounds.clear();
+       playingSounds.clear();
     }
 }

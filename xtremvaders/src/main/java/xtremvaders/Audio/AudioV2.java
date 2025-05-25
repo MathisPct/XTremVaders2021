@@ -40,6 +40,12 @@ public class AudioV2 extends Thread {
         }
     }
 
+
+     public void stopReimplemented() {
+       this.setVolume(0);
+    }
+
+
     @Override
     public void run() {
         try {
