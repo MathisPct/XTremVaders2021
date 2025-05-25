@@ -10,6 +10,15 @@ public class CursorItem extends GameItem {
         
     }
 
+    public BoundingBox getBoundingBox() {
+        return new BoundingBox(
+            this.getPosition().getX(), 
+            this.getPosition().getY(), 
+            this.getWidth(), 
+            this.getHeight()
+        );
+    }
+
     public void udpdateCoords(int x, int y) {
         //this.get
         System.out.println("Souris à : " + x + ", " + y);
@@ -23,7 +32,8 @@ public class CursorItem extends GameItem {
     }
 
     @Override
-    public void collideEffect(GameItem arg0) {
+    public void collideEffect(GameItem gi) {
+        
     }
 
     @Override
@@ -31,9 +41,11 @@ public class CursorItem extends GameItem {
         return("cursor");
     }
 
+
     @Override
-    public boolean isCollide(GameItem arg0) {
-        return true;
+    public boolean isCollide(GameItem gi) {
+        
+        return false;
     }
     
 }

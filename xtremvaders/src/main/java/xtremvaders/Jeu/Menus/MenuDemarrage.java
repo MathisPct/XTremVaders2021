@@ -16,6 +16,8 @@ public class MenuDemarrage extends Menu {
         super(g, _x, _y);
         this.menuAnime = new MenuAnime(getGame(), 0, 0);
         getGame().addItem(menuAnime);
+
+    
     }
 
     @Override

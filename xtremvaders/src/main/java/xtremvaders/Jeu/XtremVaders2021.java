@@ -1,8 +1,9 @@
 package xtremvaders.Jeu;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -11,7 +12,9 @@ import iut.GameItem;
 import iut.Vector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
-    import xtremvaders.Jeu.Menus.MouseMotionManager;
+import xtremvaders.Jeu.Menus.MenuItemClickable;
+import xtremvaders.Jeu.Menus.MouseClickManager;
+import xtremvaders.Jeu.Menus.MouseMotionManager;
 
 /**
  * ReprÃ©sente un petit jeu simple
@@ -19,7 +22,7 @@ import xtremvaders.Entites.VagueInvaders;
  */
 public class XtremVaders2021 extends Game {
 
-    private boolean kDebugMode = false;
+    private boolean kDebugMode = true;
     private boolean kMouseMode = true;
 
 
@@ -39,22 +42,79 @@ public class XtremVaders2021 extends Game {
     public static void main(String[] aArgs) {
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
-
-
-
-
     }
 
-
-
-    public void debugInfos() {
+    public void initMouseCursor() {
         // Curseur par défaut du système
-        Cursor curseur = Cursor.getDefaultCursor();
-         System.out.print("Bounds: ");
-        System.out.print(this.getBounds());
         MouseMotionManager motionManager = new MouseMotionManager(this);
+        MouseClickManager clickManager = new MouseClickManager(this, motionManager.getCursor());
         this.addMouseMotionListener(motionManager);
-        this.setCursor(curseur); // `this` = ton Canvas (ex: Jeu)
+        this.addMouseListener(clickManager);
+    }
+
+     List<MenuItemClickable> menuItems;
+
+    public void initMenu() {
+    // Coordonnées de base (centré horizontalement, espacé verticalement)
+        int baseX = this.getWidth() / 2 - 344 / 2;
+        int baseY = this.getHeight() / 2 + 50;
+
+        int ecartY = 80; // espace vertical entre les boutons
+
+        // 1. Bouton : Commencer Partie
+        MenuItemClickable boutonCommencer = new MenuItemClickable(
+            this,
+            "cursor/select", // Remplace avec sprite bouton réel si différent
+            baseX, baseY,
+            () -> {
+                /*
+                System.out.println("Action : Nouvelle partie !");
+                setNouvellePartie(true);
+                setEnterPressed(true); // Simule le comportement clavier existant
+                */
+            }
+        );
+
+        // 2. Bouton : Contrôles
+        MenuItemClickable boutonControles = new MenuItemClickable(
+            this,
+            "cursor/select",
+            baseX, baseY + ecartY,
+            () -> {
+                /*
+                System.out.println("Action : Affichage des contrôles !");
+                setSousMenuActif(true);
+                setEnterPressed(true);
+                */
+            }
+        );
+
+        // 3. Bouton : Quitter
+        MenuItemClickable boutonQuitter = new MenuItemClickable(
+            this,
+            "cursor/select",
+            baseX, baseY + ecartY * 2,
+            () -> {
+                /*
+                System.out.println("Action : Quitter le jeu");
+                System.exit(0);
+                */
+            }
+        );
+
+        // Ajout des boutons au jeu
+        this.addItem(boutonCommencer);
+        this.addItem(boutonControles);
+        this.addItem(boutonQuitter);
+
+        menuItems = new ArrayList<>();
+        menuItems.add(boutonCommencer);
+        menuItems.add(boutonControles);
+        menuItems.add(boutonQuitter);
+    }
+
+    public List<MenuItemClickable> getAllMenuItems() {
+        return menuItems;
     }
 
 
@@ -78,6 +138,7 @@ public class XtremVaders2021 extends Game {
         
         joueur = new Joueur(this, 0.35d);
         this.partie = new Partie(this, joueur);
+        initMenu();
         setupControls();
         setupDifficulty();
         
@@ -94,7 +155,7 @@ public class XtremVaders2021 extends Game {
 
     protected void setupControls() {
         if(kMouseMode==true) {
-            debugInfos();
+            initMouseCursor();
         }
 
         // Give onPress callback to player, 

@@ -15,6 +15,10 @@ public class MouseMotionManager implements MouseMotionListener {
         g.addItem(cursorInGame); // Ajout dans le jeu pour qu'il soit affiché
     }
 
+    public CursorItem getCursor() {
+        return cursorInGame;
+    }
+
     @Override
     public void mouseMoved(MouseEvent e) {
         if (cursorInGame != null) {

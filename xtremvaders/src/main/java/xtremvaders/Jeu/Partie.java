@@ -166,6 +166,8 @@ public class Partie extends GameItem {
      */
     private void lancerMenuDemarrage(){
         this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.DEMARRAGE);
+
+        
         getGame().addItem(menu);
     }
 
