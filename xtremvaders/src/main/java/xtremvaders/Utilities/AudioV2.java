@@ -13,14 +13,14 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class CustomAudio extends Thread {
+public class AudioV2 extends Thread {
 
     private AudioInputStream audioInputStream;
     private SourceDataLine line;
     private String soundFile;
     private volatile float volume = 1.0f; // volume entre 0.0 (silence) et 1.0 (max)
 
-    public CustomAudio(String s) {
+    public AudioV2(String s) {
         this.soundFile = s;
     }
 
