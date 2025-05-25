@@ -25,6 +25,11 @@ public class AudioDirector {
         return instance;
     }
 
+    public void onPauseMenuOpened() {
+        System.out.println("try to stop all sounds ...");
+        AudioPlayer.stopAll();
+    }
+
     // Joue une musique (interrompt l'ancienne si nécessaire)
     public void playMusic(String musicToPlay) {
         
