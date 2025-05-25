@@ -1,6 +1,7 @@
 package xtremvaders.Jeu;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 
 import javax.swing.JOptionPane;
@@ -10,6 +11,7 @@ import iut.GameItem;
 import iut.Vector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
+    import xtremvaders.Jeu.Menus.MouseMotionManager;
 
 /**
  * ReprÃ©sente un petit jeu simple
@@ -18,6 +20,9 @@ import xtremvaders.Entites.VagueInvaders;
 public class XtremVaders2021 extends Game {
 
     private boolean kDebugMode = false;
+    private boolean kMouseMode = true;
+
+
 
     /**
      * Joueur qui est initialisé au départ
@@ -34,7 +39,24 @@ public class XtremVaders2021 extends Game {
     public static void main(String[] aArgs) {
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
+
+
+
+
     }
+
+
+
+    public void debugInfos() {
+        // Curseur par défaut du système
+        Cursor curseur = Cursor.getDefaultCursor();
+         System.out.print("Bounds: ");
+        System.out.print(this.getBounds());
+        MouseMotionManager motionManager = new MouseMotionManager(this);
+        this.addMouseMotionListener(motionManager);
+        this.setCursor(curseur); // `this` = ton Canvas (ex: Jeu)
+    }
+
 
     /**
      * Initialise le jeu
@@ -45,24 +67,40 @@ public class XtremVaders2021 extends Game {
         super(width, height, "XtremeVaders");
         //Debug hitboxes
         GameItem.DRAW_HITBOX=kDebugMode;
+
+
     }
     /**
      * Crée les items au début du jeu
      */
     @Override
     protected void createItems() { 
-        joueur = new Joueur(this, 0.25d);
-        XtremVaders2021.getJoueur().setEstActionFreeze(true);
-        joueur.setPtVie(3);
-
-        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
-
-        this.addItem(joueur);
+        
+        joueur = new Joueur(this, 0.35d);
         this.partie = new Partie(this, joueur);
+        setupControls();
+        setupDifficulty();
+        
+        
+        this.addItem(joueur);
         this.addItem(partie);
     }
 
+    protected void setupDifficulty() {
+        joueur.setEstActionFreeze(true);
+        joueur.setPtVie(3);
+    }
 
+
+    protected void setupControls() {
+        if(kMouseMode==true) {
+            debugInfos();
+        }
+
+        // Give onPress callback to player, 
+        // -> he can pause menu
+        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
+    }
 
     protected void drawBackground(Graphics g) {
         g.setColor(Color.BLACK);
