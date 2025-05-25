@@ -3,8 +3,6 @@ package xtremvaders.Jeu;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -15,8 +13,6 @@ import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Jeu.Menus.CursorItem;
-import xtremvaders.Jeu.Menus.MenuAnime;
-import xtremvaders.Jeu.Menus.MenuItemClickable;
 import xtremvaders.Jeu.Menus.MouseClickManager;
 import xtremvaders.Jeu.Menus.MouseMotionManager;
 
@@ -29,8 +25,6 @@ public class XtremVaders2021 extends Game {
     private boolean kDebugMode = true;
     private boolean kMouseMode = true;
 
-
-
     /**
      * Joueur qui est initialisé au départ
      */
@@ -38,6 +32,9 @@ public class XtremVaders2021 extends Game {
     
     private Partie partie;
    
+    MainMenu mainMenu;
+
+    
     
     /**
      * @param aArgs the command line arguments Fonction principal (main)
@@ -62,88 +59,38 @@ public class XtremVaders2021 extends Game {
     }
 
     public void onMouseClicked(MouseEvent e, CursorItem cursor) {
-        for (MenuItemClickable item : this.getAllMenuItems()) {
-            if (item instanceof MenuItemClickable && item.getBoundingBox().intersects(cursor.getBoundingBox())) {
-                ((MenuItemClickable) item).onClick(); // Déclenche le comportement du bouton
-                System.out.println("Collide with menu item");
-                break; // Une seule action par clic
-            }
-        }
+       boolean menuItemWasClicked = mainMenu.isCollidingWithCursor(cursor);
+       System.out.print("menuItemWasClicked: " + menuItemWasClicked);
     }
 
-    List<MenuItemClickable> menuItems;
-
-    public void spawnMainMenu() {
-
-        MenuAnime menuAnime = new MenuAnime(this, 0, 0);
-        this.addItem(menuAnime);
-
-        // Coordonnées de base (centré horizontalement, espacé verticalement)
-        int baseX = this.getWidth() / 2 - 344 / 2;
-        int baseY = this.getHeight() / 2 + 50;
-
-        int ecartY = 80; // espace vertical entre les boutons
-
-        // 1. Bouton : Commencer Partie
-        MenuItemClickable boutonCommencer = new MenuItemClickable(
+    public void launchMainMenu() {
+        mainMenu = new MainMenu(
             this,
-            "cursor/select", // Remplace avec sprite bouton réel si différent
-            baseX, baseY,
-            "start",
             () -> {
-                joueur.resetJoueur();
+                spawnPlayer();
                 this.partie.nouvellePartie();
-                this.remove(menuAnime);
-                
+
                 AudioDirector director = AudioDirector.getInstance();
                 director.playRandomTrackInRange(125, 200);
-                destroyMainMenu();
+                
             }
         );
 
-        // 2. Bouton : Contrôles
-        MenuItemClickable boutonControles = new MenuItemClickable(
-            this,
-            "cursor/select",
-            baseX, baseY + ecartY,
-            "controls",
-            () -> {
-                System.out.println("Action : Affichage des contrôles !");
-            }
-        );
-
-        // 3. Bouton : Quitter
-        MenuItemClickable boutonQuitter = new MenuItemClickable(
-            this,
-            "cursor/select",
-            baseX, baseY + ecartY * 2,
-            "quit",
-            () -> {
-                System.out.println("Action : Quitter le jeu");
-                System.exit(0);
-            }
-        );
-
-        // Ajout des boutons au jeu
-        this.addItem(boutonCommencer);
-        this.addItem(boutonControles);
-        this.addItem(boutonQuitter);
-
-        menuItems = new ArrayList<>();
-        menuItems.add(boutonCommencer);
-        menuItems.add(boutonControles);
-        menuItems.add(boutonQuitter);
+        mainMenu.spawnMainMenu();
     }
 
-    public void destroyMainMenu() {
-        for (MenuItemClickable item : menuItems) {
-            this.remove(item); // Retire chaque bouton du jeu
-        }
-        menuItems.clear(); // Ensuite, vide la liste
-    }
+   
+    public void spawnPlayer() {
+        joueur = new Joueur(this, 0.35d);
+        this.partie = new Partie(this, joueur);
+        setupDifficulty();
+        this.addItem(joueur);
+        this.addItem(partie);
+        joueur.resetJoueur();
 
-    public List<MenuItemClickable> getAllMenuItems() {
-        return menuItems;
+        // Give onPress callback to player, 
+        // -> he can pause menu
+        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
     }
 
 
@@ -164,16 +111,8 @@ public class XtremVaders2021 extends Game {
      */
     @Override
     protected void createItems() { 
-        
-        joueur = new Joueur(this, 0.35d);
-        this.partie = new Partie(this, joueur);
-        spawnMainMenu();
-        setupControls();
-        setupDifficulty();
-        
-        
-        this.addItem(joueur);
-        this.addItem(partie);
+        launchMainMenu();
+        ensureControlsInitialized();
     }
 
     protected void setupDifficulty() {
@@ -182,14 +121,11 @@ public class XtremVaders2021 extends Game {
     }
 
 
-    protected void setupControls() {
+    protected void ensureControlsInitialized() {
+        //Initializing cursor
         if(kMouseMode==true) {
             initMouseCursor();
         }
-
-        // Give onPress callback to player, 
-        // -> he can pause menu
-        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
     }
 
     protected void drawBackground(Graphics g) {
