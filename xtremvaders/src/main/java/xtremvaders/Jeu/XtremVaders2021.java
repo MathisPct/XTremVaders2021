@@ -11,9 +11,11 @@ import javax.swing.JOptionPane;
 import iut.Game;
 import iut.GameItem;
 import iut.Vector;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Jeu.Menus.CursorItem;
+import xtremvaders.Jeu.Menus.MenuAnime;
 import xtremvaders.Jeu.Menus.MenuItemClickable;
 import xtremvaders.Jeu.Menus.MouseClickManager;
 import xtremvaders.Jeu.Menus.MouseMotionManager;
@@ -60,21 +62,10 @@ public class XtremVaders2021 extends Game {
     }
 
     public void onMouseClicked(MouseEvent e, CursorItem cursor) {
-
-
-        // Met à jour la position du curseur
-        //cursor.udpdateCoords(e.getX(), e.getY());
-
-         System.out.println("CLICK Souris à : " + e.getX() + ", " + e.getY());
-
-        // Parcourt tous les GameItems et détecte collision avec cursor
-        List<MenuItemClickable> items = this.getAllMenuItems();
-
-        for (MenuItemClickable item : items) {
+        for (MenuItemClickable item : this.getAllMenuItems()) {
             if (item instanceof MenuItemClickable && item.getBoundingBox().intersects(cursor.getBoundingBox())) {
                 ((MenuItemClickable) item).onClick(); // Déclenche le comportement du bouton
                 System.out.println("Collide with menu item");
-
                 break; // Une seule action par clic
             }
         }
@@ -82,8 +73,12 @@ public class XtremVaders2021 extends Game {
 
     List<MenuItemClickable> menuItems;
 
-    public void initMenu() {
-    // Coordonnées de base (centré horizontalement, espacé verticalement)
+    public void spawnMainMenu() {
+
+        MenuAnime menuAnime = new MenuAnime(this, 0, 0);
+        this.addItem(menuAnime);
+
+        // Coordonnées de base (centré horizontalement, espacé verticalement)
         int baseX = this.getWidth() / 2 - 344 / 2;
         int baseY = this.getHeight() / 2 + 50;
 
@@ -96,7 +91,13 @@ public class XtremVaders2021 extends Game {
             baseX, baseY,
             "start",
             () -> {
-                System.out.println("Action : Nouvelle partie !");
+                joueur.resetJoueur();
+                this.partie.nouvellePartie();
+                this.remove(menuAnime);
+                
+                AudioDirector director = AudioDirector.getInstance();
+                director.playRandomTrackInRange(125, 200);
+                destroyMainMenu();
             }
         );
 
@@ -134,6 +135,13 @@ public class XtremVaders2021 extends Game {
         menuItems.add(boutonQuitter);
     }
 
+    public void destroyMainMenu() {
+        for (MenuItemClickable item : menuItems) {
+            this.remove(item); // Retire chaque bouton du jeu
+        }
+        menuItems.clear(); // Ensuite, vide la liste
+    }
+
     public List<MenuItemClickable> getAllMenuItems() {
         return menuItems;
     }
@@ -159,7 +167,7 @@ public class XtremVaders2021 extends Game {
         
         joueur = new Joueur(this, 0.35d);
         this.partie = new Partie(this, joueur);
-        initMenu();
+        spawnMainMenu();
         setupControls();
         setupDifficulty();
         

@@ -74,7 +74,7 @@ public class Partie extends GameItem {
         super(g, "transparent", 0, 0);
         //Lancement menu démarrage
         this.cptIteration = 0;
-        lancerMenuDemarrage();
+        //lancerMenuDemarrage();
     }
    
 

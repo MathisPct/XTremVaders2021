@@ -10,7 +10,6 @@ import java.awt.event.KeyListener;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
 
 /**
  *
@@ -159,9 +158,6 @@ public abstract class Menu extends GameItem implements KeyListener{
 
         if(this.nouvellePartie == false) return;
 
-        AudioDirector director = AudioDirector.getInstance();
 
-        // Récupère les pistes correspondant à la plage de BPM
-        director.playRandomTrackInRange(125, 200);
     }
 }
