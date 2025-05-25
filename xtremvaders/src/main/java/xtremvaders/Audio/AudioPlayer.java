@@ -1,4 +1,4 @@
-package xtremvaders.Utilities;
+package xtremvaders.Audio;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +12,7 @@ public class AudioPlayer {
         }
 
         ManagedAudio managedAudio = new ManagedAudio(name);
+        
 
         // 🔁 callback pour nettoyer à la fin du son
         managedAudio.setOnEnd(() -> playingSounds.remove(name));
@@ -33,6 +34,6 @@ public class AudioPlayer {
         for (ManagedAudio ma : playingSounds.values()) {
             ma.stop();
         }
-        playingSounds.clear();
+       playingSounds.clear();
     }
 }

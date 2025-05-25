@@ -7,7 +7,6 @@ package xtremvaders.Jeu.Menus;
 
 import iut.Game;
 import iut.GameItem;
-
 /**
  *
  * @author David
@@ -25,6 +24,7 @@ public class MenuFin extends Menu {
 
     @Override
     public void collideEffect(GameItem gi) {
+        // aucun effet
     }
 
     @Override
@@ -34,21 +34,22 @@ public class MenuFin extends Menu {
 
     @Override
     public void evolve(long l) {
-        setCptIteration(getCptIteration()+1);      
+        setCptIteration(getCptIteration() + 1);
         normaliseChoice();
         updateSpriteMenu();
-        if(isEnterPressed()) {
-            choiceMade();           
-            if(isNouvellePartie() && getCptIteration() == 0){
+
+        if (isEnterPressed()) {
+            choiceMade();
+
+            if (isNouvellePartie() && getCptIteration() == 0) {
                 setEnterPressed(false);
-                getGame().remove(this);              
-            }
-            else if(isSousMenuActif() && getCptIteration() == 0){  
+                getGame().remove(this);
+            } else if (isSousMenuActif() && getCptIteration() == 0) {
                 setEnterPressed(false);
                 sceneSecondaire();
             }
-        } 
-    }    
+        }
+    }
 
     @Override
     public TypeMenu getTypeMenu() {
@@ -56,39 +57,49 @@ public class MenuFin extends Menu {
     }
 
     /**
-     * cette méthode est appelée dans evolve seulement après que ENTER a été pressé,
-     * elle défini les booléans des menus ou actions qui seront ensuite effectuées dans
-     * evolve. Pour cela, elle reinitialise cptItération à zero, pour que les
-     * actions correspondantes (booleans activé) soitent effectués qu'une seule fois
-     * Grace au test de la condition cptIteration = 0 dans evolve
+     * Cette méthode est appelée dans evolve seulement après que ENTER a été pressé,
+     * elle définit les booléens des menus ou actions qui seront ensuite effectuées dans
+     * evolve. Pour cela, elle réinitialise cptItération à zéro, pour que les
+     * actions correspondantes (booléens activés) soient effectuées qu'une seule fois
+     * grâce au test de la condition cptIteration = 0 dans evolve.
      */
     @Override
     public void choiceMade() {
-        switch(getChoice()) {            
-            case 0 : // cas qui declenchera une nouvelle partie
+        switch (getChoice()) {
+            case 0: // déclenche une nouvelle partie
                 setCptIteration(0);
                 setSousMenuActif(false);
                 setNouvellePartie(true);
-            break;
-            case 1 : // cas qui delenchera le menu de commande
+                break;
+            case 1: // déclenche le menu de commande (sous-menu)
                 setCptIteration(0);
-                setSousMenuActif(true); 
+                setSousMenuActif(true);
                 setMenuPrincipalActif(false);
-            break;
-            case 2 : // cas qui fermera l'application
+                break;
+            case 2: // ferme l'application
                 System.exit(0);
-            break;
-        }      
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void scenePrincipale() {
         String relativeName = "menus/menu_fin/menu_fin_";
-        switch(getChoice()) {
-            case 0 : this.changeSprite(relativeName + "00000"); break;
-            case 1 : this.changeSprite(relativeName + "00001"); break;
-            case 2 : this.changeSprite(relativeName + "00002"); break;
-            default : this.changeSprite(relativeName + "00000"); break;    
+        switch (getChoice()) {
+            case 0:
+                this.changeSprite(relativeName + "00000");
+                break;
+            case 1:
+                this.changeSprite(relativeName + "00001");
+                break;
+            case 2:
+                this.changeSprite(relativeName + "00002");
+                break;
+            default:
+                this.changeSprite(relativeName + "00000");
+                break;
         }
     }
 

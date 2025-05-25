@@ -20,8 +20,12 @@ public class FabriqueMenu {
                 menu = new MenuDemarrage(g, 0, 0);
                 menu.setNbItemMenu(3);
             break;
-            case FIN: 
+            case PAUSE: 
                 menu = new MenuFin(g, 0, 0);
+                menu.setNbItemMenu(3);
+            break;
+            case FIN: 
+                menu = new MenuPause(g, 0, 0);
                 menu.setNbItemMenu(3);
             break;
         }

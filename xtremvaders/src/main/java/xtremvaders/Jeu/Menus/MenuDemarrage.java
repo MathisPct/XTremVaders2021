@@ -1,28 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package xtremvaders.Jeu.Menus;
 
-import xtremvaders.Entites.GenerateurBoss;
-import xtremvaders.Entites.VagueInvaders;
-import xtremvaders.Graphics.Background;
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.TypeAnimation;
-import xtremvaders.Jeu.XtremVaders2021;
 import iut.Game;
 import iut.GameItem;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  *
  * @author David
  */
-public class MenuDemarrage extends Menu{   
+public class MenuDemarrage extends Menu {   
     
     private MenuAnime menuAnime;
+    private boolean paused = false;
 
     public MenuDemarrage(Game g, double _x, double _y) {
         super(g, _x, _y);
@@ -36,8 +24,7 @@ public class MenuDemarrage extends Menu{
     }
 
     @Override
-    public void collideEffect(GameItem gi) {
-    }
+    public void collideEffect(GameItem gi) {}
 
     @Override
     public String getItemType() {
@@ -46,76 +33,81 @@ public class MenuDemarrage extends Menu{
 
     @Override
     public void evolve(long l) {
-        setCptIteration(getCptIteration()+1);      
+        incrementIteration();
         normaliseChoice();
         updateSpriteMenu();
-        if(isEnterPressed()) {
-            choiceMade();           
-            if(isNouvellePartie() && getCptIteration() == 0){
-                setEnterPressed(false);
-                getGame().remove(menuAnime);
-                getGame().remove(this);               
-            }
-            else if(isSousMenuActif() && getCptIteration() == 0){  
-                setEnterPressed(false);
-                sceneSecondaire();
-            }
-        }      
+
+        if (isEnterPressed()) {
+            handleEnterPress();
+        }
     }
-    
-    /**
-     * cette méthode est appelée dans evolve seulement après que ENTER a été pressé,
-     * elle défini les booléans des menus ou actions qui seront ensuite effectuées dans
-     * evolve. Pour cela, elle reinitialise cptItération à zero, pour que les
-     * actions correspondantes (booleans activé) soitent effectués qu'une seule fois
-     * Grace au test de la condition cptIteration = 0 dans evolve
-     */
+
+    private void incrementIteration() {
+        setCptIteration(getCptIteration() + 1);
+    }
+
+    private void handleEnterPress() {
+        choiceMade();
+
+        // On ne veut exécuter ces actions qu'une seule fois, d'où la vérification cptIteration == 0
+        if (isNouvellePartie() && getCptIteration() == 0) {
+            resetEnterPressed();
+            cleanUpMenu();
+        } else if (isSousMenuActif() && getCptIteration() == 0) {
+            resetEnterPressed();
+            sceneSecondaire();
+        }
+    }
+
+    private void resetEnterPressed() {
+        setEnterPressed(false);
+    }
+
+    private void cleanUpMenu() {
+        getGame().remove(menuAnime);
+        getGame().remove(this);
+    }
+
     @Override
     public void choiceMade() {
-        switch(getChoice()) {
-            
-            case 0 : // cas qui declenchera une nouvelle partie
-                setCptIteration(0);
+        setCptIteration(0);  // On reset l’itération à chaque nouveau choix
+
+        switch (getChoice()) {
+            case 0:  // Nouvelle partie
                 setSousMenuActif(false);
                 setNouvellePartie(true);
-            break;
-            case 1 : // cas qui delenchera le menu de commande
-                setCptIteration(0);
-                setSousMenuActif(true); 
+                break;
+            case 1:  // Menu commandes (sous-menu)
+                setSousMenuActif(true);
                 setMenuPrincipalActif(false);
-            break;
-            case 2 : // cas qui fermera l'application
+                break;
+            case 2:  // Quitter
                 System.exit(0);
-            break;
+                break;
+            default:
+                // Cas par défaut (optionnel)
+                break;
         }      
     }
-      
 
-    /**
-     * Cette méthode est appelé quand on est dans le sous menu de commandes
-     * elle permet de changer le sprite de menu pour afficher l'image qui 
-     * contient toutes les commandes du jeu
-     */
     @Override
-    public void sceneSecondaire(){
+    public void sceneSecondaire() {
         this.changeSprite("menus/menu_commandes/menu_commandes");
     }
-    
-    /**
-     * Cette méthode est appelé lors du lancement du jeu (par défaut) 
-     * et lorsqu'on quitte le sous menu de commandes.
-     * Elle permet de'afficher le bon sprite de 
-     * du choix que l'on souhaite faire dans le menu principale
-     */
+
     @Override
-    public void scenePrincipale(){
-        String relativeName = "menus/menu_principal/menu_principal_";
-        switch(getChoice()) {
-            case 0 : this.changeSprite(relativeName + "00000"); break;
-            case 1 : this.changeSprite(relativeName + "00001"); break;
-            case 2 : this.changeSprite(relativeName + "00002"); break;
-            default : this.changeSprite(relativeName + "00000"); break;    
+    public void scenePrincipale() {
+        String basePath = "menus/menu_principal/menu_principal_";
+        String spriteIndex;
+
+        switch (getChoice()) {
+            case 0: spriteIndex = "00000"; break;
+            case 1: spriteIndex = "00001"; break;
+            case 2: spriteIndex = "00002"; break;
+            default: spriteIndex = "00000"; break;
         }
+
+        this.changeSprite(basePath + spriteIndex);
     }
 
     @Override

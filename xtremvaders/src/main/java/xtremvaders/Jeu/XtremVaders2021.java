@@ -46,7 +46,6 @@ public class XtremVaders2021 extends Game {
         //Debug hitboxes
         GameItem.DRAW_HITBOX=kDebugMode;
     }
-
     /**
      * Crée les items au début du jeu
      */
@@ -55,6 +54,8 @@ public class XtremVaders2021 extends Game {
         joueur = new Joueur(this, 0.25d);
         XtremVaders2021.getJoueur().setEstActionFreeze(true);
         joueur.setPtVie(3);
+
+        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
 
         this.addItem(joueur);
         this.partie = new Partie(this, joueur);

@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import xtremvaders.Utilities.AudioPlayer;
-
 public class AudioDirector {
 
     private static AudioDirector instance;
@@ -23,6 +21,11 @@ public class AudioDirector {
             instance = new AudioDirector();
         }
         return instance;
+    }
+
+    public void onPauseMenuOpened() {
+        System.out.println("try to stop all sounds ...");
+        AudioPlayer.stopAll();
     }
 
     // Joue une musique (interrompt l'ancienne si nécessaire)

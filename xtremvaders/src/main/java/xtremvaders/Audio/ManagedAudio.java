@@ -1,28 +1,56 @@
 package xtremvaders.Audio;
 
-import iut.Audio;
+public class ManagedAudio implements Runnable {
+    private final AudioV2 audio;
+    private volatile boolean stopped = false;
+    private final Thread thread;
+    private Runnable onEnd;
+    private Float pendingVolume = null;
 
-public class ManagedAudio {
-    private String name;
-    private Audio audio;
-    private Thread thread;
-    private boolean isRunning = false;
+    public ManagedAudio(String name) {
+        this.audio = new AudioV2(name);
+        this.thread = new Thread(this);
+    }
+
+    public void setOnEnd(Runnable onEnd) {
+        this.onEnd = onEnd;
+    }
 
     public void play() {
-        if (isRunning) return;
-        isRunning = true;
-        thread = new Thread(() -> {
-            audio = new Audio(name);
-            audio.run();
-            isRunning = false;
-        });
+        if (pendingVolume != null) {
+            audio.setVolume(pendingVolume);
+            pendingVolume = null;
+        }
         thread.start();
     }
 
     public void stop() {
-        isRunning = false;
-        if (thread != null && thread.isAlive()) {
-            thread.interrupt(); // méthode moderne
+        stopped = true;
+        thread.interrupt(); // pour interrompre un éventuel sleep dans AudioV2
+        audio.stopReimplemented(); // méthode qui interrompt proprement le son
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setVolume(float volume) {
+        volume = Math.max(0f, Math.min(1f, volume)); // Clamp entre 0 et 1
+
+        if (audio != null) {
+            audio.setVolume(volume);
+        } else {
+            pendingVolume = volume;
+        }
+    }
+
+    @Override
+    public void run() {
+        if (!stopped) {
+            audio.run(); // Attention : ce run() doit gérer le "stop" proprement !
+        }
+        if (onEnd != null) {
+            onEnd.run();
         }
     }
 }

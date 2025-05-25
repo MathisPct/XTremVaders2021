@@ -1,15 +1,15 @@
 package xtremvaders.Utilities;
 
-import iut.Audio;
+import xtremvaders.Audio.AudioV2;
 
 public class ManagedAudio implements Runnable {
-    private final Audio audio;
+    private final AudioV2 audio;
     private volatile boolean stopped = false;
     private final Thread thread;
     private Runnable onEnd; // callback appelé quand le son est fini
 
     public ManagedAudio(String name) {
-        this.audio = new Audio(name);
+        this.audio = new AudioV2(name);
         this.thread = new Thread(this);
     }
 
@@ -23,7 +23,11 @@ public class ManagedAudio implements Runnable {
 
     public void stop() {
         stopped = true;
-        audio.stop(); // supposé que cette méthode existe
+        System.out.println("Managing audio killing " + audio.getName());
+        
+        thread.interrupt(); // si le thread est bloqué, on le réveille proprement
+        thread.stop();
+        audio.stop();
     }
 
     public boolean isStopped() {

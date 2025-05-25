@@ -107,6 +107,11 @@ public class Joueur extends Vaisseau implements KeyListener {
         //resetJoueur();
     }
 
+    private Runnable onPressEscape;
+    public void setOnPressEscape(Runnable callback) {
+        this.onPressEscape = callback;
+    }
+
     @Override
     public void tirer() {
         //si les actions du vaisseaux ne sont pas freezées
@@ -214,7 +219,7 @@ public class Joueur extends Vaisseau implements KeyListener {
                    this.canon.tirer();
                    break;
                 case KeyEvent.VK_ESCAPE: // cas ECHAP
-                    //TODO incorporate a return to Menu
+                    onPressEscape.run();
                     
             }
         }catch(Exception x){}

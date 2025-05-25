@@ -1,16 +1,17 @@
 package xtremvaders.Jeu;
 
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.GenerateurBoss;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Graphics.Background;
 import xtremvaders.Graphics.Dashboard.HealthBar;
+import xtremvaders.Graphics.Dashboard.ScoreBar;
 import xtremvaders.Jeu.Menus.FabriqueMenu;
 import xtremvaders.Jeu.Menus.Menu;
 import xtremvaders.Jeu.Menus.TypeMenu;
-import iut.Game;
-import iut.GameItem;
-import xtremvaders.Graphics.Dashboard.ScoreBar;
 
 /**
  * Cette classe permet d'initialiser une partie et de relancer une partie
@@ -63,6 +64,11 @@ public class Partie extends GameItem {
      * éviter de générer des actions indesirables
      */
     private int cptIteration;
+
+
+    public boolean paused;
+
+  
     
     public Partie(Game g, Joueur joueur) {
         super(g, "transparent", 0, 0);
@@ -161,6 +167,31 @@ public class Partie extends GameItem {
     private void lancerMenuDemarrage(){
         this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.DEMARRAGE);
         getGame().addItem(menu);
+    }
+
+    private void saveAndQuit() {
+        //save(); //TODO to implement
+        System.exit(0);
+    }
+
+     /**
+     * Methode qui fabrique un menu de pause in game
+     */
+    public void lancerMenuPause(){
+        if(paused) { // déjà en pause ? on quitte le jeu
+            saveAndQuit();
+        }
+        paused = true;
+        scoreFin = new ScoreBar(getGame(), 385, 180);
+        getGame().addItem(scoreFin);
+        getGame().remove(scoreBar);
+        scoreBar.removeItems();
+        scoreFin.initItems(false);
+        this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.PAUSE);
+        getGame().addItem(menu);
+        getGame().remove(background);    
+        AudioDirector.getInstance().onPauseMenuOpened();
+        System.out.println("paused menu");
     }
     
     /**
