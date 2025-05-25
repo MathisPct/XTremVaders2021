@@ -20,7 +20,6 @@ public class AudioPlayer {
         managedAudio.play();
     }
 
-
     public static void stop(String name) {
         ManagedAudio managedAudio = playingSounds.get(name);
         if (managedAudio != null) {

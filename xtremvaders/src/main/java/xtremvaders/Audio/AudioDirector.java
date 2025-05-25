@@ -25,6 +25,10 @@ public class AudioDirector {
         return instance;
     }
 
+    proected void setMusicVolume() {
+        AudioPlayer.
+    }
+
     public void onPauseMenuOpened() {
         System.out.println("try to stop all sounds ...");
         AudioPlayer.stopAll();
