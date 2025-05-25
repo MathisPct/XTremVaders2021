@@ -4,7 +4,6 @@ import java.awt.Graphics;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
 
 public class MenuVolumeSlider extends GameItem {
 
@@ -46,7 +45,7 @@ public class MenuVolumeSlider extends GameItem {
         this.volume = relativeX / width;
 
         // Applique le volume au système audio
-        AudioDirector.getInstance().music.setVolume(volume);
+        //AudioDirector.getInstance().music.setVolume(volume);
 
         System.out.println("Volume ajusté à : " + volume);
     }
