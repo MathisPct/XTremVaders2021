@@ -1,15 +1,13 @@
 package xtremvaders.Utilities;
 
-import iut.Audio;
-
 public class ManagedAudio implements Runnable {
-    private final Audio audio;
+    private final CustomAudio audio;
     private volatile boolean stopped = false;
     private final Thread thread;
     private Runnable onEnd; // callback appelé quand le son est fini
 
     public ManagedAudio(String name) {
-        this.audio = new Audio(name);
+        this.audio = new CustomAudio(name);
         this.thread = new Thread(this);
     }
 
