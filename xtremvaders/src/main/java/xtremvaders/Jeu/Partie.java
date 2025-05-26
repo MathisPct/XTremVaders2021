@@ -3,6 +3,7 @@ package xtremvaders.Jeu;
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Entites.BalanceConfig;
 import xtremvaders.Entites.GenerateurBoss;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
@@ -65,7 +66,6 @@ public class Partie extends GameItem {
      */
     private int cptIteration;
 
-    public boolean paused;
     
     public Partie(Game g, Joueur joueur) {
         super(g, "transparent", 0, 0);
@@ -97,7 +97,7 @@ public class Partie extends GameItem {
     * Cette méthode est appelée pour générer les items du jeu 
     * (sauf le joueur déja créé dans la classe du jeu)
     */
-    public void startNewGame(){
+    public void startNewGame(BalanceConfig config){
         //ITEM DE JEU
         if(vagueInvaders != null){
             getGame().remove(vagueInvaders);
@@ -145,12 +145,9 @@ public class Partie extends GameItem {
             return;
         }
         GameRuntime.getGameSpeed().pause();
-        paused = true; //TODO to remove
-        //this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.PAUSE);
-        //getGame().addItem(menu);
-        getGame().remove(background);    
+
+        //TODO soundplay to move in menu logic 
         AudioDirector.getInstance().onPauseMenuOpened();
- 
     }
 
     

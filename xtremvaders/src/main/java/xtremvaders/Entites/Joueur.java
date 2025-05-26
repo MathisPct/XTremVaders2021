@@ -34,7 +34,8 @@ public class Joueur extends Vaisseau implements KeyListener {
     /**
      * utile pour attandre le temps avant de pouvoir tirer à nouveau
      */
-    private double tempsAvantTirer;
+    private double lastShotElaspedTime;
+    private double timeBeforeNextShotMs; //CONSTANT TO SET FROM DIFFICULTY
     
     /**
      * boolean qui décrit/défini si le joueur peut tirer ou non
@@ -88,7 +89,7 @@ public class Joueur extends Vaisseau implements KeyListener {
      * @param g le jeu
      * @param vitesse du joueur
      */
-    public Joueur(Game g, double vitesse) {
+    public Joueur(Game g, double vitesse, int timeBeforeNextShotMs) {
         super(g, "joueur/playerShip3", 485, 690, vitesse);
         int PV = 100;
         setPtVie(PV);
@@ -97,7 +98,8 @@ public class Joueur extends Vaisseau implements KeyListener {
         this.estActionFreeze = false;
         this.canShoot        = true;
         this._score          = 0;
-        this.tempsAvantTirer = 1000;
+        this.lastShotElaspedTime = 0;
+        this.timeBeforeNextShotMs = timeBeforeNextShotMs;
         typeMissile          = TypeMissile.NORMAL;
         right                = false;
         left                 = false;
@@ -174,11 +176,11 @@ public class Joueur extends Vaisseau implements KeyListener {
         }       
         
         itemAnime.loopAnimation(scaledDt, Animation.getAnimationSpeed());
-        this.tempsAvantTirer -= scaledDt;
+        this.lastShotElaspedTime -= scaledDt;
         
-        if(this.tempsAvantTirer <= 0){
+        if(this.lastShotElaspedTime <= 0){
             this.canShoot = true;
-            this.tempsAvantTirer = 1000; //ms
+            this.lastShotElaspedTime = timeBeforeNextShotMs; //reset du shooting
         }
         //mouvement du joueur
         appliquerMouvement(scaledDt);
@@ -369,7 +371,7 @@ public class Joueur extends Vaisseau implements KeyListener {
         this.estActionFreeze = false;
         this.canShoot        = true;
         this._score          = 0;
-        this.tempsAvantTirer = 1000;
+        this.lastShotElaspedTime = timeBeforeNextShotMs;
         typeMissile          = TypeMissile.NORMAL;
         right                = false;
         left                 = false;

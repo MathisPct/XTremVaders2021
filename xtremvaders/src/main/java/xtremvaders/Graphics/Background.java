@@ -1,13 +1,13 @@
 package xtremvaders.Graphics;
 
 
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Jeu.XtremVaders2021;
-import xtremvaders.Objets.Debris.Asteroid;
 import xtremvaders.Objets.Debris.Debris;
 import xtremvaders.Objets.Debris.FabriqueDebris;
 import xtremvaders.Objets.Debris.TypeDebris;
-import iut.Game;
-import iut.GameItem;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -49,7 +49,9 @@ public class Background extends GameItem{
     }
 
     @Override
-    public void evolve(long l) {
+    public void evolve(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
+
         if(XtremVaders2021.getJoueur().getPtVie() <= 20){
             frequenceAsteroid = 500;
         }
@@ -59,7 +61,7 @@ public class Background extends GameItem{
             Debris debris = FabriqueDebris.fabriquerUnDebris(getGame(), 0, 0, TypeDebris.ASTEROID);
             getGame().addItem(debris);
         }
-        this.moveXY(0, l*vitesseCiel/100);
+        this.moveXY(0, scaledDt*vitesseCiel/100);
         if(this.getTop()>0){
             moveXY(0, -this.getHeight()/2);
         }

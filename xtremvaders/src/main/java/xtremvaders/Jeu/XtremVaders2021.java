@@ -13,6 +13,8 @@ import iut.Game;
 import iut.GameItem;
 import iut.Vector;
 import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Entites.BalanceConfig;
+import xtremvaders.Entites.BalanceConfigFactory;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Jeu.Menus.CursorItem;
@@ -32,6 +34,8 @@ public class XtremVaders2021 extends Game {
     MouseClickManager clickManager; 
 
     GameSpeed gameSpeed;
+
+    BalanceConfig difficulty;
 
     /**
      * Joueur qui est initialisé au départ
@@ -120,25 +124,36 @@ public class XtremVaders2021 extends Game {
     }
 
     private void startNewGame() {
-        spawnPlayer();
-        this.partie.startNewGame();
+        difficulty = BalanceConfigFactory.createConfig(BalanceConfigFactory.DifficultyLevel.EASY);
+        spawnPlayer(difficulty);
+        this.partie.startNewGame(difficulty);
         AudioDirector director = AudioDirector.getInstance();
         director.playRandomTrackInRange(125, 200);
         //hideCursor();
     }
 
+
    
-    public void spawnPlayer() {
-        joueur = new Joueur(this, 0.35d);
+    public void spawnPlayer(BalanceConfig config) {
+        joueur = new Joueur(
+            this, 
+            0.35d, 
+            config.getTimeBeforeNextShotMs()
+        );
+        // Give onPressEscape callback to player, 
+        // -> he can pause menu
+        // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
+        // ca ne dvrait pas etre le joueur qui porte de Keyboard listener, 
+        // mais plutot un GameMediator ou autre router d'action
+        joueur.setOnPressEscape(() -> partie.pauseGame());
+
         this.partie = new Partie(this, joueur);
         setupDifficulty();
         this.addItem(joueur);
         this.addItem(partie);
         joueur.resetJoueur();
 
-        // Give onPress callback to player, 
-        // -> he can pause menu
-        joueur.setOnPressEscape(() -> partie.pauseGame());
+
     }
 
 
