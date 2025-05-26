@@ -81,7 +81,10 @@ public class XtremVaders2021 extends Game {
 
             pauseOverlay.setStartGameCallback(() -> {
                 System.out.println("Lancement du jeu !");
+                pauseOverlay.requestFocusInWindow();
                 startNewGame();
+                 // On redonne le focus clavier à la couche principale (this)
+                this.requestFocusInWindow();
             });
 
 
@@ -97,7 +100,6 @@ public class XtremVaders2021 extends Game {
             pauseOverlay.setVisible(true);
         }
     }
-
 
 
     public void hidePauseOverlay() {
@@ -117,24 +119,12 @@ public class XtremVaders2021 extends Game {
        System.out.print("menuItemWasClicked: " + menuItemWasClicked);
     }
 
-    public void launchMainMenu() {
-        mainMenu = new MainMenu(
-            this,
-            //ON START A NEW GAME
-            () -> {
-                startNewGame();
-            }
-        );
-
-        mainMenu.spawnMainMenu();
-    }
-
     private void startNewGame() {
         spawnPlayer();
         this.partie.startNewGame();
         AudioDirector director = AudioDirector.getInstance();
         director.playRandomTrackInRange(125, 200);
-        hideCursor();
+        //hideCursor();
     }
 
    
