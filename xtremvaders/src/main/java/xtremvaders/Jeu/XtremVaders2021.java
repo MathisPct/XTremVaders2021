@@ -1,17 +1,20 @@
 package xtremvaders.Jeu;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
 
 import iut.Game;
 import iut.GameItem;
 import iut.Vector;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
-    import xtremvaders.Jeu.Menus.MouseMotionManager;
+import xtremvaders.Jeu.Menus.CursorItem;
+import xtremvaders.Jeu.Menus.MouseClickManager;
+import xtremvaders.Jeu.Menus.MouseMotionManager;
 
 /**
  * ReprÃ©sente un petit jeu simple
@@ -22,7 +25,8 @@ public class XtremVaders2021 extends Game {
     private boolean kDebugMode = false;
     private boolean kMouseMode = true;
 
-
+    MouseMotionManager motionManager;
+    MouseClickManager clickManager; 
 
     /**
      * Joueur qui est initialisé au départ
@@ -31,6 +35,11 @@ public class XtremVaders2021 extends Game {
     
     private Partie partie;
    
+    MainMenu mainMenu;
+
+    CursorItem mousecursor;
+
+    
     
     /**
      * @param aArgs the command line arguments Fonction principal (main)
@@ -39,22 +48,56 @@ public class XtremVaders2021 extends Game {
     public static void main(String[] aArgs) {
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
-
-
-
-
     }
 
+    public void initMouseCursor() {
+        mousecursor = new CursorItem(this, "cursor/cursor", 200, 200);
+        this.addItem(mousecursor); 
 
-
-    public void debugInfos() {
-        // Curseur par défaut du système
-        Cursor curseur = Cursor.getDefaultCursor();
-         System.out.print("Bounds: ");
-        System.out.print(this.getBounds());
-        MouseMotionManager motionManager = new MouseMotionManager(this);
+        motionManager = new MouseMotionManager(this, mousecursor);
+        clickManager = new MouseClickManager(
+            motionManager.getCursor(), 
+            (event, cursor) -> {
+                this.onMouseClicked(event, cursor);
+            }
+        );
         this.addMouseMotionListener(motionManager);
-        this.setCursor(curseur); // `this` = ton Canvas (ex: Jeu)
+        this.addMouseListener(clickManager);
+    }
+
+    public void onMouseClicked(MouseEvent e, CursorItem cursor) {
+       boolean menuItemWasClicked = mainMenu.isCollidingWithCursor(cursor);
+       System.out.print("menuItemWasClicked: " + menuItemWasClicked);
+    }
+
+    public void launchMainMenu() {
+        mainMenu = new MainMenu(
+            this,
+            //ON START A NEW GAME
+            () -> {
+                spawnPlayer();
+                this.partie.nouvellePartie();
+                AudioDirector director = AudioDirector.getInstance();
+                director.playRandomTrackInRange(125, 200);
+                hideCursor();
+            }
+        );
+
+        mainMenu.spawnMainMenu();
+    }
+
+   
+    public void spawnPlayer() {
+        joueur = new Joueur(this, 0.35d);
+        this.partie = new Partie(this, joueur);
+        setupDifficulty();
+        this.addItem(joueur);
+        this.addItem(partie);
+        joueur.resetJoueur();
+
+        // Give onPress callback to player, 
+        // -> he can pause menu
+        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
     }
 
 
@@ -75,15 +118,8 @@ public class XtremVaders2021 extends Game {
      */
     @Override
     protected void createItems() { 
-        
-        joueur = new Joueur(this, 0.35d);
-        this.partie = new Partie(this, joueur);
-        setupControls();
-        setupDifficulty();
-        
-        
-        this.addItem(joueur);
-        this.addItem(partie);
+        launchMainMenu();
+        ensureControlsInitialized();
     }
 
     protected void setupDifficulty() {
@@ -92,14 +128,16 @@ public class XtremVaders2021 extends Game {
     }
 
 
-    protected void setupControls() {
+    protected void ensureControlsInitialized() {
+        //Initializing cursor
         if(kMouseMode==true) {
-            debugInfos();
+            initMouseCursor();
         }
+    }
 
-        // Give onPress callback to player, 
-        // -> he can pause menu
-        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
+    protected void hideCursor() {
+        System.out.println("Removing cursor");
+        this.remove(motionManager.getCursor());
     }
 
     protected void drawBackground(Graphics g) {
@@ -146,8 +184,4 @@ public class XtremVaders2021 extends Game {
     public static void setJoueur(Joueur joueur) {
         XtremVaders2021.joueur = joueur;
     }
-    
-    
-    
-    
 }

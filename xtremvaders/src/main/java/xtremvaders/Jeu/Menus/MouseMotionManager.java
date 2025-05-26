@@ -6,22 +6,27 @@ import iut.Game;
 
 public class MouseMotionManager implements MouseMotionListener {
 
-    private CursorItem cursorInGame;
+    private CursorItem cursor;
 
-    // ✅ Constructeur : il n'a pas de type de retour !
-    public MouseMotionManager(Game g) {
-        // On suppose que CursorItem prend un nom de sprite ou type, + coordonnées
-        this.cursorInGame = new CursorItem(g, "cursor/cursor", 200, 200);
-        g.addItem(cursorInGame); // Ajout dans le jeu pour qu'il soit affiché
+    public MouseMotionManager(Game g, CursorItem cursor) {
+        this.cursor = cursor;
+    }
+
+    public CursorItem getCursor() {
+        return cursor;
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (cursorInGame != null) {
-            cursorInGame.udpdateCoords(e.getX(), e.getY()); // Corrige typo udpdate -> update si besoin
+        if (cursor != null) {
+            cursor.udpdateCoords(e.getX(), e.getY());
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {}
+
+    protected void destroy() {
+
+    }
 }
