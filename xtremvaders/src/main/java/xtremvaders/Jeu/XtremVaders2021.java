@@ -12,7 +12,6 @@ import javax.swing.SwingUtilities;
 import iut.Game;
 import iut.GameItem;
 import iut.Vector;
-import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.BalanceConfig;
 import xtremvaders.Entites.BalanceConfigFactory;
 import xtremvaders.Entites.Joueur;
@@ -27,28 +26,22 @@ import xtremvaders.Jeu.Menus.MouseMotionManager;
  */
 public class XtremVaders2021 extends Game {
 
+    //Environnement
     private boolean kDebugMode = false;
     private boolean kMouseMode = true;
 
-    MouseMotionManager motionManager;
-    MouseClickManager clickManager; 
 
+    //Gameplay related
     GameSpeed gameSpeed;
-
     BalanceConfig difficulty;
-
-    /**
-     * Joueur qui est initialisé au départ
-     */
     private static Joueur joueur;
-    
     private Partie partie;
    
-    MainMenu mainMenu;
-
+    //Event related
+    MouseMotionManager motionManager;
+    MouseClickManager clickManager; 
     CursorItem mousecursor;
 
-    
     
     /**
      * @param aArgs the command line arguments Fonction principal (main)
@@ -60,7 +53,71 @@ public class XtremVaders2021 extends Game {
         jeu.play();
     }
 
-    public void initMouseCursor() {
+    /**
+     * Initialise le jeu
+     * @param width la largeur de l'écran
+     * @param height la hauteur de l'écran
+     */
+    public XtremVaders2021(int width, int height) {
+        super(width, height, "XtremeVaders");
+        //Debug hitboxes
+        GameItem.DRAW_HITBOX=kDebugMode;
+    }
+
+
+    /**
+     * Crée les items au début du jeu
+     * appelée par game.play()
+     */
+    @Override
+    protected void createItems() { 
+        ensureControlsInitialized();
+        showModaleMainMenu();
+    }
+
+    private void startNewGame() {
+        difficulty = BalanceConfigFactory.createConfig(BalanceConfigFactory.DifficultyLevel.EASY);
+        joueur = new Joueur(
+            this, 
+            0.35d, 
+            difficulty.getTimeBeforeNextShotMs()
+        );
+        // Give onPressEscape callback to player, 
+        // -> he can pause menu
+        // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
+        // ca ne dvrait pas etre le joueur qui porte de Keyboard listener, 
+        // mais plutot un GameMediator ou autre router d'action
+        joueur.setOnPressEscape(() -> partie.pauseGame());
+
+        joueur.setEstActionFreeze(true);
+        joueur.setPtVie(3);
+
+        this.partie = new Partie(this, joueur);
+        this.addItem(joueur);
+        this.addItem(partie);
+        joueur.resetJoueur();
+        this.partie.startNewGame(difficulty);
+        //hideCursor();
+    }
+
+
+    protected GameSpeed getGameSpeed() {
+        return gameSpeed;
+    }
+
+    protected void ensureControlsInitialized() {
+        //Initializing cursor
+        if(kMouseMode==true) {
+            initMouseCursor();
+        }
+    }
+
+    protected void hideCursor() {
+        System.out.println("Removing cursor");
+        this.remove(motionManager.getCursor());
+    }
+
+        public void initMouseCursor() {
         mousecursor = new CursorItem(this, "cursor/cursor", 200, 200);
         this.addItem(mousecursor); 
 
@@ -119,99 +176,22 @@ public class XtremVaders2021 extends Game {
 
 
     public void onMouseClicked(MouseEvent e, CursorItem cursor) {
-       boolean menuItemWasClicked = mainMenu.isCollidingWithCursor(cursor);
-       System.out.print("menuItemWasClicked: " + menuItemWasClicked);
+       //boolean menuItemWasClicked = mainMenu.isCollidingWithCursor(cursor);
+       //System.out.print("menuItemWasClicked: " + menuItemWasClicked);
     }
 
-    private void startNewGame() {
-        difficulty = BalanceConfigFactory.createConfig(BalanceConfigFactory.DifficultyLevel.EASY);
-        spawnPlayer(difficulty);
-        this.partie.startNewGame(difficulty);
-        AudioDirector director = AudioDirector.getInstance();
-        director.playRandomTrackInRange(125, 200);
-        //hideCursor();
-    }
-
-
-   
-    public void spawnPlayer(BalanceConfig config) {
-        joueur = new Joueur(
-            this, 
-            0.35d, 
-            config.getTimeBeforeNextShotMs()
-        );
-        // Give onPressEscape callback to player, 
-        // -> he can pause menu
-        // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
-        // ca ne dvrait pas etre le joueur qui porte de Keyboard listener, 
-        // mais plutot un GameMediator ou autre router d'action
-        joueur.setOnPressEscape(() -> partie.pauseGame());
-
-        this.partie = new Partie(this, joueur);
-        setupDifficulty();
-        this.addItem(joueur);
-        this.addItem(partie);
-        joueur.resetJoueur();
-
-
-    }
-
-
-    /**
-     * Initialise le jeu
-     * @param width la largeur de l'écran
-     * @param height la hauteur de l'écran
-     */
-    public XtremVaders2021(int width, int height) {
-        super(width, height, "XtremeVaders");
-        //Debug hitboxes
-        GameItem.DRAW_HITBOX=kDebugMode;
-    }
-
-
-    
-    /**
-     * Crée les items au début du jeu
-     * appelée par game.play()
-     */
     @Override
-    protected void createItems() { 
-        ensureControlsInitialized();
-        showModaleMainMenu();
+    protected void drawBackground(Graphics g) {
+        // Dessin du fond du jeu
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, getWidth(), getHeight());
     }
-
-    protected GameSpeed getGameSpeed() {
-        return gameSpeed;
-    }
-
-    protected void setupDifficulty() {
-        joueur.setEstActionFreeze(true);
-        joueur.setPtVie(3);
-    }
-
-
-    protected void ensureControlsInitialized() {
-        //Initializing cursor
-        if(kMouseMode==true) {
-            initMouseCursor();
-        }
-    }
-
-    protected void hideCursor() {
-        System.out.println("Removing cursor");
-        this.remove(motionManager.getCursor());
-    }
-
-protected void drawBackground(Graphics g) {
-    // Dessin du fond du jeu
-    g.setColor(Color.BLACK);
-    g.fillRect(0, 0, getWidth(), getHeight());
-}
 
 
     /**
      * Appelée lorsque le joueur a perdu la partie
      */
+    @Override
     protected void lost() {
         JOptionPane.showMessageDialog(this, "Vous avez perdu! \nVous ne posséder plus de vie");      
     }
@@ -219,15 +199,18 @@ protected void drawBackground(Graphics g) {
     /**
      * Appelée lorsque le joueur a perdu la partie
      */
+    @Override
     protected void win() {
         JOptionPane.showMessageDialog(this, "Et c'est gagné!!!");
     }
 
+    @Override
     protected boolean isPlayerWin() {
         // bon courage ...
         return VagueInvaders.getNbVagues() > 100;
     }
 
+    @Override
     protected boolean isPlayerLost() {
         // et oui, le joueur ne perd jamais
         // il est bloqué dans une boucle infinie
@@ -237,6 +220,7 @@ protected void drawBackground(Graphics g) {
     /**
      * gets the gravity of the Game
      */
+    @Override
     public Vector getGravity() {
         return null;
     }   

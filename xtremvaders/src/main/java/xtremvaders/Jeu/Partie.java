@@ -124,7 +124,10 @@ public class Partie extends GameItem {
         scoreBar = new ScoreBar(getGame(), 0, 30);
         // getGame().addItem(healthBar); TODO: rajouter images dashboard manquante
         getGame().addItem(scoreBar);
-        scoreBar.initItems(true);     
+        scoreBar.initItems(true);
+
+        AudioDirector director = AudioDirector.getInstance();
+        director.playRandomTrackInRange(125, 200);
     }
 
     private void endGame() {
