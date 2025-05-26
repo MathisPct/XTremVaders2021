@@ -36,8 +36,8 @@ public class PauseOverlayPanel extends JPanel {
     private Runnable startGameCallback; // ⭐ Injecté depuis l'extérieur
 
 
-    private static final int TOTAL_FRAMES = 60; // adapte selon ton nombre d’images
-    private static final int ANIMATION_DELAY_MS = 100; // vitesse (10 images/sec)
+    private static final int TOTAL_FRAMES = 50; // adapte selon ton nombre d’images
+    private static final int ANIMATION_DELAY_MS = 10;
 
     private int currentFrame = 0;
     private Timer animationTimer;
@@ -46,12 +46,12 @@ public class PauseOverlayPanel extends JPanel {
 
 private SettingsOverlayPanel settingsDialog;
 
-    public PauseOverlayPanel(int verticalOffset) {
+    public PauseOverlayPanel(int verticalOffset, int width, int height) {
         this.verticalOffset = verticalOffset;
 
         setOpaque(false);
         setLayout(null);
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(width, height));
 
         loadBackgroundImages();
         startBackgroundAnimation();
@@ -179,7 +179,7 @@ private SettingsOverlayPanel settingsDialog;
         }
 
         // Voile semi-transparent
-        g.setColor(new Color(0, 0, 0, 150));
+        g.setColor(new Color(0, 0, 0, 0));
         g.fillRect(0, 0, getWidth(), getHeight());
 
         // Texte
