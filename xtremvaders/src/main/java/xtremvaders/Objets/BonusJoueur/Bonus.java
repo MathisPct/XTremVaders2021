@@ -138,7 +138,12 @@ public abstract class Bonus extends BoxGameItem {
     public abstract TypeBonus getTypeBonus();
 
     /**
-     * Lance l'effet
+     * Lance l'effet du bonus.
+     * 
+     * Cette méthode effectue deux actions principales :
+     * 1. Active le bonus en appelant {@link BonusManager#activerBonus()}.
+     * 2. Délègue à la méthode abstraite {@link #debutEffet()} pour spécifier
+     *    l'effet concret du bonus dans le jeu.
      */
     public void lancerEffet() {
         BonusManager.getInstance().activerBonus();
