@@ -2,6 +2,7 @@ package xtremvaders.Objets.Missiles.Joueur;
 
 
 import xtremvaders.Entites.Vaisseau;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
@@ -42,6 +43,11 @@ public class MissileRapide extends MissileJoueur{
     @Override
     public void deplacement(long dt) {
         this.moveDA(dt * getVitesse(), +90);
+    }
+
+    @Override
+    public Rarity getRarity() {
+        return Rarity.RARE;
     }
 
     /**

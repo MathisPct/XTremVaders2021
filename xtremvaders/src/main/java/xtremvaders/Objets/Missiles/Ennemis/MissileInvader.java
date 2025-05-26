@@ -2,6 +2,7 @@ package xtremvaders.Objets.Missiles.Ennemis;
 
 import xtremvaders.Entites.Vaisseau;
 import xtremvaders.Graphics.SpritesAnimes.ImpactMissile;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
@@ -43,6 +44,11 @@ public class MissileInvader extends MissileEnnemi{
         this.moveDA(dt * getVitesse(), -getRandomDirection() );
         //magnetisme des missiles
         trackPlayerPosition();
+    }
+
+    @Override
+    public Rarity getRarity() {
+        return Rarity.COMMON;
     }
 
     @Override

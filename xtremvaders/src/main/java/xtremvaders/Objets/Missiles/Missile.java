@@ -94,6 +94,8 @@ public abstract class Missile extends BoxGameItem {
      */
     public abstract void deplacement(long dt);
 
+    public abstract Rarity getRarity();
+
     public double getVitesse() {
         return vitesse;
     }

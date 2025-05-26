@@ -2,6 +2,7 @@ package xtremvaders.Objets.Missiles.Joueur;
 
 import xtremvaders.Entites.Vaisseau;
 import xtremvaders.Graphics.SpritesAnimes.ImpactMissile;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
@@ -36,7 +37,12 @@ public class MissileCanon extends MissileJoueur {
     public void deplacement(long dt) {
         this.moveDA(dt * getVitesse(), getRandomDirection() );
     }
-    
+
+    @Override
+    public Rarity getRarity() {
+        return Rarity.COMMON;
+    }
+
     /**
      * Les missiles du canon possède une efficité fixe indifférente de l'item
      * qu'il a touché

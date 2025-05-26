@@ -4,6 +4,7 @@ import xtremvaders.Entites.Vaisseau;
 import xtremvaders.Graphics.SpritesAnimes.EnnemiExplosion;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
@@ -43,6 +44,11 @@ public class MissileBoss extends MissileEnnemi {
         itemAnime.loopAnimation(dt, 30);
         this.moveDA(dt * getVitesse(), -getRandomDirection() );
         this.trackPlayerPosition();
+    }
+
+    @Override
+    public Rarity getRarity() {
+        return Rarity.RARE;
     }
 
     @Override

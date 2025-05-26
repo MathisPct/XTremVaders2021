@@ -11,6 +11,7 @@ import xtremvaders.Objets.BonusJoueur.Bonus;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Missiles.Missile;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Utilities.TypeMouvement;
 import xtremvaders.Utilities.Utilite;
 
@@ -75,9 +76,10 @@ public abstract class Invader extends Vaisseau{
      */
     @Override
     public void collideEffect(GameItem gi) {
-        if(gi.getItemType().equals("MissileJoueur")){
-            Missile m = (Missile) gi;
-            setPtVie(getPtVie() - m.getDegat(this));
+        Missile missile = null;
+        if(gi.getItemType().equals("MissileJoueur")) {
+            missile = (Missile) gi;
+            setPtVie(getPtVie() - missile.getDegat(this));
         }  
         //effet de la propagation de l'explosion de la bombe nuke
         if(gi.getItemType().equals("explosionNuke")){
@@ -97,8 +99,10 @@ public abstract class Invader extends Vaisseau{
             
             nombreEnnemi --;
             XtremVaders2021.getJoueur().addScore();
-            
-            BonusManager.getInstance().lacherBonus(getGame(), typeBonus, getMiddleX(), getMiddleY());
+
+            if(missile != null && missile.getRarity() != Rarity.EPIC) {
+                BonusManager.getInstance().lacherBonus(getGame(), typeBonus, getMiddleX(), getMiddleY());
+            }
         }
     }
 
