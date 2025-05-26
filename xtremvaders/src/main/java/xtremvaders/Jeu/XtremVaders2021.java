@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import iut.Game;
 import iut.GameItem;
@@ -68,6 +71,47 @@ public class XtremVaders2021 extends Game {
         this.addMouseListener(clickManager);
     }
 
+    private PauseOverlayPanel pauseOverlay;
+
+    // Dans ta méthode showModaleMainMenu
+    public void showModaleMainMenu() {
+        if (pauseOverlay == null) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            pauseOverlay = new PauseOverlayPanel(30); // ← 🎯 Décalage vertical des boutons de menu ici
+
+            pauseOverlay.setStartGameCallback(() -> {
+                System.out.println("Lancement du jeu !");
+                startNewGame();
+            });
+
+
+            if (frame != null) {
+                pauseOverlay.setBounds(0, 0, getWidth(), getHeight());
+                pauseOverlay.setOpaque(false);
+                pauseOverlay.setVisible(true);
+                frame.getLayeredPane().add(pauseOverlay, JLayeredPane.MODAL_LAYER);
+                frame.getLayeredPane().revalidate();
+                frame.getLayeredPane().repaint();
+            }
+        } else {
+            pauseOverlay.setVisible(true);
+        }
+    }
+
+
+
+    public void hidePauseOverlay() {
+        if (pauseOverlay != null) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            if (frame != null) {
+                frame.getLayeredPane().remove(pauseOverlay);
+                frame.getLayeredPane().repaint();
+                pauseOverlay = null;
+            }
+        }
+    }
+
+
     public void onMouseClicked(MouseEvent e, CursorItem cursor) {
        boolean menuItemWasClicked = mainMenu.isCollidingWithCursor(cursor);
        System.out.print("menuItemWasClicked: " + menuItemWasClicked);
@@ -78,15 +122,19 @@ public class XtremVaders2021 extends Game {
             this,
             //ON START A NEW GAME
             () -> {
-                spawnPlayer();
-                this.partie.startNewGame();
-                AudioDirector director = AudioDirector.getInstance();
-                director.playRandomTrackInRange(125, 200);
-                hideCursor();
+                startNewGame();
             }
         );
 
         mainMenu.spawnMainMenu();
+    }
+
+    private void startNewGame() {
+        spawnPlayer();
+        this.partie.startNewGame();
+        AudioDirector director = AudioDirector.getInstance();
+        director.playRandomTrackInRange(125, 200);
+        hideCursor();
     }
 
    
@@ -123,8 +171,8 @@ public class XtremVaders2021 extends Game {
      */
     @Override
     protected void createItems() { 
-        launchMainMenu();
         ensureControlsInitialized();
+        showModaleMainMenu();
     }
 
     protected GameSpeed getGameSpeed() {
@@ -149,10 +197,11 @@ public class XtremVaders2021 extends Game {
         this.remove(motionManager.getCursor());
     }
 
-    protected void drawBackground(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(00, 0, getWidth(), getHeight());
-    }
+protected void drawBackground(Graphics g) {
+    // Dessin du fond du jeu
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, getWidth(), getHeight());
+}
 
 
     /**

@@ -152,6 +152,8 @@ public class Partie extends GameItem {
         AudioDirector.getInstance().onPauseMenuOpened();
  
     }
+
+    
     
     /**
      * Méthode qui fabrique un menu de fin
