@@ -77,7 +77,7 @@ public class XtremVaders2021 extends Game {
     public void showModaleMainMenu() {
         if (pauseOverlay == null) {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            pauseOverlay = new PauseOverlayPanel(120, getWidth(), getHeight()); // ← 🎯 Décalage vertical des boutons de menu ici
+            pauseOverlay = new PauseOverlayPanel(180, getWidth(), getHeight()); // ← 🎯 Décalage vertical des boutons de menu ici
 
             pauseOverlay.setStartGameCallback(() -> {
                 System.out.println("Lancement du jeu !");
