@@ -61,7 +61,7 @@ public class MissileNuke extends MissileJoueur{
         int degat = 20; 
         if(itemType.getItemType().equals("Invader")) degat = 200;
         else if(itemType.getItemType().equals("Boss")) degat = 25;
-        else if(itemType.getItemType().equals("Debrits")) degat = 45;
+        else if(itemType.getItemType().equals("Debris")) degat = 45;
         return degat;
     } 
 }

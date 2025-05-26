@@ -53,7 +53,7 @@ public abstract class Debris extends GameItem {
 
     @Override
     public String getItemType() {
-        return "Debrits";
+        return "Debris";
     }
 
     @Override

@@ -80,7 +80,7 @@ public abstract class Invader extends Vaisseau{
             setPtVie(getPtVie() - m.getDegat(this));
         }  
         //effet de la propagation de l'explosion de la bombe nuke
-        if(gi.getItemType().equals("explosioNuke")){
+        if(gi.getItemType().equals("explosionNuke")){
             setPtVie(getPtVie() - 100);
         }
         if(!estVivant()){          

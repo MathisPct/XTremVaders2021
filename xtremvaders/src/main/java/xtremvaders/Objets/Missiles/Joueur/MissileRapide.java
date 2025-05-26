@@ -52,7 +52,7 @@ public class MissileRapide extends MissileJoueur{
     @Override
     public int getDegat(iut.GameItem itemType) {
         int degat = 20;
-        if(itemType.getItemType().equals("Debrits")){
+        if(itemType.getItemType().equals("Debris")){
             degat = 45;
         }
         return degat;
