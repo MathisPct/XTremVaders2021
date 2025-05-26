@@ -65,16 +65,12 @@ public class Partie extends GameItem {
      */
     private int cptIteration;
 
-
     public boolean paused;
-
-  
     
     public Partie(Game g, Joueur joueur) {
         super(g, "transparent", 0, 0);
         //Lancement menu démarrage
         this.cptIteration = 0;
-        //lancerMenuDemarrage(); //TODO to remove at end of feature
     }
    
 
@@ -94,44 +90,14 @@ public class Partie extends GameItem {
 
     @Override
     public void evolve(long l) {       
-        //LANCEMENT DU JEU
-        //si le menu est de type démarrage et peut lancer une nouvelle partie
-        if(menu != null && menu.isNouvellePartie() && menu.getTypeMenu()==TypeMenu.DEMARRAGE){
-            System.out.println("LANCEMENT D'UNE PREMIERE PARTIE");
-            menu.setNouvellePartie(false);
-            getGame().remove(menu);
-            nouvellePartie();
-            XtremVaders2021.getJoueur().resetJoueur();
-        }
         
-        //FIN DE PARTIE
-        //Si le joueur est mort
-        if(!XtremVaders2021.getJoueur().estVivant()) {
-            this.cptIteration ++;
-            //LANCEMENT MENU FIN DE PARTIE [1 seule fois]
-            if(cptIteration == 1){
-                System.out.println("JOUEUR MORT");
-                XtremVaders2021.getJoueur().setEstActionFreeze(true);
-                lancerMenuFin();              
-            }
-            if(menu.getTypeMenu()==TypeMenu.FIN){
-                if(menu.isNouvellePartie()){
-                    System.out.println("LANCEMENT D'UNE NOUVELLE PARTIE");
-                    getGame().remove(background);
-                    menu.setNouvellePartie(false);
-                    XtremVaders2021.getJoueur().resetJoueur();
-                    nouvellePartie();
-                    cptIteration = 0;
-                }
-            }
-        }
     }
     
     /**
     * Cette méthode est appelée pour générer les items du jeu 
     * (sauf le joueur déja créé dans la classe du jeu)
     */
-    public void nouvellePartie(){
+    public void startNewGame(){
         //ITEM DE JEU
         if(vagueInvaders != null){
             getGame().remove(vagueInvaders);
@@ -159,14 +125,10 @@ public class Partie extends GameItem {
         // getGame().addItem(healthBar); TODO: rajouter images dashboard manquante
         getGame().addItem(scoreBar);
         scoreBar.initItems(true);     
-    }   
-    
-    /**
-     * Methode qui fabrique un menu de démarrage
-     */
-    private void lancerMenuDemarrage(){
-        this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.DEMARRAGE);
-        getGame().addItem(menu);
+    }
+
+    private void endGame() {
+
     }
 
     private void saveAndQuit() {
@@ -177,21 +139,18 @@ public class Partie extends GameItem {
      /**
      * Methode qui fabrique un menu de pause in game
      */
-    public void lancerMenuPause(){
-        if(paused) { // déjà en pause ? on quitte le jeu
-            saveAndQuit();
+    protected void pauseGame(){
+        if(GameRuntime.getGameSpeed().isPaused()) { // déjà en pause ? on resume
+            GameRuntime.getGameSpeed().resume();
+            return;
         }
-        paused = true;
-        scoreFin = new ScoreBar(getGame(), 385, 180);
-        getGame().addItem(scoreFin);
-        getGame().remove(scoreBar);
-        scoreBar.removeItems();
-        scoreFin.initItems(false);
-        this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.PAUSE);
-        getGame().addItem(menu);
+        GameRuntime.getGameSpeed().pause();
+        paused = true; //TODO to remove
+        //this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.PAUSE);
+        //getGame().addItem(menu);
         getGame().remove(background);    
         AudioDirector.getInstance().onPauseMenuOpened();
-        System.out.println("paused menu");
+ 
     }
     
     /**
@@ -207,4 +166,40 @@ public class Partie extends GameItem {
         this.menu = FabriqueMenu.FabriquerUnMenu(getGame(), TypeMenu.FIN);
         getGame().addItem(menu);
     }
+
+    /*
+    private void oldEvolve() {
+        //LANCEMENT DU JEU
+        //si le menu est de type démarrage et peut lancer une nouvelle partie
+        if(menu != null && menu.isNouvellePartie()){
+            System.out.println("LANCEMENT D'UNE PREMIERE PARTIE");
+            menu.setNouvellePartie(false);
+            getGame().remove(menu);
+            startNewGame();
+            XtremVaders2021.getJoueur().resetJoueur();
+        }
+        
+        //FIN DE PARTIE
+        //Si le joueur est mort
+        if(!XtremVaders2021.getJoueur().estVivant()) {
+            this.cptIteration ++;
+            //LANCEMENT MENU FIN DE PARTIE [1 seule fois]
+            if(cptIteration == 1){
+                System.out.println("JOUEUR MORT");
+                XtremVaders2021.getJoueur().setEstActionFreeze(true);
+                lancerMenuFin();              
+            }
+            if(menu.getTypeMenu()==TypeMenu.FIN){
+                if(menu.isNouvellePartie()){
+                    System.out.println("LANCEMENT D'UNE NOUVELLE PARTIE");
+                    getGame().remove(background);
+                    menu.setNouvellePartie(false);
+                    XtremVaders2021.getJoueur().resetJoueur();
+                    startNewGame();
+                    cptIteration = 0;
+                }
+            }
+        }
+    }
+     */
 }

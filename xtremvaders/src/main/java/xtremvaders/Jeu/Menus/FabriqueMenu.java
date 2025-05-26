@@ -16,10 +16,6 @@ public class FabriqueMenu {
     public static Menu FabriquerUnMenu(Game g, TypeMenu type){
         Menu menu = null;
         switch(type){
-            case DEMARRAGE: 
-                menu = new MenuDemarrage(g, 0, 0);
-                menu.setNbItemMenu(3);
-            break;
             case PAUSE: 
                 menu = new MenuFin(g, 0, 0);
                 menu.setNbItemMenu(3);

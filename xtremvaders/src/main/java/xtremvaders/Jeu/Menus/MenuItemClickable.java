@@ -2,6 +2,7 @@ package xtremvaders.Jeu.Menus;
 
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.Audio.AudioDirector;
 
 public class MenuItemClickable extends GameItem {
 
@@ -31,6 +32,7 @@ public class MenuItemClickable extends GameItem {
 
     public void onClick() {
         this.changeSprite("cursor/select_hover");
+        AudioDirector.getInstance().playSFX("click");
        action.run();
     }
 
@@ -41,7 +43,7 @@ public class MenuItemClickable extends GameItem {
 
     @Override
     public String getItemType() {
-        return TypeMenu.DEMARRAGE.name() + "_" + actionName;
+        return "CLICKABLE_" + actionName;
     }
 
     @Override

@@ -1,11 +1,11 @@
 package xtremvaders.Objets.Missiles;
 
-import xtremvaders.Graphics.SpritesAnimes.ExplosionNuke;
-import xtremvaders.Entites.Vaisseau;
-import xtremvaders.Jeu.XtremVaders2021;
+import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
-import iut.BoxGameItem;
+import xtremvaders.Entites.Vaisseau;
+import xtremvaders.Jeu.GameRuntime;
+import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Utilities.Utilite;
 
 public abstract class Missile extends BoxGameItem {
@@ -67,10 +67,12 @@ public abstract class Missile extends BoxGameItem {
         return "Missile";
     }
 
-    public void evolve(long dt) {            
-        deplacement(dt);
+    public void evolve(long dt) {       
+        long scaledDt = GameRuntime.getScaledDt(dt);
+     
+        deplacement(scaledDt);
         if(!this.getItemType().equals("MissileJoueur") && !this.getItemType().equals("MissileCanon") ){
-            angle += dt*vitesseRotation/10;
+            angle += scaledDt*vitesseRotation/10;
             this.setAngle(angle);    
         }      
         if(this.getTop() < 0 || this.getBottom() >= getGame().getHeight() || !XtremVaders2021.getJoueur().estVivant()){
@@ -146,9 +148,9 @@ public abstract class Missile extends BoxGameItem {
      * magnétiser à la position du joueur dans l'espace.
      * AKA les missiles thermiques
      */
-    public void trackPlayerPosition(){
+    public void trackPlayerPosition(double scaledDt){
         double cordX = XtremVaders2021.getJoueur().getMiddleX() - this.getMiddleX();
-        this.moveXY(cordX*this.getCoefficientMagnetisme()/1000, 0);
+        this.moveXY(cordX*this.getCoefficientMagnetisme()*scaledDt /4000, 0);
     }
     
     /**

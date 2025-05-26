@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xtremvaders.Jeu.Menus.CursorItem;
-import xtremvaders.Jeu.Menus.MenuAnime;
+import xtremvaders.Jeu.Menus.MainMenuBackground;
 import xtremvaders.Jeu.Menus.MenuItemClickable;
 
 public class MainMenu {
@@ -13,7 +13,7 @@ public class MainMenu {
     
     XtremVaders2021 game;
 
-    MenuAnime menuAnime;
+    MainMenuBackground menuAnime;
 
     Runnable onStartNewGame;
 
@@ -35,13 +35,17 @@ public class MainMenu {
         return false;
     }
 
+    private void openSettings() {
+        
+    }
+
     public List<MenuItemClickable> getAllMenuItems() {
         return menuItems;
     }
 
      public void spawnMainMenu() {
 
-        menuAnime = new MenuAnime(game, 0, 0);
+        menuAnime = new MainMenuBackground(game, 0, 0);
         game.addItem(menuAnime);
 
         // Coordonnées de base (centré horizontalement, espacé verticalement)

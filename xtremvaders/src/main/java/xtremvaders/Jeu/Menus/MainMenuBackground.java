@@ -5,20 +5,20 @@
  */
 package xtremvaders.Jeu.Menus;
 
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.TypeAnimation;
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.Graphics.VFX.ItemAnime;
+import xtremvaders.Graphics.VFX.TypeAnimation;
 
 /**
  *
  * @author David
  */
-public class MenuAnime extends GameItem {
+public class MainMenuBackground extends GameItem {
     
     private ItemAnime fondAnime;
 
-    public MenuAnime(Game g, double _x, double _y) {
+    public MainMenuBackground(Game g, double _x, double _y) {
         super(g, "menus/menu_principal_animation/menu_principal_animation_00000", _x, _y);
         this.fondAnime = new ItemAnime(getGame(), "menus/menu_principal_animation/menu_principal_animation_00000", 0, 0, TypeAnimation.MENU_PRINCIPAL, this);
     }

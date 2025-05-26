@@ -9,6 +9,7 @@ import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.VFX.Animation;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Objets.Canon;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
@@ -159,6 +160,8 @@ public class Joueur extends Vaisseau implements KeyListener {
 
     @Override
     public void evolve(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
+
         //Animation de mort
         if(!estVivant()){
             itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_DEAD);
@@ -170,16 +173,16 @@ public class Joueur extends Vaisseau implements KeyListener {
             itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_NORMAL);
         }       
         
-        itemAnime.loopAnimation(dt, Animation.getAnimationSpeed());
-        this.tempsAvantTirer -= dt;
+        itemAnime.loopAnimation(scaledDt, Animation.getAnimationSpeed());
+        this.tempsAvantTirer -= scaledDt;
         
         if(this.tempsAvantTirer <= 0){
             this.canShoot = true;
             this.tempsAvantTirer = 1000; //ms
         }
         //mouvement du joueur
-        appliquerMouvement(dt);
-        //applyPhysics(dt);
+        appliquerMouvement(scaledDt);
+        //applyPhysics(scaledDt);
     }
 
     @Override

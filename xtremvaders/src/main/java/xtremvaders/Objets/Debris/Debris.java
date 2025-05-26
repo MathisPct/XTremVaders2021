@@ -4,6 +4,7 @@ import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.VFX.ItemAnime;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 import xtremvaders.Objets.Missiles.Missile;
@@ -57,13 +58,14 @@ public abstract class Debris extends GameItem {
     }
 
     @Override
-    public void evolve(long l) {
+    public void evolve(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
         //suppresion des debris si le joueur est mort
         if(!XtremVaders2021.getJoueur().estVivant()) getGame().remove(this);
-        angle += l*vitesseRotation/100;
+        angle += scaledDt*vitesseRotation/100;
         this.setAngle(angle);    
-        itemAnime.playOnce(l);
-        this.moveXY(0, (int)l*vitesse/100);
+        itemAnime.playOnce(scaledDt);
+        this.moveXY(0, (int)scaledDt*vitesse/100);
         //si le débris se casse
         if(resistance <= 0) {
             effetExplosion();

@@ -1,7 +1,8 @@
 package xtremvaders.Objets.BonusJoueur.immediate;
 
-import xtremvaders.Jeu.XtremVaders2021;
 import iut.Game;
+import xtremvaders.Jeu.GameRuntime;
+import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 
@@ -38,7 +39,8 @@ public class BonusMedecin extends BonusImmediate {
     
     @Override
     public void bouger(long dt){
-        moveDA(dt * getVitesse(), -90);
+        long scaledDt = GameRuntime.getScaledDt(dt);
+        moveDA(scaledDt * getVitesse(), -90);
     }
     
     /**

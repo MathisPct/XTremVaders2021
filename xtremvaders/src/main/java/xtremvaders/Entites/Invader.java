@@ -1,11 +1,14 @@
 package xtremvaders.Entites;
 
+import java.util.Random;
+
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.SpritesAnimes.EnnemiExplosion;
 import xtremvaders.Graphics.VFX.Animation;
 import xtremvaders.Graphics.VFX.ItemAnime;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.Bonus;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
@@ -13,8 +16,6 @@ import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Utilities.TypeMouvement;
 import xtremvaders.Utilities.Utilite;
-
-import java.util.Random;
 
 /**
  * Classe général des invaders
@@ -113,15 +114,33 @@ public abstract class Invader extends Vaisseau{
 
     @Override
     public void evolve(long dt) {
-        super.evolve(dt);
-        itemAnime.loopAnimation(dt+Utilite.randomBetweenRange(0, 120),  Animation.getAnimationSpeed());
-        tempAvantTir -= dt;
-        if(tempAvantTir <= 0){
+        long scaledDt = GameRuntime.getScaledDt(dt);
+        super.evolve(scaledDt);
+
+        itemAnime.loopAnimation(
+            scaledDt + Utilite.randomBetweenRange(0, 120),
+            Animation.getAnimationSpeed()
+        );
+
+        tempAvantTir -= scaledDt;
+
+        if (tempAvantTir <= 0) {
             tirer();
-            Random r = new Random();
-            tempAvantTir = r.nextInt(7000)+3000; //entre 3 et 10s
+
+            float timeSpeed = GameRuntime.getGameSpeed().getTimeSpeed();
+            float minDelay = 3000.0f * timeSpeed;
+            float maxDelay = 10000.0f * timeSpeed; // 3000 + 10000 (entre 3 à 10 secondes)
+
+            tempAvantTir = (long) randomBetweenRange((long) minDelay, (long) maxDelay);
         }
     }
+
+    // Méthode utilitaire //TODO à externaliser
+    public static long randomBetweenRange(long min, long max) {
+        if (max <= min) return min; // éviter erreurs
+        return min + (long)(Math.random() * (max - min));
+    }
+
     
     /**
      * Permet de savoir quel côté a été touché par un invader

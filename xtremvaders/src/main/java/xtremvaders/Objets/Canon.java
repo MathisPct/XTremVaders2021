@@ -4,6 +4,7 @@ import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.Joueur;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
@@ -51,9 +52,10 @@ public class Canon extends GameItem {
     }
 
     @Override
-    public void evolve(long l) {
+    public void evolve(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
         if(!XtremVaders2021.getJoueur().estVivant()) getGame().remove(this);
-        this.tempsAvantTirer -= l;
+        this.tempsAvantTirer -= scaledDt;
         
         if(this.tempsAvantTirer <= 0){
             this.canShoot = true;

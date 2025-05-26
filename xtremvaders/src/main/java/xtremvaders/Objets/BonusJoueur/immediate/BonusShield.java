@@ -1,11 +1,12 @@
 package xtremvaders.Objets.BonusJoueur.immediate;
 
+import iut.Game;
+import iut.GameItem;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Shields.ShieldBasic;
-import iut.Game;
-import iut.GameItem;
 
 /**
  * @author David Golay
@@ -28,7 +29,8 @@ public class BonusShield extends BonusImmediate {
 
     @Override
     public void bouger(long dt) {
-        moveDA(dt * getVitesse(), -90);   
+        long scaledDt = GameRuntime.getScaledDt(dt);
+        moveDA(scaledDt * getVitesse(), -90);   
     }
 
     @Override

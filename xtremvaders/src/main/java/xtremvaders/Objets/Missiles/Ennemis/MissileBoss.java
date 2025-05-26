@@ -1,12 +1,13 @@
 package xtremvaders.Objets.Missiles.Ennemis;
 
+import iut.Game;
+import iut.GameItem;
 import xtremvaders.Entites.Vaisseau;
 import xtremvaders.Graphics.SpritesAnimes.EnnemiExplosion;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Objets.Missiles.TypeMissile;
-import iut.Game;
-import iut.GameItem;
 
 /**
  *
@@ -40,9 +41,11 @@ public class MissileBoss extends MissileEnnemi {
 
     @Override
     public void deplacement(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
+
         itemAnime.loopAnimation(dt, 30);
-        this.moveDA(dt * getVitesse(), -getRandomDirection() );
-        this.trackPlayerPosition();
+        this.moveDA(scaledDt * getVitesse(), -getRandomDirection() );
+        this.trackPlayerPosition(scaledDt);
     }
 
     @Override

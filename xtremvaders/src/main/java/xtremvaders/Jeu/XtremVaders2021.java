@@ -28,6 +28,8 @@ public class XtremVaders2021 extends Game {
     MouseMotionManager motionManager;
     MouseClickManager clickManager; 
 
+    GameSpeed gameSpeed;
+
     /**
      * Joueur qui est initialisé au départ
      */
@@ -46,6 +48,7 @@ public class XtremVaders2021 extends Game {
      * Fonction principale du jeu
      */
     public static void main(String[] aArgs) {
+        GameRuntime.init(new GameSpeed());
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
     }
@@ -76,7 +79,7 @@ public class XtremVaders2021 extends Game {
             //ON START A NEW GAME
             () -> {
                 spawnPlayer();
-                this.partie.nouvellePartie();
+                this.partie.startNewGame();
                 AudioDirector director = AudioDirector.getInstance();
                 director.playRandomTrackInRange(125, 200);
                 hideCursor();
@@ -97,7 +100,7 @@ public class XtremVaders2021 extends Game {
 
         // Give onPress callback to player, 
         // -> he can pause menu
-        joueur.setOnPressEscape(() -> partie.lancerMenuPause());
+        joueur.setOnPressEscape(() -> partie.pauseGame());
     }
 
 
@@ -110,16 +113,22 @@ public class XtremVaders2021 extends Game {
         super(width, height, "XtremeVaders");
         //Debug hitboxes
         GameItem.DRAW_HITBOX=kDebugMode;
-
-
     }
+
+
+    
     /**
      * Crée les items au début du jeu
+     * appelée par game.play()
      */
     @Override
     protected void createItems() { 
         launchMainMenu();
         ensureControlsInitialized();
+    }
+
+    protected GameSpeed getGameSpeed() {
+        return gameSpeed;
     }
 
     protected void setupDifficulty() {
@@ -144,6 +153,7 @@ public class XtremVaders2021 extends Game {
         g.setColor(Color.BLACK);
         g.fillRect(00, 0, getWidth(), getHeight());
     }
+
 
     /**
      * Appelée lorsque le joueur a perdu la partie

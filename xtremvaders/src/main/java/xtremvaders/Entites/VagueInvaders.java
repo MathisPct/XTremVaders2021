@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Utilities.TypeMouvement;
 
@@ -106,12 +107,14 @@ public class VagueInvaders extends GameItem{
     
     @Override
     public void evolve(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
+
         //génération de la vague s'il n'y a pas d'invaders sur la carte
         if(invaders.isEmpty()){
             this.genererVague();
         }
-        bouger(dt * Invader.getVitesseInvaders());
-     }
+        bouger(scaledDt * Invader.getVitesseInvaders());
+    }
     
     /**
      * Génére les invaders par ligne et colonne suivant le nombre de ligne voulue

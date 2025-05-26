@@ -1,10 +1,11 @@
 package xtremvaders.Objets.Missiles.Ennemis;
 
-import xtremvaders.Entites.Vaisseau;
-import xtremvaders.Graphics.SpritesAnimes.ImpactMissile;
-import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.Entites.Vaisseau;
+import xtremvaders.Graphics.SpritesAnimes.ImpactMissile;
+import xtremvaders.Jeu.GameRuntime;
+import xtremvaders.Objets.Missiles.TypeMissile;
 
 /**
  * Missile par défaut des invader
@@ -39,10 +40,12 @@ public class MissileInvader extends MissileEnnemi{
 
     @Override
     public void deplacement(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
+
         //sens de déplacement des missiles
-        this.moveDA(dt * getVitesse(), -getRandomDirection() );
+        this.moveDA(scaledDt * getVitesse(), -getRandomDirection() );
         //magnetisme des missiles
-        trackPlayerPosition();
+        trackPlayerPosition(scaledDt);
     }
 
     @Override

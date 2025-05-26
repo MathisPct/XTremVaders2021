@@ -1,10 +1,11 @@
 package xtremvaders.Objets.Shields;
 
-import xtremvaders.Graphics.SpritesAnimes.ImpactShield;
-import xtremvaders.Jeu.XtremVaders2021;
-import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.Graphics.SpritesAnimes.ImpactShield;
+import xtremvaders.Jeu.GameRuntime;
+import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 
 
 /**
@@ -34,13 +35,14 @@ public abstract class Shield extends GameItem {
     }
     
     @Override
-    public void evolve(long l) {
+    public void evolve(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
         if(!XtremVaders2021.getJoueur().estVivant()) getGame().remove(this);
         //si le bouclier est en fin de vie
         if(isLiveTimeOver()){
             getGame().remove(this);
         }
-        this.setLifeSpend(getLifeSpend()+l);
+        this.setLifeSpend(getLifeSpend()+scaledDt);
         int deltaPosX = XtremVaders2021.getJoueur().getMiddleX() - this.getMiddleX();
         moveXY(deltaPosX, 0);
     }
