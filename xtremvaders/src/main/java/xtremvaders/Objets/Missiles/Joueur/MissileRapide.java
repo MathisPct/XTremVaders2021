@@ -2,6 +2,7 @@ package xtremvaders.Objets.Missiles.Joueur;
 
 
 import xtremvaders.Entites.Vaisseau;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
@@ -44,6 +45,11 @@ public class MissileRapide extends MissileJoueur{
         this.moveDA(dt * getVitesse(), +90);
     }
 
+    @Override
+    public Rarity getRarity() {
+        return Rarity.RARE;
+    }
+
     /**
      * Les missiles rapides occasionnent plus de dégât aux débrits
      * @param itemType
@@ -52,7 +58,7 @@ public class MissileRapide extends MissileJoueur{
     @Override
     public int getDegat(iut.GameItem itemType) {
         int degat = 20;
-        if(itemType.getItemType().equals("Debrits")){
+        if(itemType.getItemType().equals("Debris")){
             degat = 45;
         }
         return degat;

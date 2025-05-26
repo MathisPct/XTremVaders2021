@@ -3,6 +3,7 @@ package xtremvaders.Objets.Missiles.Joueur;
 
 import xtremvaders.Entites.Vaisseau;
 import xtremvaders.Graphics.SpritesAnimes.ImpactMissile;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
@@ -46,7 +47,12 @@ public class MissileNormal extends MissileJoueur{
         if(getVaisseau().getItemType().equals("Joueur")) this.moveDA(dt * getVitesse(), 90);
         else if(getVaisseau().getItemType().equals("Invader")) this.moveDA(dt * getVitesse(), -90);
     }
-    
+
+    @Override
+    public Rarity getRarity() {
+        return Rarity.COMMON;
+    }
+
     /**
      * Les missiles normaux ne font pas beaucoup de dégât sur le boss
      * @param itemType

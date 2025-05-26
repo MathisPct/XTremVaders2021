@@ -150,7 +150,7 @@ public class Joueur extends Vaisseau implements KeyListener {
                 setPtVie(-getPtVie());
                 AudioDirector.getInstance().playSFX("newSounds/playerTouched");
             }
-            else if(item.getItemType().equals("Debrits")){
+            else if(item.getItemType().equals("Debris")){
                 setPtVie(getPtVie()-50);
                 AudioDirector.getInstance().playSFX("newSounds/asteroidCollision");
             }

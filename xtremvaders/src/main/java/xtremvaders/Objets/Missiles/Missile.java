@@ -56,7 +56,7 @@ public abstract class Missile extends BoxGameItem {
     @Override
     public void collideEffect(GameItem gameItem) {
         //collisions entre un missile et un débrit
-        if(gameItem.getItemType().equals("Debrits")){
+        if(gameItem.getItemType().equals("Debris")){
             effetExplosion();
             getGame().remove(this);
         }
@@ -93,6 +93,8 @@ public abstract class Missile extends BoxGameItem {
      * @param dt la valeur du temps
      */
     public abstract void deplacement(long dt);
+
+    public abstract Rarity getRarity();
 
     public double getVitesse() {
         return vitesse;

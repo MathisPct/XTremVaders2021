@@ -9,6 +9,7 @@ import xtremvaders.Graphics.SpritesAnimes.ExplosionNuke;
 import xtremvaders.Entites.Vaisseau;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
+import xtremvaders.Objets.Missiles.Rarity;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;
@@ -49,7 +50,12 @@ public class MissileNuke extends MissileJoueur{
         itemAnime.loopAnimation(dt, 10);
         this.moveDA(dt * getVitesse(), 90);
     }
-    
+
+    @Override
+    public Rarity getRarity() {
+        return Rarity.EPIC;
+    }
+
     /**
      * Les missiles nuke ont moins d'efficacité sur le boss mais peuvent détruire
      * en un coup les débrits
@@ -61,7 +67,7 @@ public class MissileNuke extends MissileJoueur{
         int degat = 20; 
         if(itemType.getItemType().equals("Invader")) degat = 200;
         else if(itemType.getItemType().equals("Boss")) degat = 25;
-        else if(itemType.getItemType().equals("Debrits")) degat = 45;
+        else if(itemType.getItemType().equals("Debris")) degat = 45;
         return degat;
     } 
 }

@@ -36,7 +36,7 @@ public class ExplosionNuke extends GameItem {
 
     @Override
     public String getItemType() {
-        return "explosioNuke";
+        return "explosionNuke";
     }
 
     @Override
