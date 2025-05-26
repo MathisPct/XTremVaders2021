@@ -1,6 +1,7 @@
-package xtremvaders.Objets.BonusJoueur;
+package xtremvaders.Objets.BonusJoueur.temporal;
 
 import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import java.util.Random;
@@ -14,33 +15,24 @@ public class BonusMissileRapide extends BonusTir {
     public BonusMissileRapide(Game aG, int aX, int aY) {
         super(aG, "bonus/itemsBonus/bonusSpeed", aX, aY);
         Random r = new Random();
-        setDureeEffet(r.nextInt(10000)+ 5000); //entre 5s et 15000s d'effet
+        this.dureeEffet = r.nextInt(10000)+ 5000; //entre 5s et 15s d'effet
     }
     
     /**
      * On change le type de missile que possède le joueur
      */
     @Override
-    public void lancerEffet() {
-        if(!isEnCours()){
-            XtremVaders2021.getJoueur().setTypeMissile(TypeMissile.RAPIDE);
-            this.changeSprite("transparent");
-        }
-        setEnCours(true);
+    public void debutEffet() {
+        XtremVaders2021.getJoueur().setTypeMissile(TypeMissile.RAPIDE);
+        this.changeSprite("transparent");
     }
     
     /**
      * On réintialise le type de missile du joueur
-     * @param dt 
      */
     @Override
-    public void finEffet(long dt) {
-        setDureeEffet(getDureeEffet() - dt);
-        if(getDureeEffet() <= 0){
-            setEnCours(false);
-            XtremVaders2021.getJoueur().setTypeMissile(TypeMissile.NORMAL);
-            getGame().remove(this);
-        }
+    public void finEffet() {
+        XtremVaders2021.getJoueur().setTypeMissile(TypeMissile.NORMAL);
     }
 
     @Override

@@ -2,6 +2,7 @@ package xtremvaders.Objets.Shields;
 
 import xtremvaders.Graphics.SpritesAnimes.ImpactShield;
 import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 import iut.Game;
 import iut.GameItem;
 
@@ -11,19 +12,20 @@ import iut.GameItem;
  * @author David Golay
  */
 public abstract class Shield extends GameItem {
-    
+    private final BonusShield bonusShieldAssociated;
     private long duree;
     private int resistance;
     private int cptImpact;
     private int valueSprite;
     private long lifeSpend;
 
-    public Shield(Game g, double _x, double _y, int resistance) {
+    public Shield(Game g, double _x, double _y, int resistance, BonusShield bonusShield) {
         super(g, "shield/shieldBasic_00000", (int)_x,(int)_y);
         this.resistance = resistance;
         this.cptImpact = 0;
         this.lifeSpend = 0;
         this.duree = 10000;
+        this.bonusShieldAssociated = bonusShield;
     }
         
     @Override
@@ -85,6 +87,7 @@ public abstract class Shield extends GameItem {
     public boolean isBroken(){
         boolean res = false;
         if(cptImpact >= resistance){
+            this.bonusShieldAssociated.finEffet();
             res = true;
         }
         return res;

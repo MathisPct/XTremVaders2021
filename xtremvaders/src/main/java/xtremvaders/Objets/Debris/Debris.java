@@ -5,7 +5,7 @@ import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Jeu.XtremVaders2021;
-import xtremvaders.Objets.BonusJoueur.BonusShield;
+import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Utilities.Utilite;
 

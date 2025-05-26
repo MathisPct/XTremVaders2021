@@ -1,6 +1,10 @@
 package xtremvaders.Objets.BonusJoueur;
 
 import iut.Game;
+import xtremvaders.Objets.BonusJoueur.immediate.BonusMedecin;
+import xtremvaders.Objets.BonusJoueur.temporal.BonusMissileRapide;
+import xtremvaders.Objets.BonusJoueur.temporal.BonusNuke;
+import xtremvaders.Objets.BonusJoueur.temporal.BonusSlow;
 
 /**
  * Fabrique des bonus

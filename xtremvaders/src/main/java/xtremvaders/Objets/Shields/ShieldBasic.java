@@ -7,13 +7,11 @@ package xtremvaders.Objets.Shields;
  */
 
 
-import xtremvaders.Objets.Shields.Shield;
-import xtremvaders.Graphics.SpritesAnimes.ImpactShield;
-import xtremvaders.Graphics.SpritesAnimes.ShieldSprite;
-import xtremvaders.Entites.Vaisseau;
-import xtremvaders.Jeu.XtremVaders2021;
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.Graphics.SpritesAnimes.ImpactShield;
+import xtremvaders.Graphics.SpritesAnimes.ShieldSprite;
+import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 
 /**
  *
@@ -21,8 +19,8 @@ import iut.GameItem;
  */
 public class ShieldBasic extends Shield {
 
-    public ShieldBasic(Game g, double _x, double _y) {
-        super(g, _x, _y-60, 4);
+    public ShieldBasic(Game g, double _x, double _y, BonusShield bonusShield) {
+        super(g, _x, _y-60, 4, bonusShield);
     }
 
     @Override
