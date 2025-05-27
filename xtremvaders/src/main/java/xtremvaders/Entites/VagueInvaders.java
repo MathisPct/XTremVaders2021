@@ -152,15 +152,17 @@ public class VagueInvaders extends GameItem{
      * dans la liste. Suivant le côté touché coteOuAller est modifié. Permet aussi
      * d'indiquer qu'il faut que le groupe d'invader descende
      */
-    public void gestionCoteTouche(){
+    public void checkHitBorders(){
         allerBas = false;
         for (Invader invader : invaders) {
             if(invader.coteTouche() == TypeMouvement.DROITE && cptDeplacerBas == 0){
                 allerBas = true;
                 this.coteOuAller = TypeMouvement.GAUCHE;
+                break;
             }else if(invader.coteTouche() == TypeMouvement.GAUCHE && cptDeplacerBas == 0){
                 allerBas = true;
                 this.coteOuAller = TypeMouvement.DROITE;
+                break;
             }
         }
     }
@@ -190,7 +192,7 @@ public class VagueInvaders extends GameItem{
      * @param vitesse des invaders
      */
     public void bouger(double vitesse){
-        gestionCoteTouche();
+        checkHitBorders();
         if(allerBas){
             bougerBas(vitesse);
         }else{
