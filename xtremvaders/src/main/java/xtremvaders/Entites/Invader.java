@@ -14,7 +14,8 @@ import xtremvaders.Objets.BonusJoueur.Bonus;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Missiles.Missile;
-import xtremvaders.Utilities.TypeMouvement;
+import xtremvaders.Utilities.Direction;
+import xtremvaders.Utilities.InvaderBoundaryListener;
 import xtremvaders.Utilities.Utilite;
 
 /**
@@ -52,6 +53,11 @@ public abstract class Invader extends Vaisseau{
     private ItemAnime itemAnime;   
     
     /**
+     * Listener pour les collisions avec les bords
+     */
+    private InvaderBoundaryListener boundaryListener;
+    
+    /**
      * Constructeur par initialisation
      * @param g le jeu 
      * @param sprite de l'invader
@@ -68,6 +74,14 @@ public abstract class Invader extends Vaisseau{
         // création du bonus
         this.typeBonus = Bonus.genererBonus();
         VagueInvaders.ajouterBonus(typeBonus);
+    }
+    
+    /**
+     * Définit le listener pour les collisions avec les bords
+     * @param listener Le listener à notifier
+     */
+    public void setBoundaryListener(InvaderBoundaryListener listener) {
+        this.boundaryListener = listener;
     }
     
     /**
@@ -122,6 +136,8 @@ public abstract class Invader extends Vaisseau{
             Animation.getAnimationSpeed()
         );
 
+        checkBoundaryCollision();
+
         tempAvantTir -= scaledDt;
 
         if (tempAvantTir <= 0) {
@@ -132,6 +148,16 @@ public abstract class Invader extends Vaisseau{
             float maxDelay = 10000.0f * timeSpeed; // 3000 + 10000 (entre 3 à 10 secondes)
 
             tempAvantTir = (long) randomBetweenRange((long) minDelay, (long) maxDelay);
+        }
+    }
+
+    /**
+     * Vérifie si l'invader touche un bord de l'écran et notifie le listener
+     */
+    private void checkBoundaryCollision() {
+        Direction direction = coteTouche();
+        if (direction != null && boundaryListener != null) {
+            boundaryListener.onBoundaryCollision(this, direction);
         }
     }
 
@@ -146,22 +172,21 @@ public abstract class Invader extends Vaisseau{
      * Permet de savoir quel côté a été touché par un invader
      * @return le côté qui a été touché
      */
-    public TypeMouvement coteTouche(){
-        TypeMouvement res = null;
-        if(this.getRight() <= 64){
-            res = TypeMouvement.GAUCHE;
-        }else if(this.getLeft() >= getGame().getWidth() - 64){
-            res = TypeMouvement.DROITE;
+    public Direction coteTouche(){
+        Direction res = null;
+        if(this.getRight() <= this.getWidth()){
+            res = Direction.GAUCHE;
+        }else if(this.getLeft() >= getGame().getWidth() - this.getWidth()){
+            res = Direction.DROITE;
         }
         return res;
     }
-    
-    /**
-     * Permet de bouger un invader à droite, à gauche et à droite d'un certain
-     * nombre de pixel
-     * @param mouvement à effectuer pour se déplacer sur l'un des côtés
+      /**
+     * Permet de bouger un invader à droite, à gauche, en haut ou en bas
+     * @param mouvement à effectuer pour se déplacer dans la direction souhaitée
+     * @param vitesse la vitesse de déplacement
      */
-    public void bouger(TypeMouvement mouvement, double vitesse){
+    public void bouger(Direction mouvement, double vitesse) {
         switch(mouvement){
             case DROITE:
                 this.moveDA(vitesse, 0);
@@ -170,7 +195,12 @@ public abstract class Invader extends Vaisseau{
                 this.moveDA(vitesse, 180);
                 break;
             case BAS:
-                this.moveXY(0, +64);
+                this.moveXY(0, +this.getWidth());
+                break;
+            case HAUT:
+                this.moveXY(0, -this.getWidth());
+                break;
+            default:
                 break;
         }
     }

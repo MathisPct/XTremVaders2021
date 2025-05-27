@@ -9,7 +9,9 @@ import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
-import xtremvaders.Utilities.TypeMouvement;
+import xtremvaders.Utilities.EtatMouvement;
+import xtremvaders.Utilities.InvaderBoundaryListener;
+import xtremvaders.Utilities.Direction;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,15 +23,15 @@ import xtremvaders.Utilities.TypeMouvement;
  * Classe générer une vague d'invaders
  * @author Mathis Poncet
  */
-public class VagueInvaders extends GameItem{
+public class VagueInvaders extends GameItem implements InvaderBoundaryListener {
     /**
      * Nomre de lignes d'invaders
      */
-    private int nbSurLigne;
+    private final int nbSurLigne;
     /**
      * Nombre de colonne d'invader
      */
-    private int nbSurCol;
+    private final int nbSurCol;
     /**
      * Permet de connaître le nombre de vagues qui se sont déjà déroulés dans le
      * jeu
@@ -40,28 +42,14 @@ public class VagueInvaders extends GameItem{
      */
     private static ArrayList<Invader> invaders;
     /**
-     * Temps entre 2 déplacements du groupe d'invader
+     * Direction horizontale courante des invaders (GAUCHE ou DROITE)
      */
-    private double tempsAvantBouger;
+    private Direction directionHorizontale;
     /**
-     * Délai avant le déplacement du grou^pe d'invaders
-     * De base à une seconde
+     * État actuel du mouvement des invaders
      */
-    private double delai = 800;
-    /**
-     * Permet aux invaders d'aller sur un côté (Gauche ou Droit)
-     */
-    private TypeMouvement coteOuAller;
-    /**
-     * Compte le nombre de déplacement vers le bas
-     */
-    private int cptDeplacerBas;
-    /**
-     * Permet de savoir si les invaders sont entrain de se déplacer vers le bas
-     */
-    private boolean allerBas;
-     
-    
+    private EtatMouvement etatMouvement;
+
     /**
      * Liste des bonus présents dans la vague des invaders
      */
@@ -75,13 +63,11 @@ public class VagueInvaders extends GameItem{
      */
     public VagueInvaders(Game g, int nbSurLigne, int nbSurCol) {
         super(g, "", -1, -1);
-        this.cptDeplacerBas = 0;
         invaders = new ArrayList<>();
-        this.tempsAvantBouger = this.delai;
-        this.allerBas = false;
+        this.etatMouvement = EtatMouvement.DEPLACEMENT_HORIZONTAL;
         this.nbSurCol = nbSurCol;
         this.nbSurLigne = nbSurLigne;
-        this.coteOuAller = TypeMouvement.DROITE;
+        this.directionHorizontale = Direction.DROITE;
         nbVagues = 0;
     }
 
@@ -128,12 +114,15 @@ public class VagueInvaders extends GameItem{
         System.out.println("Nb vague = " + nbVagues);
         //initialisation de la liste des bonus de la vague
         listeBonus = new ArrayList<>();
-        this.coteOuAller = TypeMouvement.DROITE; //réintialisation mouvement
-        //GENERATION DES INVADERS DE LA VAGUE
+        this.directionHorizontale = Direction.DROITE;
+        this.etatMouvement = EtatMouvement.DEPLACEMENT_HORIZONTAL;
+
+        // GENERATION DES INVADERS DE LA VAGUE
         for (int l = 0; l < this.nbSurLigne; l++) {
             for (int c = 0; c < this.nbSurCol; c++) {
                 Invader invader = FabriqueInvader.fabriquerUnInvader(getGame(),64 + l*64, 0 + c*64, TypeInvader.NORMAL, vitesseVague());//new Invader(getGame(),"cold_un" ,64 + l*64, 0 + c*64);
-                this.invaders.add(invader);
+                invader.setBoundaryListener(this);
+                invaders.add(invader);
                 super.getGame().addItem(invader);
             }
         }
@@ -148,57 +137,38 @@ public class VagueInvaders extends GameItem{
     }
     
     /**
-     * Permet de savoir quel côté a été touché par le groupe d'invaders contenue
-     * dans la liste. Suivant le côté touché coteOuAller est modifié. Permet aussi
-     * d'indiquer qu'il faut que le groupe d'invader descende
-     */
-    public void checkHitBorders(){
-        allerBas = false;
-        for (Invader invader : invaders) {
-            if(invader.coteTouche() == TypeMouvement.DROITE && cptDeplacerBas == 0){
-                allerBas = true;
-                this.coteOuAller = TypeMouvement.GAUCHE;
-                break;
-            }else if(invader.coteTouche() == TypeMouvement.GAUCHE && cptDeplacerBas == 0){
-                allerBas = true;
-                this.coteOuAller = TypeMouvement.DROITE;
-                break;
-            }
-        }
-    }
-    
-    /**
      * Permet aux invaders de bouger vers le bas
      */
     private void bougerBas(double vitesse){
-        cptDeplacerBas ++;
         for (Invader invader : invaders) {
-            invader.bouger(TypeMouvement.BAS, vitesse);
+            invader.bouger(Direction.BAS, vitesse);
         }
     }
     
     /**
-     * Permet au groupe d'invader de bouger latéralement 
+     * Permet au groupe d'invader de bouger latéralement dans la direction courante
      */
     private void bougerLateralement(double vitesse){
         for (Invader invader : invaders) {
-            invader.bouger(coteOuAller, vitesse);
+            invader.bouger(directionHorizontale, vitesse);
         }
     }
     
     /**
-     * Permet de faire bouger les invaders latéralement ou horizontalement suivant
-     * si il faut aller vers le bas (connu grâce au boolean allerBas)
+     * Permet de faire bouger les invaders selon leur état de mouvement actuel
      * @param vitesse des invaders
      */
     public void bouger(double vitesse){
-        checkHitBorders();
-        if(allerBas){
-            bougerBas(vitesse);
-        }else{
-            cptDeplacerBas = 0;
-            bougerLateralement(vitesse);
-        }  
+        switch(etatMouvement) {
+            case DESCENTE:
+                bougerBas(vitesse);
+                etatMouvement = EtatMouvement.DEPLACEMENT_HORIZONTAL;
+                bougerLateralement(vitesse);
+                break;
+            case DEPLACEMENT_HORIZONTAL:
+                bougerLateralement(vitesse);
+                break;
+        }
     }
     
     public static ArrayList<Invader> getInvaders() {
@@ -226,5 +196,25 @@ public class VagueInvaders extends GameItem{
     
     public static void ajouterBonus(TypeBonus b){
         listeBonus.add(b);
+    }
+
+    /**
+     * Méthode appelée lorsqu'un invader touche un bord de l'écran
+     * Implémentation de l'interface InvaderBoundaryListener
+     *
+     * @param invader L'invader qui a touché le bord
+     * @param direction La direction du bord touché (GAUCHE ou DROITE)
+     */
+    @Override
+    public void onBoundaryCollision(Invader invader, Direction direction) {
+        if (etatMouvement != EtatMouvement.DESCENTE) {
+            etatMouvement = EtatMouvement.DESCENTE;
+            
+            if (direction == Direction.DROITE) {
+                this.directionHorizontale = Direction.GAUCHE;
+            } else if (direction == Direction.GAUCHE) {
+                this.directionHorizontale = Direction.DROITE;
+            }
+        }
     }
 }
