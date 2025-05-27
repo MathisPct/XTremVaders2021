@@ -27,7 +27,7 @@ import xtremvaders.Jeu.Menus.MouseMotionManager;
 public class XtremVaders2021 extends Game {
 
     //Environnement
-    private boolean kDebugMode = false;
+    private boolean kDebugMode = true;
     private boolean kMouseMode = true;
 
 
