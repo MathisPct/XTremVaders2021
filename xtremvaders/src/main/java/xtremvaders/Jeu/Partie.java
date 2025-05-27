@@ -66,11 +66,19 @@ public class Partie extends GameItem {
      */
     private int cptIteration;
 
+
+    private Runnable onGamePaused;
+
     
-    public Partie(Game g, Joueur joueur) {
+    public Partie(
+        Game g, 
+        Joueur joueur,
+        Runnable onGamePaused
+        ) {
         super(g, "transparent", 0, 0);
         //Lancement menu démarrage
         this.cptIteration = 0;
+        this.onGamePaused = onGamePaused;
     }
    
 
@@ -138,21 +146,6 @@ public class Partie extends GameItem {
         //save(); //TODO to implement
         System.exit(0);
     }
-
-     /**
-     * Methode qui fabrique un menu de pause in game
-     */
-    protected void pauseGame(){
-        if(GameRuntime.getGameSpeed().isPaused()) { // déjà en pause ? on resume
-            GameRuntime.getGameSpeed().resume();
-            return;
-        }
-        GameRuntime.getGameSpeed().pause();
-
-        //TODO soundplay to move in menu logic 
-        AudioDirector.getInstance().onPauseMenuOpened();
-    }
-
     
     
     /**

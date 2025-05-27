@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class PauseOverlayPanel extends JPanel {
+public class PausePanel extends JPanel {
 
     private Image backgroundImage;
     private Font customFont;
@@ -33,7 +33,7 @@ public class PauseOverlayPanel extends JPanel {
 
 
     private final int verticalOffset; // ⭐ Paramètre personnalisable
-    private Runnable startGameCallback; // ⭐ Injecté depuis l'extérieur
+    private Runnable setResumeGameCallback; // ⭐ Injecté depuis l'extérieur
 
 
     private static final int TOTAL_FRAMES = 50; // adapte selon ton nombre d’images
@@ -46,7 +46,7 @@ public class PauseOverlayPanel extends JPanel {
 
 private SettingsOverlayPanel settingsDialog;
 
-    public PauseOverlayPanel(int verticalOffset, int width, int height) {
+    public PausePanel(int verticalOffset, int width, int height) {
         this.verticalOffset = verticalOffset;
 
         setOpaque(false);
@@ -62,8 +62,8 @@ private SettingsOverlayPanel settingsDialog;
         initButtons();
     }
 
-    public void setStartGameCallback(Runnable callback) {
-        this.startGameCallback = callback;
+    public void setResumeGameCallback(Runnable callback) {
+        this.setResumeGameCallback = callback;
     }
 
     private void startBackgroundAnimation() {
@@ -116,10 +116,10 @@ private SettingsOverlayPanel settingsDialog;
         int startY = (getPreferredSize().height - totalHeight) / 2 + verticalOffset;
         int centerX = (getPreferredSize().width - buttonWidth) / 2;
 
-        startButton = createStyledButton("Start New Game", e -> {
-            if (startGameCallback != null) {
+        startButton = createStyledButton("Resume", e -> {
+            if (setResumeGameCallback != null) {
                 setVisible(false);  // On masque le panneau pause 
-                startGameCallback.run(); //on appelle la callback qui va lancer la game
+                setResumeGameCallback.run(); //on appelle la callback qui va lancer la game
             }
         });
         startButton.setBounds(centerX, startY, buttonWidth, buttonHeight);
@@ -127,7 +127,7 @@ private SettingsOverlayPanel settingsDialog;
         settingsButton = createStyledButton("Settings", e -> settingsDialog.setVisible(true));
         settingsButton.setBounds(centerX, startY + buttonHeight + spacing, buttonWidth, buttonHeight);
 
-        quitButton = createStyledButton("Quit Game", e -> System.exit(0));
+        quitButton = createStyledButton("Quit", e -> System.exit(0));
         quitButton.setBounds(centerX, startY + 2 * (buttonHeight + spacing), buttonWidth, buttonHeight);
 
         add(startButton);

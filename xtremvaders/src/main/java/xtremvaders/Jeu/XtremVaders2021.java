@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import iut.Game;
 import iut.GameItem;
 import iut.Vector;
+import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.BalanceConfig;
 import xtremvaders.Entites.BalanceConfigFactory;
 import xtremvaders.Entites.Joueur;
@@ -27,9 +28,12 @@ import xtremvaders.Jeu.Menus.MouseMotionManager;
 public class XtremVaders2021 extends Game {
 
     //Environnement
-    private boolean kDebugMode = true;
-    private boolean kMouseMode = true;
-
+    //private final boolean kHitBoxMode = EnvConfig.HITBOX_MODE;
+   // private final boolean kMouseMode = EnvConfig.MOUSE_MODE;
+    //private final boolean kDebugPauseMode = EnvConfig.DEBUG_PAUSE_MODE;
+    private final boolean kHitBoxMode = false;
+    private final boolean kMouseMode = true;
+    private final boolean kDebugPauseMode = false;
 
     //Gameplay related
     GameSpeed gameSpeed;
@@ -42,6 +46,9 @@ public class XtremVaders2021 extends Game {
     MouseClickManager clickManager; 
     CursorItem mousecursor;
 
+    private MainMenuPanel mainMenu;
+
+    private PausePanel pauseMenu;
     
     /**
      * @param aArgs the command line arguments Fonction principal (main)
@@ -51,6 +58,9 @@ public class XtremVaders2021 extends Game {
         GameRuntime.init(new GameSpeed());
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
+
+        
+        
     }
 
     /**
@@ -61,7 +71,7 @@ public class XtremVaders2021 extends Game {
     public XtremVaders2021(int width, int height) {
         super(width, height, "XtremeVaders");
         //Debug hitboxes
-        GameItem.DRAW_HITBOX=kDebugMode;
+        GameItem.DRAW_HITBOX=kHitBoxMode;
     }
 
 
@@ -72,7 +82,7 @@ public class XtremVaders2021 extends Game {
     @Override
     protected void createItems() { 
         ensureControlsInitialized();
-        showModaleMainMenu();
+        showMainMenu();
     }
 
     private void startNewGame() {
@@ -87,17 +97,44 @@ public class XtremVaders2021 extends Game {
         // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
         // ca ne dvrait pas etre le joueur qui porte de Keyboard listener, 
         // mais plutot un GameMediator ou autre router d'action
-        joueur.setOnPressEscape(() -> partie.pauseGame());
-
+        joueur.setOnPressEscape(() -> pauseGame());
         joueur.setEstActionFreeze(true);
         joueur.setPtVie(3);
 
-        this.partie = new Partie(this, joueur);
+        this.partie = new Partie(
+            this, 
+            joueur,
+            //onGamePaused called
+            () -> {
+                pauseGame();
+            }
+        );
         this.addItem(joueur);
         this.addItem(partie);
         joueur.resetJoueur();
         this.partie.startNewGame(difficulty);
         //hideCursor();
+    }
+
+    /**
+     * 
+     */
+    protected void pauseGame(){
+        System.out.println("pause game");
+        if(kDebugPauseMode == false) {
+            showPauseMenu();
+        }
+
+        GameRuntime.getGameSpeed().pause(); 
+        AudioDirector.getInstance().onPauseMenuOpened();
+    }
+
+    /**
+     * 
+     */
+    private void resumeGame() {
+        joueur.setEstActionFreeze(false);
+        GameRuntime.getGameSpeed().resume();
     }
 
 
@@ -132,45 +169,58 @@ public class XtremVaders2021 extends Game {
         this.addMouseListener(clickManager);
     }
 
-    private PauseOverlayPanel pauseOverlay;
-
-    // Dans ta méthode showModaleMainMenu
-    public void showModaleMainMenu() {
-        if (pauseOverlay == null) {
+    //  showMainMenu montre le menu d'en
+    public void showMainMenu() {
+        if (mainMenu == null) {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            pauseOverlay = new PauseOverlayPanel(180, getWidth(), getHeight()); // ← 🎯 Décalage vertical des boutons de menu ici
+            mainMenu = new MainMenuPanel(180, getWidth(), getHeight()); // ← 🎯 Décalage vertical des boutons de menu ici
 
-            pauseOverlay.setStartGameCallback(() -> {
+            mainMenu.setStartGameCallback(() -> {
                 System.out.println("Lancement du jeu !");
-                pauseOverlay.requestFocusInWindow();
+                mainMenu.requestFocusInWindow();
                 startNewGame();
                  // On redonne le focus clavier à la couche principale (this)
                 this.requestFocusInWindow();
             });
 
-
             if (frame != null) {
-                pauseOverlay.setBounds(0, 0, getWidth(), getHeight());
-                pauseOverlay.setOpaque(false);
-                pauseOverlay.setVisible(true);
-                frame.getLayeredPane().add(pauseOverlay, JLayeredPane.MODAL_LAYER);
+                mainMenu.setBounds(0, 0, getWidth(), getHeight());
+                mainMenu.setOpaque(false);
+                mainMenu.setVisible(true);
+                frame.getLayeredPane().add(mainMenu, JLayeredPane.MODAL_LAYER);
                 frame.getLayeredPane().revalidate();
                 frame.getLayeredPane().repaint();
             }
         } else {
-            pauseOverlay.setVisible(true);
+            mainMenu.setVisible(true);
         }
     }
 
-
-    public void hidePauseOverlay() {
-        if (pauseOverlay != null) {
+    //  showMainMenu montre le menu d'en
+    public void showPauseMenu() {
+        if (pauseMenu == null) {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            pauseMenu = new PausePanel(180, getWidth(), getHeight()); // ← 🎯 Décalage vertical des boutons de menu ici
+
+            // callback de resume game
+            pauseMenu.setResumeGameCallback(() -> {
+                System.out.println("Reprise de la partie");
+                pauseMenu.requestFocusInWindow();
+                resumeGame();
+                 // On redonne le focus clavier à la couche principale (this)
+                this.requestFocusInWindow();
+            });
+
             if (frame != null) {
-                frame.getLayeredPane().remove(pauseOverlay);
+                pauseMenu.setBounds(0, 0, getWidth(), getHeight());
+                pauseMenu.setOpaque(false);
+                pauseMenu.setVisible(true);
+                frame.getLayeredPane().add(pauseMenu, JLayeredPane.MODAL_LAYER);
+                frame.getLayeredPane().revalidate();
                 frame.getLayeredPane().repaint();
-                pauseOverlay = null;
             }
+        } else {
+            pauseMenu.setVisible(true);
         }
     }
 
