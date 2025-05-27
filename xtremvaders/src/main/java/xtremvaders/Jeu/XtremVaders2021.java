@@ -103,11 +103,7 @@ public class XtremVaders2021 extends Game {
 
         this.partie = new Partie(
             this, 
-            joueur,
-            //onGamePaused called
-            () -> {
-                pauseGame();
-            }
+            joueur
         );
         this.addItem(joueur);
         this.addItem(partie);
@@ -199,8 +195,10 @@ public class XtremVaders2021 extends Game {
     //  showMainMenu montre le menu d'en
     public void showPauseMenu() {
         if (pauseMenu == null) {
+            int modaleWidth = getWidth() - 700;
+            int modaleHeight = getHeight() - 600;
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            pauseMenu = new PausePanel(180, getWidth(), getHeight()); // ← 🎯 Décalage vertical des boutons de menu ici
+            pauseMenu = new PausePanel(0, modaleWidth, modaleHeight); // ← 🎯 Décalage vertical des boutons de menu ici
 
             // callback de resume game
             pauseMenu.setResumeGameCallback(() -> {
@@ -212,10 +210,13 @@ public class XtremVaders2021 extends Game {
             });
 
             if (frame != null) {
-                pauseMenu.setBounds(0, 0, getWidth(), getHeight());
+                int x = (getWidth() - modaleWidth) / 2;
+                int y = (getHeight() - modaleHeight) / 2;
+                pauseMenu.setBounds(x, y, modaleWidth, modaleHeight);
+
                 pauseMenu.setOpaque(false);
                 pauseMenu.setVisible(true);
-                frame.getLayeredPane().add(pauseMenu, JLayeredPane.MODAL_LAYER);
+                frame.getLayeredPane().add(pauseMenu, JLayeredPane.POPUP_LAYER);
                 frame.getLayeredPane().revalidate();
                 frame.getLayeredPane().repaint();
             }
