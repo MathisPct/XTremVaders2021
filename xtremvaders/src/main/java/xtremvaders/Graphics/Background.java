@@ -56,7 +56,7 @@ public class Background extends GameItem{
             frequenceAsteroid = 500;
         }
         
-        lifeSpend += 1;
+        lifeSpend += scaledDt;
         if(lifeSpend%frequenceAsteroid == 0){
             Debris debris = FabriqueDebris.fabriquerUnDebris(getGame(), 0, 0, TypeDebris.ASTEROID);
             getGame().addItem(debris);
