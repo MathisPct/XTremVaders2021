@@ -6,11 +6,11 @@ package xtremvaders.Entites;
  * and open the template in the editor.
  */
 
-import xtremvaders.Jeu.XtremVaders2021;
-import xtremvaders.Objets.Missiles.Missile;
+import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
-import iut.BoxGameItem;
+import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Objets.Missiles.Missile;
 
 /**
  * Vaisseau du jeu
@@ -41,7 +41,7 @@ public abstract class Vaisseau extends BoxGameItem {
     }
 
     public void evolve(long aDt) {
-        if(!XtremVaders2021.getJoueur().estVivant() && !this.getItemType().equals("Joueur")) getGame().remove(this);
+        if(!XtremVaders2021.getJoueur().estVivant() && false == this.getItemType().equals("Joueur")) getGame().remove(this);
     }
 
     public String getItemType() {

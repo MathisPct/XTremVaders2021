@@ -114,8 +114,8 @@ public abstract class Invader extends Vaisseau{
 
     @Override
     public void evolve(long dt) {
+        super.evolve(dt);
         long scaledDt = GameRuntime.getScaledDt(dt);
-        super.evolve(scaledDt);
 
         itemAnime.loopAnimation(
             scaledDt + Utilite.randomBetweenRange(0, 120),
