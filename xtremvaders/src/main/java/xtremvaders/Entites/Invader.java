@@ -181,28 +181,14 @@ public abstract class Invader extends Vaisseau{
         }
         return res;
     }
-      /**
-     * Permet de bouger un invader à droite, à gauche, en haut ou en bas
-     * @param mouvement à effectuer pour se déplacer dans la direction souhaitée
-     * @param vitesse la vitesse de déplacement
+    
+    /**
+     * Permet de bouger un invader selon des composantes x et y de vitesse
+     * @param vx la vitesse horizontale
+     * @param vy la vitesse verticale
      */
-    public void bouger(Direction mouvement, double vitesse) {
-        switch(mouvement){
-            case DROITE:
-                this.moveDA(vitesse, 0);
-                break;
-            case GAUCHE:
-                this.moveDA(vitesse, 180);
-                break;
-            case BAS:
-                this.moveXY(0, +this.getWidth());
-                break;
-            case HAUT:
-                this.moveXY(0, -this.getWidth());
-                break;
-            default:
-                break;
-        }
+    public void bouger(double vx, double vy) {
+        moveXY(vx, vy);
     }
     
     /**

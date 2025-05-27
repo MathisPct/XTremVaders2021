@@ -88,7 +88,7 @@ public class Partie extends GameItem {
         }
         gameGUI.startNewGame();
         this.background = new Background(getGame()); 
-        this.vagueInvaders = new VagueInvaders(getGame(), 5, 3);
+        this.vagueInvaders = new VagueInvaders(getGame(), 3, 3);
         this.generateurBoss = new GenerateurBoss(getGame());
         getGame().addItem(background);
         getGame().addItem(vagueInvaders);
