@@ -12,7 +12,7 @@ import xtremvaders.Graphics.VFX.TypeAnimation;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.Missiles.TypeMissile;
-import xtremvaders.Utilities.TypeMouvement;
+import xtremvaders.Utilities.Direction;
 import xtremvaders.Utilities.Utilite;
 
 /**
@@ -23,7 +23,7 @@ public class Boss extends Vaisseau{
     /**
      * Le côté ou aller
      */
-    private TypeMouvement coteOuAller;
+    private Direction coteOuAller;
     
     /**
      * Temps avant que le boss tire
@@ -52,7 +52,7 @@ public class Boss extends Vaisseau{
      */
     public Boss(Game g, int x, int y, double vitesse, int resistance) {
         super(g, "alienGreen3", x, y, vitesse);
-        this.coteOuAller = TypeMouvement.DROITE;
+        this.coteOuAller = Direction.DROITE;
         super.setPtVie(resistance);
         this.itemAnime = new ItemAnime(g, "", x, y, TypeAnimation.ALIEN_FATHER, this);
         itemAnime.setAnimationType(TypeAnimation.ALIEN_FATHER);
@@ -83,10 +83,10 @@ public class Boss extends Vaisseau{
      * @param dt le cours du temps
      */
     public void bougerBoss(long dt){  
-        if(coteOuAller == TypeMouvement.DROITE && this.getRight() < getGame().getWidth()) this.moveDA(dt * 0.15, 0);
-        else coteOuAller = TypeMouvement.GAUCHE;
-        if(coteOuAller == TypeMouvement.GAUCHE && this.getLeft() > 0) this.moveDA(dt * 0.15, 180);
-        else coteOuAller = TypeMouvement.DROITE;
+        if(coteOuAller == Direction.DROITE && this.getRight() < getGame().getWidth()) this.moveDA(dt * 0.15, 0);
+        else coteOuAller = Direction.GAUCHE;
+        if(coteOuAller == Direction.GAUCHE && this.getLeft() > 0) this.moveDA(dt * 0.15, 180);
+        else coteOuAller = Direction.DROITE;
     }
     
     /**
