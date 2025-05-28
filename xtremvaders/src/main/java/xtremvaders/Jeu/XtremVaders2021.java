@@ -57,6 +57,7 @@ public class XtremVaders2021 extends Game {
      */
     public static void main(String[] aArgs) {
         GameRuntime.init(new GameSpeed());
+        AudioDirector.getInstance().onLaunchGame();
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
     }
@@ -107,7 +108,7 @@ public class XtremVaders2021 extends Game {
         this.addItem(partie);
         joueur.resetJoueur();
         this.partie.startNewGame(difficulty);
-        //hideCursor();
+        hideCursor();
     }
 
     /**
@@ -118,9 +119,7 @@ public class XtremVaders2021 extends Game {
         if(kDebugPauseMode == false) {
             showPauseMenu();
         }
-
         GameRuntime.getGameSpeed().pause(); 
-        AudioDirector.getInstance().onPauseMenuOpened();
     }
 
     /**

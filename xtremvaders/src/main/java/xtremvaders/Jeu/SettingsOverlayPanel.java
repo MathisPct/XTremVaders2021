@@ -15,6 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
+import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Audio.AudioTrack;
+import xtremvaders.Audio.TrackID;
 import xtremvaders.Entites.BalanceConfigFactory;
 import xtremvaders.Entites.BalanceConfigFactory.DifficultyLevel;
 
@@ -23,6 +26,8 @@ public class SettingsOverlayPanel extends JPanel {
     private JSlider volumeSlider;
     private JSlider musicSlider;
     private JComboBox<DifficultyLevel> difficultyCombo;
+    private JComboBox<TrackID> musicTrackCombo;
+
     private JButton closeButton;
 
     private final Consumer<DifficultyLevel> onDifficultyChanged;
@@ -42,117 +47,158 @@ public class SettingsOverlayPanel extends JPanel {
         initComponents();
     }
 
-private void initComponents() {
-    Font labelFont = new Font("Orbitron", Font.BOLD, 18);
+    private void initComponents() {
+        Font labelFont = new Font("Orbitron", Font.BOLD, 18);
 
-    int panelWidth = getWidth() > 0 ? getWidth() : 500;
-    int panelHeight = getHeight() > 0 ? getHeight() : 350;
+        int panelWidth = getWidth() > 0 ? getWidth() : 500;
+        int panelHeight = getHeight() > 0 ? getHeight() : 350;
 
-    int marginLeft = 50;
-    int labelWidth = 200;
-    int sliderWidth = panelWidth - marginLeft * 2;
-    int controlHeight = 30;
-    int sliderHeight = 50;
-    int verticalSpacing = 40;
-    int yPos = 30;
+        int marginLeft = 50;
+        int labelWidth = 200;
+        int sliderWidth = panelWidth - marginLeft * 2;
+        int controlHeight = 30;
+        int sliderHeight = 50;
+        int verticalSpacing = 40;
+        int yPos = 30;
 
-    // Volume général
-    JLabel volumeLabel = new JLabel("Volume Général");
-    volumeLabel.setForeground(Color.WHITE);
-    volumeLabel.setFont(labelFont);
-    volumeLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
-    add(volumeLabel);
+        // Volume général
+        JLabel volumeLabel = new JLabel("Volume Général");
+        volumeLabel.setForeground(Color.WHITE);
+        volumeLabel.setFont(labelFont);
+        volumeLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+        add(volumeLabel);
 
-    yPos += controlHeight;
+        yPos += controlHeight;
 
-    volumeSlider = new JSlider(0, 100, 75);
-    volumeSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
-    volumeSlider.setOpaque(false);
-    add(volumeSlider);
+        volumeSlider = new JSlider(0, 100, 75);
+        volumeSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
+        volumeSlider.setOpaque(false);
+        add(volumeSlider);
 
-    yPos += sliderHeight + verticalSpacing;
+        yPos += sliderHeight + verticalSpacing;
 
-    // Volume musique
-    JLabel musicLabel = new JLabel("Volume Musique");
-    musicLabel.setForeground(Color.WHITE);
-    musicLabel.setFont(labelFont);
-    musicLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
-    add(musicLabel);
+        // Volume musique
+        JLabel musicLabel = new JLabel("Volume Musique");
+        musicLabel.setForeground(Color.WHITE);
+        musicLabel.setFont(labelFont);
+        musicLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+        add(musicLabel);
 
-    yPos += controlHeight;
+        yPos += controlHeight;
 
-    musicSlider = new JSlider(0, 100, 60);
-    musicSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
-    musicSlider.setOpaque(false);
-    add(musicSlider);
+        musicSlider = new JSlider(0, 100, 60);
+        musicSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
+        musicSlider.setOpaque(false);
+        add(musicSlider);
 
-    yPos += sliderHeight + verticalSpacing;
+        yPos += sliderHeight + verticalSpacing;
 
-    // Difficulté
-    JLabel difficultyLabel = new JLabel("Difficulté");
-    difficultyLabel.setForeground(Color.WHITE);
-    difficultyLabel.setFont(labelFont);
-    difficultyLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
-    add(difficultyLabel);
+        // Difficulté
+        JLabel difficultyLabel = new JLabel("Difficulté");
+        difficultyLabel.setForeground(Color.WHITE);
+        difficultyLabel.setFont(labelFont);
+        difficultyLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+        add(difficultyLabel);
 
-    difficultyCombo = new JComboBox<>(DifficultyLevel.values());
-    int comboWidth = 350;
-    int comboHeight = 40;
-    int labelHeight = controlHeight;
-    int comboY = yPos - (comboHeight - labelHeight) / 2;
+        difficultyCombo = new JComboBox<>(DifficultyLevel.values());
+        int comboWidth = 350;
+        int comboHeight = 40;
+        int labelHeight = controlHeight;
+        int comboY = yPos - (comboHeight - labelHeight) / 2;
 
-    difficultyCombo.setBounds(marginLeft + labelWidth + 10, comboY, comboWidth, comboHeight);
-    difficultyCombo.setFont(labelFont.deriveFont(Font.BOLD, 20f));
-    difficultyCombo.setBackground(Color.BLACK);
-    difficultyCombo.setForeground(Color.WHITE);
+        difficultyCombo.setBounds(marginLeft + labelWidth + 10, comboY, comboWidth, comboHeight);
+        difficultyCombo.setFont(labelFont.deriveFont(Font.BOLD, 20f));
+        difficultyCombo.setBackground(Color.BLACK);
+        difficultyCombo.setForeground(Color.WHITE);
 
-    // Custom renderer pour padding intérieur
-    difficultyCombo.setRenderer(new javax.swing.DefaultListCellRenderer() {
-        private final int padding = 10;  // padding à gauche et droite
+        // Custom renderer pour padding intérieur
+        difficultyCombo.setRenderer(new javax.swing.DefaultListCellRenderer() {
+            private final int padding = 10;  // padding à gauche et droite
 
-        @Override
-        public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value,
-                int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            label.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, padding, 0, padding));
-            return label;
+            @Override
+            public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                label.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, padding, 0, padding));
+                return label;
+            }
+        });
+
+        add(difficultyCombo);
+
+        DifficultyLevel current = BalanceConfigFactory.getCurrentDifficulty();
+        difficultyCombo.setSelectedItem(current);
+
+        difficultyCombo.addActionListener(e -> {
+            DifficultyLevel selected = (DifficultyLevel) difficultyCombo.getSelectedItem();
+            if (onDifficultyChanged != null && selected != null) {
+                onDifficultyChanged.accept(selected);
+            }
+        });
+
+        // Met à jour yPos après difficulté
+        yPos += controlHeight + verticalSpacing;
+
+        // Label pour la musique
+        JLabel trackLabel = new JLabel("Choix Musique");
+        trackLabel.setForeground(Color.WHITE);
+        trackLabel.setFont(labelFont);
+        trackLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+        add(trackLabel);
+
+        // ComboBox pour choisir une musique
+        JComboBox<TrackID> trackCombo = new JComboBox<>(TrackID.values());
+        int trackComboY = yPos - (comboHeight - labelHeight) / 2;
+        trackCombo.setBounds(marginLeft + labelWidth + 10, trackComboY, comboWidth, comboHeight);
+        trackCombo.setFont(labelFont.deriveFont(Font.BOLD, 20f));
+        trackCombo.setBackground(Color.BLACK);
+        trackCombo.setForeground(Color.WHITE);
+
+        // Initialiser la sélection avec lastTrack de audioDirector
+        AudioTrack lastTrack = AudioDirector.getInstance().getLastTrack(); // ou méthode qui retourne AudioTrack
+        TrackID lastTrackID = TrackID.fromAudioTrack(lastTrack);
+        if (lastTrackID != null) {
+            trackCombo.setSelectedItem(lastTrackID);
         }
-    });
 
-    add(difficultyCombo);
+        // Ajout de l'action sur sélection
+        trackCombo.addActionListener(e -> {
+            TrackID selectedTrack = (TrackID) trackCombo.getSelectedItem();
+            if (selectedTrack != null) {
+                playSelectedTrack(selectedTrack);
+            }
+        });
 
-    DifficultyLevel current = BalanceConfigFactory.getCurrentDifficulty();
-    difficultyCombo.setSelectedItem(current);
-
-    difficultyCombo.addActionListener(e -> {
-        DifficultyLevel selected = (DifficultyLevel) difficultyCombo.getSelectedItem();
-        if (onDifficultyChanged != null && selected != null) {
-            onDifficultyChanged.accept(selected);
-        }
-    });
-
-    // Ici on ignore yPos + verticalSpacing pour placer le bouton en bas
-    int buttonWidth = 100;
-    int buttonHeight = 40;
-    int bottomPadding = 30;
-
-    closeButton = new JButton("Fermer");
-    closeButton.setBounds(
-        (panelWidth - buttonWidth) / 2,
-        panelHeight - buttonHeight - bottomPadding,
-        buttonWidth,
-        buttonHeight
-    );
-    closeButton.setFont(labelFont);
-    closeButton.setForeground(Color.WHITE);
-    closeButton.setContentAreaFilled(false);
-    closeButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true));
-    closeButton.setFocusPainted(false);
-    closeButton.addActionListener(e -> setVisible(false));
-    add(closeButton);
-}
+        add(trackCombo);
 
 
+        yPos += controlHeight + verticalSpacing;
+
+        // Bouton Fermer placé en bas
+        int buttonWidth = 100;
+        int buttonHeight = 40;
+        int bottomPadding = 30;
+
+        closeButton = new JButton("Fermer");
+        closeButton.setBounds(
+            (panelWidth - buttonWidth) / 2,
+            panelHeight - buttonHeight - bottomPadding,
+            buttonWidth,
+            buttonHeight
+        );
+        closeButton.setFont(labelFont);
+        closeButton.setForeground(Color.WHITE);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true));
+        closeButton.setFocusPainted(false);
+        closeButton.addActionListener(e -> setVisible(false));
+        add(closeButton);
+    }
+
+
+    private void playSelectedTrack(TrackID trackID) {
+        AudioDirector.getInstance().playSelectedTrack(trackID);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {

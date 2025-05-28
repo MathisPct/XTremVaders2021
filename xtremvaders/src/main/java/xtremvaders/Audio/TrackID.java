@@ -13,6 +13,16 @@ public enum TrackID {
         this.track = track;
     }
 
+    public static TrackID fromAudioTrack(AudioTrack track) {
+        for (TrackID tid : values()) {
+            if (tid.get().equals(track)) {
+                return tid;
+            }
+        }
+        return null; // ou une valeur par défaut
+    }
+
+
     public AudioTrack get() {
         return track;
     }

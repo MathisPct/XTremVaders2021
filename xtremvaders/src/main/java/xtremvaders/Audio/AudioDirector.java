@@ -9,6 +9,9 @@ public class AudioDirector {
 
     private static AudioDirector instance;
 
+    private AudioTrack lastTrack = null;
+
+
     private String currentMusic;
 
     private AudioDirector() {
@@ -23,9 +26,14 @@ public class AudioDirector {
         return instance;
     }
 
-    public void onPauseMenuOpened() {
+    public AudioTrack getLastTrack() {
+        return lastTrack;
+    }
+
+    public void onLaunchGame() {
         //TODO EMPECHER DE FAIRE 9A DEUX FOIS
         System.out.println("try to stop all sounds ...");
+        AudioDirector.getInstance().playRandomTrackInRange(0, 300);
     }
 
     public void onResumeGame() {
@@ -70,9 +78,8 @@ public class AudioDirector {
         return currentMusic;
     }
 
-    private AudioTrack lastTrack = null;
 
-    public void playRandomTrackInRange(int minBPM, int maxBPM) {
+    public AudioTrack playRandomTrackInRange(int minBPM, int maxBPM) {
         List<AudioTrack> candidates = getTracksForBPMRange(minBPM, maxBPM)
             .stream()
             .filter(track -> !track.equals(lastTrack))
@@ -82,7 +89,16 @@ public class AudioDirector {
             AudioTrack selected = candidates.get(new Random().nextInt(candidates.size()));
             playMusic(selected.getPath());
             lastTrack = selected;
+            return selected;
         }
+        return null;
+    }
+
+    public void playSelectedTrack(TrackID trackID) {
+        stopMusic();
+        AudioTrack track = trackID.get();
+        playMusic(track.getPath());
+        lastTrack = track;
     }
 
     public List<AudioTrack> getTracksForBPMRange(int min, int max) {
