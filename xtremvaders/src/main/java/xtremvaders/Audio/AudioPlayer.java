@@ -21,6 +21,13 @@ public class AudioPlayer {
         managedAudio.play();
     }
 
+    ///TODO dont work atm
+    public static void playAll() {
+        for (ManagedAudio ma : playingSounds.values()) {
+            ma.play();
+        }
+    }
+
 
     public static void stop(String name) {
         ManagedAudio managedAudio = playingSounds.get(name);
@@ -36,4 +43,6 @@ public class AudioPlayer {
         }
        playingSounds.clear();
     }
+
+
 }

@@ -2,35 +2,22 @@ package xtremvaders.Jeu;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class MainMenuPanel extends JPanel {
+import xtremvaders.Entites.BalanceConfigFactory;
 
-    private Image backgroundImage;
-    private Font customFont;
+public class MainMenuPanel extends JPanel {
 
     private JButton startButton;
     private JButton settingsButton;
     private JButton quitButton;
-
 
     private final int verticalOffset; // ⭐ Paramètre personnalisable
     private Runnable startGameCallback; // ⭐ Injecté depuis l'extérieur
@@ -43,10 +30,18 @@ public class MainMenuPanel extends JPanel {
     private Timer animationTimer;
     private Image[] backgroundFrames;
 
+    private int width;
+    private int height;
+
 
 private SettingsOverlayPanel settingsDialog;
 
-    public MainMenuPanel(int verticalOffset, int width, int height) {
+    public MainMenuPanel(
+        int verticalOffset, 
+        int width, int height
+    ) {
+        this.width = width;
+        this.height = height;
         this.verticalOffset = verticalOffset;
 
         setOpaque(false);
@@ -55,8 +50,6 @@ private SettingsOverlayPanel settingsDialog;
 
         loadBackgroundImages();
         startBackgroundAnimation();
-
-        loadCustomFont();
 
         initSettingsDialog();  // instanciation et ajout du settingsOverlay
         initButtons();
@@ -88,22 +81,16 @@ private SettingsOverlayPanel settingsDialog;
         }
     }
 
-
-    private void loadCustomFont() {
-        try {
-            customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/fonts/Orbitron-Bold.ttf")).deriveFont(20f);
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(customFont);
-        } catch (Exception e) {
-            e.printStackTrace();
-            customFont = new Font("Arial", Font.BOLD, 20);
-        }
-    }
-
     private void initSettingsDialog() {
-        settingsDialog = new SettingsOverlayPanel();
-        settingsDialog.setVisible(false); // caché au départ
+        settingsDialog = new SettingsOverlayPanel(
+            width,
+            height,
+            difficultyLevel -> {
+            BalanceConfigFactory.applyDifficulty(difficultyLevel);
+        });
+
+        settingsDialog.setVisible(false);
         add(settingsDialog);
-        // Position déjà gérée par SettingsOverlayPanel via setBounds
     }
 
 
@@ -116,7 +103,7 @@ private SettingsOverlayPanel settingsDialog;
         int startY = (getPreferredSize().height - totalHeight) / 2 + verticalOffset;
         int centerX = (getPreferredSize().width - buttonWidth) / 2;
 
-        startButton = createStyledButton("Start New Game", e -> {
+        startButton = Stylesheet.createStyledButton("Start New Game", e -> {
             if (startGameCallback != null) {
                 setVisible(false);  // On masque le panneau pause 
                 startGameCallback.run(); //on appelle la callback qui va lancer la game
@@ -124,10 +111,10 @@ private SettingsOverlayPanel settingsDialog;
         });
         startButton.setBounds(centerX, startY, buttonWidth, buttonHeight);
 
-        settingsButton = createStyledButton("Settings", e -> settingsDialog.setVisible(true));
+        settingsButton = Stylesheet.createStyledButton("Settings", e -> settingsDialog.setVisible(true));
         settingsButton.setBounds(centerX, startY + buttonHeight + spacing, buttonWidth, buttonHeight);
 
-        quitButton = createStyledButton("Quit Game", e -> System.exit(0));
+        quitButton = Stylesheet.createStyledButton("Quit Game", e -> System.exit(0));
         quitButton.setBounds(centerX, startY + 2 * (buttonHeight + spacing), buttonWidth, buttonHeight);
 
         add(startButton);
@@ -135,39 +122,6 @@ private SettingsOverlayPanel settingsDialog;
         add(quitButton);
     }
 
-    private JButton createStyledButton(String text, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setFont(customFont);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setContentAreaFilled(false);
-        button.setBorder(BorderFactory.createEmptyBorder());
-
-        button.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                AbstractButton b = (AbstractButton) c;
-
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Shape rounded = new RoundRectangle2D.Float(0, 0, b.getWidth(), b.getHeight(), 20, 20);
-                g2.setColor(b.getModel().isRollover() ? new Color(60, 60, 60, 220) : new Color(30, 30, 30, 180));
-                g2.fill(rounded);
-                g2.setColor(Color.WHITE);
-                g2.draw(rounded);
-
-                g2.setFont(b.getFont());
-                FontMetrics fm = g2.getFontMetrics();
-                int textWidth = fm.stringWidth(b.getText());
-                int textHeight = fm.getAscent();
-                g2.drawString(b.getText(), (b.getWidth() - textWidth) / 2, (b.getHeight() + textHeight) / 2 - 4);
-                g2.dispose();
-            }
-        });
-
-        button.addActionListener(action);
-        return button;
-    }
 
     @Override
     protected void paintComponent(Graphics g) {

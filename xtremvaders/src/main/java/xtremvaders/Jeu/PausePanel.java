@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import xtremvaders.Entites.BalanceConfigFactory;
+
 public class PausePanel extends JPanel {
 
 
@@ -43,7 +45,14 @@ private SettingsOverlayPanel settingsDialog;
 
 
     private void initSettingsDialog() {
-        settingsDialog = new SettingsOverlayPanel();
+        settingsDialog = new SettingsOverlayPanel(
+            getWidth(),
+            getHeight(),
+            (difficultyLevel) -> {
+                System.out.println("Nouveau niveau de difficulté sélectionné : " + difficultyLevel);
+                BalanceConfigFactory.applyDifficulty(difficultyLevel);
+            }
+        );
         settingsDialog.setVisible(false); // caché au départ
         add(settingsDialog);
         // Position déjà gérée par SettingsOverlayPanel via setBounds

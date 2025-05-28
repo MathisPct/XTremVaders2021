@@ -15,6 +15,7 @@ import iut.Vector;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.BalanceConfig;
 import xtremvaders.Entites.BalanceConfigFactory;
+import xtremvaders.Entites.BalanceConfigFactory.DifficultyLevel;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Jeu.Menus.CursorItem;
@@ -37,7 +38,7 @@ public class XtremVaders2021 extends Game {
 
     //Gameplay related
     GameSpeed gameSpeed;
-    BalanceConfig difficulty;
+    
     private static Joueur joueur;
     private Partie partie;
    
@@ -58,9 +59,6 @@ public class XtremVaders2021 extends Game {
         GameRuntime.init(new GameSpeed());
         XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
         jeu.play();
-
-        
-        
     }
 
     /**
@@ -86,7 +84,7 @@ public class XtremVaders2021 extends Game {
     }
 
     private void startNewGame() {
-        difficulty = BalanceConfigFactory.createConfig(BalanceConfigFactory.DifficultyLevel.EASY);
+        BalanceConfig difficulty = BalanceConfigFactory.createConfig(BalanceConfigFactory.getCurrentDifficulty());
         joueur = new Joueur(
             this, 
             0.35d, 
@@ -131,6 +129,7 @@ public class XtremVaders2021 extends Game {
     private void resumeGame() {
         joueur.setEstActionFreeze(false);
         GameRuntime.getGameSpeed().resume();
+         AudioDirector.getInstance().onResumeGame();
     }
 
 
@@ -169,7 +168,12 @@ public class XtremVaders2021 extends Game {
     public void showMainMenu() {
         if (mainMenu == null) {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            mainMenu = new MainMenuPanel(180, getWidth(), getHeight()); // ← 🎯 Décalage vertical des boutons de menu ici
+            mainMenu = new MainMenuPanel(
+                180, 
+                getWidth(), 
+                getHeight()
+                
+            );
 
             mainMenu.setStartGameCallback(() -> {
                 System.out.println("Lancement du jeu !");
@@ -178,6 +182,7 @@ public class XtremVaders2021 extends Game {
                  // On redonne le focus clavier à la couche principale (this)
                 this.requestFocusInWindow();
             });
+
 
             if (frame != null) {
                 mainMenu.setBounds(0, 0, getWidth(), getHeight());
@@ -190,6 +195,10 @@ public class XtremVaders2021 extends Game {
         } else {
             mainMenu.setVisible(true);
         }
+    }
+
+    private void affectDifficulty(DifficultyLevel difficulty) {
+
     }
 
     //  showMainMenu montre le menu d'en

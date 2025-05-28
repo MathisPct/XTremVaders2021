@@ -2,6 +2,19 @@ package xtremvaders.Entites;
 
 public class BalanceConfigFactory {
 
+    private BalanceConfig difficulty;
+    private static DifficultyLevel currentDifficulty = DifficultyLevel.MEDIUM;
+
+    public static void applyDifficulty(DifficultyLevel newDifficulty) {
+        System.out.println("Nouveau niveau de difficulté sélectionné : " + newDifficulty);
+        //TODO should notify the other (observe)
+       currentDifficulty = newDifficulty;
+    }
+
+    public static DifficultyLevel getCurrentDifficulty() {
+        return currentDifficulty;
+    }
+
     public enum DifficultyLevel {
         EASY,
         MEDIUM,
@@ -15,7 +28,7 @@ public class BalanceConfigFactory {
                     .enemyHealth(50)
                     .enemyDamage(5)
                     .spawnRate(0.5f)
-                    .timeBeforeNextShotMs(160)
+                    .timeBeforeNextShotMs(140)
                     .build();
 
             case MEDIUM:
@@ -23,7 +36,7 @@ public class BalanceConfigFactory {
                     .enemyHealth(100)
                     .enemyDamage(15)
                     .spawnRate(1.0f)
-                    .timeBeforeNextShotMs(200)
+                    .timeBeforeNextShotMs(300)
                     .build();
 
             case HARD:
@@ -31,7 +44,7 @@ public class BalanceConfigFactory {
                     .enemyHealth(200)
                     .enemyDamage(30)
                     .spawnRate(1.5f)
-                    .timeBeforeNextShotMs(300)
+                    .timeBeforeNextShotMs(1000)
                     .build();
 
             default:

@@ -6,79 +6,161 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
+import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+
+import xtremvaders.Entites.BalanceConfigFactory;
+import xtremvaders.Entites.BalanceConfigFactory.DifficultyLevel;
 
 public class SettingsOverlayPanel extends JPanel {
 
     private JSlider volumeSlider;
     private JSlider musicSlider;
+    private JComboBox<DifficultyLevel> difficultyCombo;
     private JButton closeButton;
 
-    public SettingsOverlayPanel() {
+    private final Consumer<DifficultyLevel> onDifficultyChanged;
+
+    public SettingsOverlayPanel(int width, int height, Consumer<DifficultyLevel> onDifficultyChanged) {
+        this.onDifficultyChanged = onDifficultyChanged;
         setOpaque(false);
         setLayout(null);
 
         // Fond transparent foncé + bord arrondi
-        setBackground(new Color(0, 0, 0, 220));
+        setBackground(new Color(0, 0, 0, 250));
         setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true));
 
         // Taille fixe pour le panneau (exemple)
-        setBounds(150, 100, 500, 300);
+        setBounds(0, 0, width, height);
 
         initComponents();
     }
 
-    private void initComponents() {
-        Font labelFont = new Font("Orbitron", Font.BOLD, 18);
+private void initComponents() {
+    Font labelFont = new Font("Orbitron", Font.BOLD, 18);
 
-        JLabel volumeLabel = new JLabel("Volume Général");
-        volumeLabel.setForeground(Color.WHITE);
-        volumeLabel.setFont(labelFont);
-        volumeLabel.setBounds(50, 30, 200, 30);
-        add(volumeLabel);
+    int panelWidth = getWidth() > 0 ? getWidth() : 500;
+    int panelHeight = getHeight() > 0 ? getHeight() : 350;
 
-        volumeSlider = new JSlider(0, 100, 75);
-        volumeSlider.setBounds(50, 70, 400, 50);
-        volumeSlider.setOpaque(false);
-        add(volumeSlider);
+    int marginLeft = 50;
+    int labelWidth = 200;
+    int sliderWidth = panelWidth - marginLeft * 2;
+    int controlHeight = 30;
+    int sliderHeight = 50;
+    int verticalSpacing = 40;
+    int yPos = 30;
 
-        JLabel musicLabel = new JLabel("Volume Musique");
-        musicLabel.setForeground(Color.WHITE);
-        musicLabel.setFont(labelFont);
-        musicLabel.setBounds(50, 130, 200, 30);
-        add(musicLabel);
+    // Volume général
+    JLabel volumeLabel = new JLabel("Volume Général");
+    volumeLabel.setForeground(Color.WHITE);
+    volumeLabel.setFont(labelFont);
+    volumeLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+    add(volumeLabel);
 
-        musicSlider = new JSlider(0, 100, 60);
-        musicSlider.setBounds(50, 170, 400, 50);
-        musicSlider.setOpaque(false);
-        add(musicSlider);
+    yPos += controlHeight;
 
-        closeButton = new JButton("Fermer");
-        closeButton.setBounds(200, 230, 100, 40);
-        closeButton.setFont(labelFont);
-        closeButton.setForeground(Color.WHITE);
-        closeButton.setContentAreaFilled(false);
-        closeButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true));
-        closeButton.setFocusPainted(false);
+    volumeSlider = new JSlider(0, 100, 75);
+    volumeSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
+    volumeSlider.setOpaque(false);
+    add(volumeSlider);
 
-        closeButton.addActionListener(e -> setVisible(false));
-        add(closeButton);
-    }
+    yPos += sliderHeight + verticalSpacing;
+
+    // Volume musique
+    JLabel musicLabel = new JLabel("Volume Musique");
+    musicLabel.setForeground(Color.WHITE);
+    musicLabel.setFont(labelFont);
+    musicLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+    add(musicLabel);
+
+    yPos += controlHeight;
+
+    musicSlider = new JSlider(0, 100, 60);
+    musicSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
+    musicSlider.setOpaque(false);
+    add(musicSlider);
+
+    yPos += sliderHeight + verticalSpacing;
+
+    // Difficulté
+    JLabel difficultyLabel = new JLabel("Difficulté");
+    difficultyLabel.setForeground(Color.WHITE);
+    difficultyLabel.setFont(labelFont);
+    difficultyLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+    add(difficultyLabel);
+
+    difficultyCombo = new JComboBox<>(DifficultyLevel.values());
+    int comboWidth = 350;
+    int comboHeight = 40;
+    int labelHeight = controlHeight;
+    int comboY = yPos - (comboHeight - labelHeight) / 2;
+
+    difficultyCombo.setBounds(marginLeft + labelWidth + 10, comboY, comboWidth, comboHeight);
+    difficultyCombo.setFont(labelFont.deriveFont(Font.BOLD, 20f));
+    difficultyCombo.setBackground(Color.BLACK);
+    difficultyCombo.setForeground(Color.WHITE);
+
+    // Custom renderer pour padding intérieur
+    difficultyCombo.setRenderer(new javax.swing.DefaultListCellRenderer() {
+        private final int padding = 10;  // padding à gauche et droite
+
+        @Override
+        public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value,
+                int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            label.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, padding, 0, padding));
+            return label;
+        }
+    });
+
+    add(difficultyCombo);
+
+    DifficultyLevel current = BalanceConfigFactory.getCurrentDifficulty();
+    difficultyCombo.setSelectedItem(current);
+
+    difficultyCombo.addActionListener(e -> {
+        DifficultyLevel selected = (DifficultyLevel) difficultyCombo.getSelectedItem();
+        if (onDifficultyChanged != null && selected != null) {
+            onDifficultyChanged.accept(selected);
+        }
+    });
+
+    // Ici on ignore yPos + verticalSpacing pour placer le bouton en bas
+    int buttonWidth = 100;
+    int buttonHeight = 40;
+    int bottomPadding = 30;
+
+    closeButton = new JButton("Fermer");
+    closeButton.setBounds(
+        (panelWidth - buttonWidth) / 2,
+        panelHeight - buttonHeight - bottomPadding,
+        buttonWidth,
+        buttonHeight
+    );
+    closeButton.setFont(labelFont);
+    closeButton.setForeground(Color.WHITE);
+    closeButton.setContentAreaFilled(false);
+    closeButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true));
+    closeButton.setFocusPainted(false);
+    closeButton.addActionListener(e -> setVisible(false));
+    add(closeButton);
+}
+
+
 
     @Override
     protected void paintComponent(Graphics g) {
         // Fond semi-transparent arrondi
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         g2.setColor(getBackground());
         g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
-
         g2.dispose();
 
         super.paintComponent(g);
@@ -90,5 +172,9 @@ public class SettingsOverlayPanel extends JPanel {
 
     public int getMusicVolume() {
         return musicSlider.getValue();
+    }
+
+    public DifficultyLevel getSelectedDifficulty() {
+        return (DifficultyLevel) difficultyCombo.getSelectedItem();
     }
 }

@@ -24,9 +24,16 @@ public class AudioDirector {
     }
 
     public void onPauseMenuOpened() {
+        //TODO EMPECHER DE FAIRE 9A DEUX FOIS
         System.out.println("try to stop all sounds ...");
-        AudioPlayer.stopAll();
     }
+
+    public void onResumeGame() {
+        //TODO EMPECHER DE FAIRE 9A DEUX FOIS
+        System.out.println("AUDIO DIRECTOR: onResumeGame");
+    }
+
+    
 
     // Joue une musique (interrompt l'ancienne si nécessaire)
     public void playMusic(String musicToPlay) {
