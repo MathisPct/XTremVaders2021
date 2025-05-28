@@ -31,14 +31,14 @@ public class AudioDirector {
     }
 
     public void onLaunchGame() {
-        //TODO EMPECHER DE FAIRE 9A DEUX FOIS
-        System.out.println("try to stop all sounds ...");
+        //TODO EMPECHER DE FAIRE CA DEUX FOIS
+        System.out.println("On launch game");
         AudioDirector.getInstance().playRandomTrackInRange(0, 300);
     }
 
     public void onResumeGame() {
-        //TODO EMPECHER DE FAIRE 9A DEUX FOIS
-        System.out.println("AUDIO DIRECTOR: onResumeGame");
+        //TODO EMPECHER DE FAIRE CA DEUX FOIS
+        System.out.println("MUSIC - onResumeGame");
     }
 
     
@@ -46,17 +46,20 @@ public class AudioDirector {
     // Joue une musique (interrompt l'ancienne si nécessaire)
     public void playMusic(String musicToPlay) {
         
-        // if (currentMusic != null && !currentMusic.equals(musicToPlay)) {
-        //     stopMusic();
-        // }
-        
+        if (currentMusic != null && !currentMusic.equals(musicToPlay)) {
+            System.out.println("MUSIC - Stopping: " + currentMusic + "& Playing " + musicToPlay);
+            stopMusic();
+        }
 
         currentMusic = musicToPlay;
+
+        System.out.println("MUSIC - Playing " + musicToPlay);
         AudioPlayer.play(musicToPlay); // Ex : "musics/theme1"
     }
 
     // Joue un effet sonore (ne coupe pas la musique)
     public void playSFX(String sfxName) {
+        //System.out.println("🔊 Playing " + sfxName);
         AudioPlayer.play(sfxName); // Ex : "sfx/explosion1"
     }
 

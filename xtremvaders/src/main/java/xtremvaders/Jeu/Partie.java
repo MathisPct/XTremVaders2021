@@ -2,7 +2,6 @@ package xtremvaders.Jeu;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.BalanceConfig;
 import xtremvaders.Entites.GenerateurBoss;
 import xtremvaders.Entites.Joueur;
@@ -93,10 +92,6 @@ public class Partie extends GameItem {
         getGame().addItem(background);
         getGame().addItem(vagueInvaders);
         getGame().addItem(generateurBoss);
-        
-
-        AudioDirector director = AudioDirector.getInstance();
-        director.playRandomTrackInRange(125, 200);
     }
 
     private void saveAndQuit() {

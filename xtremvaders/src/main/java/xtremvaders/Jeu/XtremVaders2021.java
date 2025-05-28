@@ -30,10 +30,10 @@ public class XtremVaders2021 extends Game {
 
     //Environnement
     //private final boolean kHitBoxMode = EnvConfig.HITBOX_MODE;
-   // private final boolean kMouseMode = EnvConfig.MOUSE_MODE;
+   // private final boolean kGameCursor = EnvConfig.MOUSE_MODE;
     //private final boolean kDebugPauseMode = EnvConfig.DEBUG_PAUSE_MODE;
     private final boolean kHitBoxMode = false;
-    private final boolean kMouseMode = true;
+    private final boolean kGameCursor = true;
     private final boolean kDebugPauseMode = false;
 
     //Gameplay related
@@ -138,17 +138,17 @@ public class XtremVaders2021 extends Game {
 
     protected void ensureControlsInitialized() {
         //Initializing cursor
-        if(kMouseMode==true) {
-            initMouseCursor();
+        if(kGameCursor==true) {
+            initGameCursor();
         }
     }
 
     protected void hideCursor() {
-        System.out.println("Removing cursor");
+        System.out.println("MAIN: Removing GameItem Cursor");
         this.remove(motionManager.getCursor());
     }
 
-        public void initMouseCursor() {
+        public void initGameCursor() {
         mousecursor = new CursorItem(this, "cursor/cursor", 200, 200);
         this.addItem(mousecursor); 
 
