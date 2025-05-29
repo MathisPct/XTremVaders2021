@@ -17,7 +17,6 @@ import iut.Vector;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.BalanceConfig;
 import xtremvaders.Entites.BalanceConfigFactory;
-import xtremvaders.Entites.BalanceConfigFactory.DifficultyLevel;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Input.GameInputHandler;
@@ -34,14 +33,14 @@ public class XtremVaders2021 extends Game {
     public static String kBuildVersion = "2.0.0";
     //Debuging logs
     public static boolean kDebugPauseMode = false; //false in release
-    public static boolean kDebugGameControls = true; //false in release
+    public static boolean kDebugGameControls = false; //false in release
 
     public static boolean kLargeMode = false; // true in release when operationnal
-    public static boolean kHitBoxDisplay = false; 
-    public static boolean kGameCursor = true; 
+    public static boolean kHitBoxDisplay = false; // false obsviously
+    public static boolean kGameCursor = true; //true in release
 
-    public static boolean kDisableMusic = true; //false in release
-    public static boolean kDisableSfx = true; // false
+    public static boolean kDisableMusic = false; //false in release
+    public static boolean kDisableSfx = false; // false
 
     //Gameplay related
     GameSpeed gameSpeed;
@@ -234,15 +233,11 @@ public class XtremVaders2021 extends Game {
         }
     }
 
-    private void affectDifficulty(DifficultyLevel difficulty) {
-
-    }
-
     //  showMainMenu montre le menu d'en
     public void showPauseMenu() {
         if (pauseMenu == null) {
-            int modaleWidth = getWidth() - 700;
-            int modaleHeight = getHeight() - 600;
+            int modaleWidth = getWidth() - 500;
+            int modaleHeight = getHeight() - 300;
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             pauseMenu = new PausePanel(0, modaleWidth, modaleHeight); // ← 🎯 Décalage vertical des boutons de menu ici
 

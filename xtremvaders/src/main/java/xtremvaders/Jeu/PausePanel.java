@@ -19,6 +19,9 @@ public class PausePanel extends JPanel {
     private final int verticalOffset; // ⭐ Paramètre personnalisable
     private Runnable setResumeGameCallback; // ⭐ Injecté depuis l'extérieur
 
+    private int width;
+    private int height;
+
 
 
 private SettingsOverlayPanel settingsDialog;
@@ -29,6 +32,8 @@ private SettingsOverlayPanel settingsDialog;
         int height
         ) {
         this.verticalOffset = verticalOffset;
+        this.width = width;
+        this.height = height;
 
         setOpaque(false);
         setLayout(null);
@@ -46,19 +51,16 @@ private SettingsOverlayPanel settingsDialog;
         this.setResumeGameCallback = callback;
     }
 
-
     private void initSettingsDialog() {
         settingsDialog = new SettingsOverlayPanel(
-            getWidth(),
-            getHeight(),
-            (difficultyLevel) -> {
-                System.out.println("Nouveau niveau de difficulté sélectionné : " + difficultyLevel);
-                BalanceConfigFactory.applyDifficulty(difficultyLevel);
-            }
-        );
-        settingsDialog.setVisible(false); // caché au départ
+            width,
+            height,
+            difficultyLevel -> {
+            BalanceConfigFactory.applyDifficulty(difficultyLevel);
+        });
+
+        settingsDialog.setVisible(false);
         add(settingsDialog);
-        // Position déjà gérée par SettingsOverlayPanel via setBounds
     }
 
     private void initButtons() {
