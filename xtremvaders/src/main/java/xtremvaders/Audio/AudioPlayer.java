@@ -21,6 +21,13 @@ public class AudioPlayer {
         managedAudio.play();
     }
 
+    public static void setVolume(float volume) {
+        for (ManagedAudio ma : playingSounds.values()) {
+            ma.setVolume(volume);
+        }
+    }
+
+
     ///TODO dont work atm
     public static void playAll() {
         for (ManagedAudio ma : playingSounds.values()) {

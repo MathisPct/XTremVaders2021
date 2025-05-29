@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -14,6 +16,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Audio.AudioTrack;
@@ -47,6 +51,9 @@ public class SettingsOverlayPanel extends JPanel {
         initComponents();
     }
 
+    private Timer throttleTimer;
+    private static final int THROTTLE_DELAY_MS = 200; // déclenche tous les 100ms au maximum
+
     private void initComponents() {
         Font labelFont = new Font("Orbitron", Font.BOLD, 18);
 
@@ -61,36 +68,44 @@ public class SettingsOverlayPanel extends JPanel {
         int verticalSpacing = 40;
         int yPos = 30;
 
-        // Volume général
-        JLabel volumeLabel = new JLabel("Volume Général");
-        volumeLabel.setForeground(Color.WHITE);
-        volumeLabel.setFont(labelFont);
-        volumeLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
-        add(volumeLabel);
-
         yPos += controlHeight;
 
-        volumeSlider = new JSlider(0, 100, 75);
-        volumeSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
-        volumeSlider.setOpaque(false);
-        add(volumeSlider);
-
-        yPos += sliderHeight + verticalSpacing;
-
-        // Volume musique
-        JLabel musicLabel = new JLabel("Volume Musique");
+                // Volume musique
+        JLabel musicLabel = new JLabel("Volume général");
         musicLabel.setForeground(Color.WHITE);
         musicLabel.setFont(labelFont);
         musicLabel.setBounds(marginLeft, yPos, labelWidth, controlHeight);
+        
         add(musicLabel);
+        yPos += verticalSpacing;
+        volumeSlider = new JSlider(0, 100, 60);
+        volumeSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
+        volumeSlider.setOpaque(false);
+
+        // Dans ton constructeur ou méthode d'init :
+        volumeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (throttleTimer != null) {
+                    throttleTimer.cancel(); // annule le précédent timer
+                }
+
+                throttleTimer = new Timer();
+                throttleTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        int volume = volumeSlider.getValue();
+                        float normalized = (float) (volume / 100.0);
+                        AudioDirector.getInstance().changeVolume(normalized);
+                        System.out.println("Volume changé (throttled) : " + volume + "%");
+                    }
+                }, THROTTLE_DELAY_MS);
+            }
+        });
+
+        add(volumeSlider);
 
         yPos += controlHeight;
-
-        musicSlider = new JSlider(0, 100, 60);
-        musicSlider.setBounds(marginLeft, yPos, sliderWidth, sliderHeight);
-        musicSlider.setOpaque(false);
-        add(musicSlider);
-
         yPos += sliderHeight + verticalSpacing;
 
         // Difficulté

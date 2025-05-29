@@ -181,8 +181,8 @@ public class Joueur extends Vaisseau implements GameActionListener {
             this.lastShotElaspedTime = timeBeforeNextShotMs; //reset du shooting
         }
         //mouvement du joueur
-        appliquerMouvement(scaledDt);
-        //applyPhysics(scaledDt);
+        //appliquerMouvement(scaledDt);
+        applyPhysics(scaledDt);
     }
 
     @Override
@@ -226,39 +226,49 @@ public class Joueur extends Vaisseau implements GameActionListener {
     private double vitesseMax = 400.0;         // vitesse maximale autorisée
 
 
-    /**
-     * Appliquer le mouvement horizontal avec masse et inertie
-     * @param dt Temps écoulé en millisecondes
-     */
-    private void applyPhysics(long dt) {
-        double dtSecondes = dt / 1000.0; // conversion en secondes
+private void applyPhysics(long dt) {
+    double dtSecondes = dt / 1000.0;
 
-        // Calcul de la force appliquée selon les touches
-        double accelerationX = 0;
-        if (right && this.getRight() < getGame().getWidth()) {
-            accelerationX = force / masse;
-        } else if (left && this.getLeft() > 0) {
-            accelerationX = -force / masse;
+    // États des touches
+    boolean allerADroite = right && this.getRight() < getGame().getWidth();
+    boolean allerAGauche = left && this.getLeft() > 0;
+
+    double accelerationX = 0;
+    double boost = 200; // Valeur du boost (tu peux ajuster)
+
+    if (allerADroite) {
+        if (vitesseX < 0) {
+            // Changement de direction : petit boost
+            vitesseX += boost;
         }
+        accelerationX = force / masse;
 
-        // Appliquer l'accélération à la vitesse
-        vitesseX += accelerationX * dtSecondes;
-
-        // Appliquer inertie si aucune touche n’est pressée
-        if (!right && !left) {
-            vitesseX *= inertie; // ralentit progressivement
-            if (Math.abs(vitesseX) < 1) vitesseX = 0; // éviter la glisse infinie
+    } else if (allerAGauche) {
+        if (vitesseX > 0) {
+            vitesseX -= boost;
         }
-
-        // Limiter la vitesse
-        if (vitesseX > vitesseMax) vitesseX = vitesseMax;
-        if (vitesseX < -vitesseMax) vitesseX = -vitesseMax;
-
-        // Appliquer le déplacement réel
-        double dx = vitesseX * dtSecondes;
-        moveDA(Math.abs(dx), dx >= 0 ? 0 : 180); // 0 = droite, 180 = gauche
-        canon.deplacerCanon(Math.abs(dx), dx >= 0 ? 0 : 180);
+        accelerationX = -force / masse;
     }
+
+    // Appliquer l'accélération à la vitesse
+    vitesseX += accelerationX * dtSecondes;
+
+    // Appliquer l'inertie si aucune touche n’est pressée
+    if (!allerADroite && !allerAGauche) {
+        vitesseX *= inertie;
+        if (Math.abs(vitesseX) < 1) vitesseX = 0;
+    }
+
+    // Limiter la vitesse
+    if (vitesseX > vitesseMax) vitesseX = vitesseMax;
+    if (vitesseX < -vitesseMax) vitesseX = -vitesseMax;
+
+    // Appliquer le déplacement
+    double dx = vitesseX * dtSecondes;
+    moveDA(Math.abs(dx), dx >= 0 ? 0 : 180);
+    canon.deplacerCanon(Math.abs(dx), dx >= 0 ? 0 : 180);
+}
+
 
 
     /**

@@ -28,6 +28,13 @@ public class AudioDirector {
         return instance;
     }
 
+    public void changeVolume(float volume) {
+        if (currentMusic == null) {
+            return;
+        }
+        AudioPlayer.setVolume(volume);
+    }
+
     public AudioTrack getLastTrack() {
         return lastTrack;
     }
