@@ -61,12 +61,6 @@ public class GameInputHandler extends GameItem implements KeyListener {
         listeners.add(listener);
     }
 
-    public  void notifyStof() {
-        for (GameActionListener l : listeners) {
-            l.onActionPressed(GameAction.FIRE);
-        }
-    }
-
     private void notifyActionPressed(GameAction action) {
         if(XtremVaders2021.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: notifyActionPressed " + this.getClass().getName());

@@ -133,7 +133,6 @@ public class XtremVaders2021 extends Game {
         joueur.setEstActionFreeze(true);
         joueur.setPtVie(3);
 
-        gameInputHandler.notifyStof();
 
         this.partie = new Partie(
             this, 
