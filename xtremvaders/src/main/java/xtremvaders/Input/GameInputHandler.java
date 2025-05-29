@@ -38,7 +38,7 @@ public class GameInputHandler extends GameItem implements KeyListener {
 
 
     public GameInputHandler(Game g) {
-        super(g, "joueur/playerShip3", 485, 690);
+        super(g, "utils/empty", 0, 0);
         // Bindings clavier par défaut
         keyBindings.put(KeyEvent.VK_LEFT, GameAction.MOVE_LEFT);
         keyBindings.put(KeyEvent.VK_Q, GameAction.MOVE_LEFT);

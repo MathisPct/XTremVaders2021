@@ -30,24 +30,15 @@ public class Partie extends GameItem {
      * Attribut permettant de générer le boss
      */
     private GenerateurBoss generateurBoss;
-    
-    
-    /**
-     * Compteur utile pour effectuer certaines instructions seulment une fois
-     * dans le evolve. afin d'éviter de tout refaire en boucle et ainsi d'
-     * éviter de générer des actions indesirables
-     */
-    private int cptIteration;
 
-    private InGameGUI gameGUI;
+
+    private final InGameGUI gameGUI;
 
     public Partie(
         Game g, 
         Joueur joueur
         ) {
         super(g, "transparent", 0, 0);
-        //Lancement menu démarrage
-        this.cptIteration = 0;
         this.gameGUI = new InGameGUI(g);
     }
 
@@ -92,18 +83,5 @@ public class Partie extends GameItem {
         getGame().addItem(background);
         getGame().addItem(vagueInvaders);
         getGame().addItem(generateurBoss);
-    }
-
-    private void saveAndQuit() {
-        //save(); //TODO to implement
-        System.exit(0);
-    }
-    
-    
-    /**
-     * Méthode qui fabrique un menu de fin
-     */
-    private void lancerMenuFin(){
-        gameGUI.lancerMenuFin();
     }
 }
