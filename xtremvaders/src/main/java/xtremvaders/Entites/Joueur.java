@@ -8,8 +8,8 @@ import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
 import xtremvaders.Input.GameAction;
 import xtremvaders.Input.GameActionListener;
+import xtremvaders.Jeu.GameConfig;
 import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.Canon;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
@@ -339,7 +339,7 @@ private void applyPhysics(long dt) {
 
     @Override
     public void onActionPressed(GameAction action) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: " + this.getClass().getName() + " onActionPressed() ");
         }
         switch (action) {
@@ -365,7 +365,7 @@ private void applyPhysics(long dt) {
 
     @Override
     public void onActionReleased(GameAction action) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: " + this.getClass().getName() + " onActionReleased() ");
         }
         switch (action) {

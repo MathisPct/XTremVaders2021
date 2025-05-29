@@ -9,7 +9,7 @@ import java.util.Map;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Jeu.GameConfig;
 
 
 /**
@@ -55,14 +55,14 @@ public class GameInputHandler extends GameItem implements KeyListener {
     }
 
     public void addActionListener(GameActionListener listener) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: Add GameControlsListener: " + listener.getClass().toString());
         }
         listeners.add(listener);
     }
 
     private void notifyActionPressed(GameAction action) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: notifyActionPressed " + this.getClass().getName());
         }
         for (GameActionListener l : listeners) {
@@ -71,7 +71,7 @@ public class GameInputHandler extends GameItem implements KeyListener {
     }
 
     private void notifyActionReleased(GameAction action) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: notifyActionReleased " + this.getClass().getName());
         }
         for (GameActionListener l : listeners) {
@@ -81,7 +81,7 @@ public class GameInputHandler extends GameItem implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: Key pressed " + e.toString());
         }
         
@@ -101,7 +101,7 @@ public class GameInputHandler extends GameItem implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: keyReleased Event KeyListener" + e.getKeyCode());
         }
         GameAction action = keyBindings.get(e.getKeyCode());
@@ -113,7 +113,7 @@ public class GameInputHandler extends GameItem implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if(XtremVaders2021.kDebugGameControls == true) {
+        if(GameConfig.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: keyTyped Event KeyListener" + e.getKeyCode());
         }
     }

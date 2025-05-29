@@ -30,17 +30,6 @@ import xtremvaders.Output.StylizedLogger;
  * @author aguidet
  */
 public class XtremVaders2021 extends Game {
-
-    public static String kBuildVersion = "2.0.0";
-    public static boolean kDebugPauseMode = false; //false in release
-    public static boolean kDebugGameControls = false; //false in release
-     public static boolean kAutoLaunchGame = true; //false in release
-    public static boolean kLargeMode = false; // true in release when operationnal
-    public static boolean kHitBoxDisplay = false; // false obsviously
-    public static boolean kGameCursor = true; //true in release
-    public static boolean kDisableMusic = false; //false in release
-    public static boolean kDisableSfx = false; // false
-
     //Gameplay related
     GameSpeed gameSpeed;
     
@@ -69,7 +58,7 @@ public class XtremVaders2021 extends Game {
         int width = 1024;
         int height = 800;
 
-        if(kLargeMode == true) {
+        if(GameConfig.kLargeMode == true) {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             width = screenSize.width - 200;
             height = screenSize.height - 100;
@@ -89,10 +78,11 @@ public class XtremVaders2021 extends Game {
      */
     public XtremVaders2021(int width, int height) {
         super(width, height, "XtremeVaders");
-        StylizedLogger.printGameLaunch(kBuildVersion, "buildChanges: ");
+        StylizedLogger.printGameLaunch(GameConfig.kBuildVersion, "buildChanges: ");
+        StylizedLogger.printPropertiesConfig();
 
         //Debug hitboxes
-        GameItem.DRAW_HITBOX=kHitBoxDisplay;
+        GameItem.DRAW_HITBOX=GameConfig.kHitBoxDisplay;
          //Keyboard mapping atm
         gameInputHandler = new GameInputHandler(this);
         this.addItem(gameInputHandler); //TODO add remove to clear memory
@@ -117,7 +107,7 @@ public class XtremVaders2021 extends Game {
     protected void createItems() { 
         ensureControlsInitialized();
         showMainMenu();
-        if(kAutoLaunchGame == true) {
+        if(GameConfig.kAutoLaunchGame == true) {
             startNewGame();
         }
     }
@@ -155,7 +145,7 @@ public class XtremVaders2021 extends Game {
      */
     protected void pauseGame(){
         System.out.println("pause game");
-        if(kDebugPauseMode == false) {
+        if(GameConfig.kDebugPauseMode == false) {
             showPauseMenu();
         }
         GameRuntime.getGameSpeed().pause(); 
@@ -177,7 +167,7 @@ public class XtremVaders2021 extends Game {
 
     protected void ensureControlsInitialized() {
         //Initializing cursor
-        if(kGameCursor==true) {
+        if(GameConfig.kGameCursor==true) {
             initGameCursor();
         }
     }
