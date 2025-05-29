@@ -33,15 +33,15 @@ import xtremvaders.Output.StylizedLogger;
 public class XtremVaders2021 extends Game {
     public static String kBuildVersion = "2.0.0";
     //Debuging logs
-    public static boolean kDebugPauseMode = false;
-    public static boolean kDebugGameControls = true;
+    public static boolean kDebugPauseMode = false; //false in release
+    public static boolean kDebugGameControls = true; //false in release
 
-    public static boolean kLargeMode = false;
-    public static boolean kHitBoxDisplay = false;
-    public static boolean kGameCursor = true;
+    public static boolean kLargeMode = false; // true in release when operationnal
+    public static boolean kHitBoxDisplay = false; 
+    public static boolean kGameCursor = true; 
 
-    public static boolean kDisableMusic = true;
-    public static boolean kDisableSfx = true;
+    public static boolean kDisableMusic = true; //false in release
+    public static boolean kDisableSfx = true; // false
 
     //Gameplay related
     GameSpeed gameSpeed;
@@ -96,7 +96,8 @@ public class XtremVaders2021 extends Game {
         //Debug hitboxes
         GameItem.DRAW_HITBOX=kHitBoxDisplay;
          //Keyboard mapping atm
-        gameInputHandler = new GameInputHandler();
+        gameInputHandler = new GameInputHandler(this);
+        this.addItem(gameInputHandler); //TODO add remove to clear memory
         GameRuntime.init(new GameSpeed());
         AudioDirector.getInstance().onLaunchGame();
 
@@ -108,6 +109,8 @@ public class XtremVaders2021 extends Game {
             difficulty.getTimeBeforeNextShotMs()
         );
         gameInputHandler.addActionListener(joueur);
+
+
     }
 
     /**
@@ -129,6 +132,8 @@ public class XtremVaders2021 extends Game {
         joueur.setOnPressEscape(() -> pauseGame());
         joueur.setEstActionFreeze(true);
         joueur.setPtVie(3);
+
+        gameInputHandler.notifyStof();
 
         this.partie = new Partie(
             this, 

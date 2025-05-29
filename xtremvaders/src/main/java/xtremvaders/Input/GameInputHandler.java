@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import iut.Game;
+import iut.GameItem;
 import xtremvaders.Jeu.XtremVaders2021;
 
 
@@ -14,7 +16,7 @@ import xtremvaders.Jeu.XtremVaders2021;
  * Cette classe doit boire les inputs, c'est l'extraction de la classe joueur
  */
 
-public class GameInputHandler implements KeyListener {
+public class GameInputHandler extends GameItem implements KeyListener {
 
     /**
      * Map liant les codes des touches clavier (KeyEvent.VK_*) à des actions du jeu (GameAction).
@@ -35,7 +37,8 @@ public class GameInputHandler implements KeyListener {
     private final List<GameActionListener> listeners = new ArrayList<>();
 
 
-    public GameInputHandler() {
+    public GameInputHandler(Game g) {
+        super(g, "joueur/playerShip3", 485, 690);
         // Bindings clavier par défaut
         keyBindings.put(KeyEvent.VK_LEFT, GameAction.MOVE_LEFT);
         keyBindings.put(KeyEvent.VK_Q, GameAction.MOVE_LEFT);
@@ -56,6 +59,12 @@ public class GameInputHandler implements KeyListener {
             System.out.println("kDebugGameControls: Add GameControlsListener: " + listener.getClass().toString());
         }
         listeners.add(listener);
+    }
+
+    public  void notifyStof() {
+        for (GameActionListener l : listeners) {
+            l.onActionPressed(GameAction.FIRE);
+        }
     }
 
     private void notifyActionPressed(GameAction action) {
@@ -113,5 +122,24 @@ public class GameInputHandler implements KeyListener {
         if(XtremVaders2021.kDebugGameControls == true) {
             System.out.println("kDebugGameControls: keyTyped Event KeyListener" + e.getKeyCode());
         }
+    }
+
+    @Override
+    public void evolve(long arg0) {
+    }
+
+    @Override
+    public void collideEffect(GameItem arg0) {
+
+    }
+
+    @Override
+    public String getItemType() {
+        return "GameInputListener";
+    }
+
+    @Override
+    public boolean isCollide(GameItem arg0) {
+        return false;
     }
 }

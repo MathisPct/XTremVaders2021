@@ -1,7 +1,5 @@
 package xtremvaders.Entites;
 
-import java.awt.event.KeyEvent;
-
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
@@ -120,17 +118,15 @@ public class Joueur extends Vaisseau implements GameActionListener {
     @Override
     public void tirer() {
         //si les actions du vaisseaux ne sont pas freezées
-        if(!estActionFreeze){
-            //si le joueur peut tirer
-            if(this.canShoot){
-                AudioDirector director = AudioDirector.getInstance();
-                director.playSFX("newSounds/spaceShoot");
-                this.canShoot = false;
-                this.missile = FabriqueMissile.fabriquerUnMissile(getGame(), getMiddleX()-5, getMiddleY()-50, typeMissile, this);
-                getGame().addItem(missile);
-                itemAnime.setLifeSpend(0);
-                itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_SHOOT);
-            }
+        //si le joueur peut tirer
+        if(this.canShoot){
+            AudioDirector director = AudioDirector.getInstance();
+            director.playSFX("newSounds/spaceShoot");
+            this.canShoot = false;
+            this.missile = FabriqueMissile.fabriquerUnMissile(getGame(), getMiddleX()-5, getMiddleY()-50, typeMissile, this);
+            getGame().addItem(missile);
+            itemAnime.setLifeSpend(0);
+            itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_SHOOT);
         }
     }
     
@@ -195,72 +191,72 @@ public class Joueur extends Vaisseau implements GameActionListener {
     }
 
     
-    /**
-     * Evènement appelé lorsqu'une touche est pressée. Gère les mouvements 
-     * du 
-     * @param e la touche qui est pressée
-     */
-    //@Override
-    public void keyPressed(KeyEvent e) {
-        try{
-            switch(e.getKeyCode()){
-                case KeyEvent.VK_LEFT:
-                    left = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    right = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
-                case KeyEvent.VK_Q:
-                    left = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
-                case KeyEvent.VK_D:
-                    right = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
+    // /**
+    //  * Evènement appelé lorsqu'une touche est pressée. Gère les mouvements 
+    //  * du 
+    //  * @param e la touche qui est pressée
+    //  */
+    // //@Override
+    // public void keyPressed(KeyEvent e) {
+    //     try{
+    //         switch(e.getKeyCode()){
+    //             case KeyEvent.VK_LEFT:
+    //                 left = true;
+    //                 setVitesse(getVitesse() + 0.005); //accélération + on appuie
+    //                 break;
+    //             case KeyEvent.VK_RIGHT:
+    //                 right = true;
+    //                 setVitesse(getVitesse() + 0.005); //accélération + on appuie
+    //                 break;
+    //             case KeyEvent.VK_Q:
+    //                 left = true;
+    //                 setVitesse(getVitesse() + 0.005); //accélération + on appuie
+    //                 break;
+    //             case KeyEvent.VK_D:
+    //                 right = true;
+    //                 setVitesse(getVitesse() + 0.005); //accélération + on appuie
+    //                 break;
 
-                case KeyEvent.VK_SPACE:
-                   tirer();
-                   break;
-                case KeyEvent.VK_A:
-                   this.canon.tirer();
-                   break;
-                case KeyEvent.VK_ESCAPE: // cas ECHAP
-                    onPressEscape.run();
+    //             case KeyEvent.VK_SPACE:
+    //                tirer();
+    //                break;
+    //             case KeyEvent.VK_A:
+    //                this.canon.tirer();
+    //                break;
+    //             case KeyEvent.VK_ESCAPE: // cas ECHAP
+    //                 onPressEscape.run();
                     
-            }
-        }catch(Exception x){}
-    }
+    //         }
+    //     }catch(Exception x){}
+    // }
     
-   // @Override
-    public void keyTyped(KeyEvent e) {
-    }
+//    // @Override
+//     public void keyTyped(KeyEvent e) {
+//     }
     
-    //@Override
-    public void keyReleased(KeyEvent e) {
-        try{
-            switch(e.getKeyCode()){
-                case KeyEvent.VK_LEFT:
-                    left = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    right = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-                case KeyEvent.VK_Q:
-                    left = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-                case KeyEvent.VK_D:
-                    right = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-            }
-        }catch(Exception x){}
-    }
+    // //@Override
+    // public void keyReleased(KeyEvent e) {
+    //     try{
+    //         switch(e.getKeyCode()){
+    //             case KeyEvent.VK_LEFT:
+    //                 left = false;
+    //                 setVitesse(0.25); //réinitialisation de la vitesse
+    //                 break;
+    //             case KeyEvent.VK_RIGHT:
+    //                 right = false;
+    //                 setVitesse(0.25); //réinitialisation de la vitesse
+    //                 break;
+    //             case KeyEvent.VK_Q:
+    //                 left = false;
+    //                 setVitesse(0.25); //réinitialisation de la vitesse
+    //                 break;
+    //             case KeyEvent.VK_D:
+    //                 right = false;
+    //                 setVitesse(0.25); //réinitialisation de la vitesse
+    //                 break;
+    //         }
+    //     }catch(Exception x){}
+    // }
 
     public int getScore() {
         return _score;
