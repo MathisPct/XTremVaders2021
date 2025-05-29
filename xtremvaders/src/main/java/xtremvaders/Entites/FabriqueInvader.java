@@ -1,8 +1,8 @@
 package xtremvaders.Entites;
 
-import xtremvaders.Graphics.VFX.Animation;
-import xtremvaders.Graphics.VFX.ItemAnime;
 import iut.Game;
+import xtremvaders.Graphics.Animation.Animation;
+import xtremvaders.Graphics.Animation.ItemAnime;
 
 /**
  * Frabrique à invader

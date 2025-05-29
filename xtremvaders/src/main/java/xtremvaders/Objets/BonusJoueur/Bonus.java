@@ -6,9 +6,9 @@ import java.util.Random;
 import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.VagueInvaders;
-import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Utilities.RangProba;
 
 /**

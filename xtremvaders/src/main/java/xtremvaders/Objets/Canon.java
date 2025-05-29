@@ -2,13 +2,13 @@ package xtremvaders.Objets;
 
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.Joueur;
-import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.Missiles.TypeMissile;
+import xtremvaders.Runtime.GameRuntime;
 
 /**
  * Cette classe représente le Canon du joeur

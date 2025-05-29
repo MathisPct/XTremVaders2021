@@ -3,11 +3,11 @@ package xtremvaders.Objets.Missiles.Ennemis;
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Entites.Vaisseau;
-import xtremvaders.Graphics.SpritesAnimes.EnnemiExplosion;
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.TypeAnimation;
-import xtremvaders.Jeu.GameRuntime;
+import xtremvaders.Graphics.Animation.ItemAnime;
+import xtremvaders.Graphics.Animation.TypeAnimation;
+import xtremvaders.Graphics.Animation.AnimatedSprites.EnnemiExplosion;
 import xtremvaders.Objets.Missiles.TypeMissile;
+import xtremvaders.Runtime.GameRuntime;
 
 /**
  *

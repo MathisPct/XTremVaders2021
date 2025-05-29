@@ -3,11 +3,11 @@ package xtremvaders.Graphics;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Objets.Debris.Debris;
 import xtremvaders.Objets.Debris.FabriqueDebris;
 import xtremvaders.Objets.Debris.TypeDebris;
+import xtremvaders.Runtime.GameRuntime;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

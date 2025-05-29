@@ -3,18 +3,18 @@ package xtremvaders.Entites;
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
-import xtremvaders.Graphics.VFX.Animation;
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.TypeAnimation;
-import xtremvaders.Input.GameAction;
-import xtremvaders.Input.GameActionListener;
-import xtremvaders.Jeu.GameConfig;
-import xtremvaders.Jeu.GameRuntime;
+import xtremvaders.Controls.GameActionListener;
+import xtremvaders.Gameplay.Actions.GameAction;
+import xtremvaders.Graphics.Animation.Animation;
+import xtremvaders.Graphics.Animation.ItemAnime;
+import xtremvaders.Graphics.Animation.TypeAnimation;
 import xtremvaders.Objets.Canon;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import xtremvaders.Objets.Shields.Shield;
+import xtremvaders.Runtime.GameConfig;
+import xtremvaders.Runtime.GameRuntime;
 
 /**
  * Joueur du petitjeu
@@ -35,7 +35,11 @@ public class Joueur extends Vaisseau implements GameActionListener {
      * utile pour attandre le temps avant de pouvoir tirer à nouveau
      */
     private double lastShotElaspedTime;
-    private double timeBeforeNextShotMs; //CONSTANT TO SET FROM DIFFICULTY
+
+    /*
+    * CONSTANT TO SET FROM DIFFICULTY
+    */
+    private double timeBeforeNextShotMs;
     
     /**
      * boolean qui décrit/défini si le joueur peut tirer ou non
@@ -73,11 +77,6 @@ public class Joueur extends Vaisseau implements GameActionListener {
      */
     private Shield shield;
     
-    /*
-    *utile pour bloquer les actions du vaisseau et sur le vaisseau
-    */
-    private boolean estActionFreeze;
-    
     /**
      * limite de vie
      */
@@ -95,7 +94,6 @@ public class Joueur extends Vaisseau implements GameActionListener {
         setPtVie(PV);
         this.maxPtVie  = PV;
         this._score          = 0;
-        this.estActionFreeze = false;
         this.canShoot        = true;
         this._score          = 0;
         this.lastShotElaspedTime = 0;
@@ -138,7 +136,7 @@ public class Joueur extends Vaisseau implements GameActionListener {
     @Override
     public void collideEffect(GameItem item) {
         //si les actions du vaisseaux ne sont pas freezées
-        if(estVivant() && !estActionFreeze){
+        if(estVivant()){
             if(item.getItemType().equals("MissileEnnemi")){
                 Missile m = (Missile) (item);
                 System.out.println(getPtVie());
@@ -226,49 +224,48 @@ public class Joueur extends Vaisseau implements GameActionListener {
     private double vitesseMax = 400.0;         // vitesse maximale autorisée
 
 
-private void applyPhysics(long dt) {
-    double dtSecondes = dt / 1000.0;
+    private void applyPhysics(long dt) {
+        double dtSecondes = dt / 1000.0;
 
-    // États des touches
-    boolean allerADroite = right && this.getRight() < getGame().getWidth();
-    boolean allerAGauche = left && this.getLeft() > 0;
+        // États des touches
+        boolean allerADroite = right && this.getRight() < getGame().getWidth();
+        boolean allerAGauche = left && this.getLeft() > 0;
 
-    double accelerationX = 0;
-    double boost = 200; // Valeur du boost (tu peux ajuster)
+        double accelerationX = 0;
+        double boost = 200; // Valeur du boost (tu peux ajuster)
 
-    if (allerADroite) {
-        if (vitesseX < 0) {
-            // Changement de direction : petit boost
-            vitesseX += boost;
+        if (allerADroite) {
+            if (vitesseX < 0) {
+                // Changement de direction : petit boost
+                vitesseX += boost;
+            }
+            accelerationX = force / masse;
+
+        } else if (allerAGauche) {
+            if (vitesseX > 0) {
+                vitesseX -= boost;
+            }
+            accelerationX = -force / masse;
         }
-        accelerationX = force / masse;
 
-    } else if (allerAGauche) {
-        if (vitesseX > 0) {
-            vitesseX -= boost;
+        // Appliquer l'accélération à la vitesse
+        vitesseX += accelerationX * dtSecondes;
+
+        // Appliquer l'inertie si aucune touche n’est pressée
+        if (!allerADroite && !allerAGauche) {
+            vitesseX *= inertie;
+            if (Math.abs(vitesseX) < 1) vitesseX = 0;
         }
-        accelerationX = -force / masse;
+
+        // Limiter la vitesse
+        if (vitesseX > vitesseMax) vitesseX = vitesseMax;
+        if (vitesseX < -vitesseMax) vitesseX = -vitesseMax;
+
+        // Appliquer le déplacement
+        double dx = vitesseX * dtSecondes;
+        moveDA(Math.abs(dx), dx >= 0 ? 0 : 180);
+        canon.deplacerCanon(Math.abs(dx), dx >= 0 ? 0 : 180);
     }
-
-    // Appliquer l'accélération à la vitesse
-    vitesseX += accelerationX * dtSecondes;
-
-    // Appliquer l'inertie si aucune touche n’est pressée
-    if (!allerADroite && !allerAGauche) {
-        vitesseX *= inertie;
-        if (Math.abs(vitesseX) < 1) vitesseX = 0;
-    }
-
-    // Limiter la vitesse
-    if (vitesseX > vitesseMax) vitesseX = vitesseMax;
-    if (vitesseX < -vitesseMax) vitesseX = -vitesseMax;
-
-    // Appliquer le déplacement
-    double dx = vitesseX * dtSecondes;
-    moveDA(Math.abs(dx), dx >= 0 ? 0 : 180);
-    canon.deplacerCanon(Math.abs(dx), dx >= 0 ? 0 : 180);
-}
-
 
 
     /**
@@ -292,24 +289,12 @@ private void applyPhysics(long dt) {
         return canon;
     }
     
-    /**
-     * Cette méthode permet d'activer le boolean qui servira à savoir 
-     * si on doit bloquer les actions du vaisseau ou non
-     */
-    public void setEstActionFreeze(boolean estActionFreeze) {
-        this.estActionFreeze = estActionFreeze;
-    }
 
-    public boolean isEstActionFreeze() {
-        return estActionFreeze;
-    }
-    
     public void resetJoueur(){
         int PV = 100;
         setPtVie(PV);
         this.maxPtVie  = PV;
         this._score          = 0;
-        this.estActionFreeze = false;
         this.canShoot        = true;
         this._score          = 0;
         this.lastShotElaspedTime = timeBeforeNextShotMs;

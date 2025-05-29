@@ -1,6 +1,6 @@
 package xtremvaders.Output;
 
-import xtremvaders.Jeu.GameConfig;
+import xtremvaders.Runtime.GameConfig;
 
 public class StylizedLogger {
     // ANSI styles

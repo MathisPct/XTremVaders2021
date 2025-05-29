@@ -1,7 +1,7 @@
 package xtremvaders.Objets.Debris;
 
-import xtremvaders.Graphics.SpritesAnimes.ExplosionAsteroid;
-import xtremvaders.Graphics.VFX.TypeAnimation;
+import xtremvaders.Graphics.Animation.TypeAnimation;
+import xtremvaders.Graphics.Animation.AnimatedSprites.ExplosionAsteroid;
 import iut.Game;
 
 /**

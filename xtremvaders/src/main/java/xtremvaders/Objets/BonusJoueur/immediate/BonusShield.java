@@ -2,11 +2,11 @@ package xtremvaders.Objets.BonusJoueur.immediate;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Shields.ShieldBasic;
+import xtremvaders.Runtime.GameRuntime;
 
 /**
  * @author David Golay

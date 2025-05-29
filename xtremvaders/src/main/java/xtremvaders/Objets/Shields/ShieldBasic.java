@@ -9,8 +9,8 @@ package xtremvaders.Objets.Shields;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Graphics.SpritesAnimes.ImpactShield;
-import xtremvaders.Graphics.SpritesAnimes.ShieldSprite;
+import xtremvaders.Graphics.Animation.AnimatedSprites.ImpactShield;
+import xtremvaders.Graphics.Animation.AnimatedSprites.ShieldSprite;
 import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 
 /**

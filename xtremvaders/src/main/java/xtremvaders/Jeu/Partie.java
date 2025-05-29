@@ -2,11 +2,12 @@ package xtremvaders.Jeu;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Entites.BalanceConfig;
 import xtremvaders.Entites.GenerateurBoss;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
+import xtremvaders.Gameplay.Balance.BalanceConfig;
 import xtremvaders.Graphics.Background;
+import xtremvaders.Graphics.HUD.InGameGUI;
 
 /**
  * Cette classe permet d'initialiser une partie et de relancer une partie
@@ -76,7 +77,7 @@ public class Partie extends GameItem {
         if(background != null){
             getGame().remove(background);
         }
-        gameGUI.startNewGame();
+        gameGUI.onGameStarted();
         this.background = new Background(getGame()); 
         this.vagueInvaders = new VagueInvaders(getGame(), 5, 3);
         this.generateurBoss = new GenerateurBoss(getGame());
