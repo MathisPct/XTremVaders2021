@@ -1,7 +1,9 @@
 package xtremvaders.Jeu;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
@@ -18,48 +20,68 @@ import xtremvaders.Entites.BalanceConfigFactory;
 import xtremvaders.Entites.BalanceConfigFactory.DifficultyLevel;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
+import xtremvaders.Input.GameInputHandler;
 import xtremvaders.Jeu.Menus.CursorItem;
 import xtremvaders.Jeu.Menus.MouseClickManager;
 import xtremvaders.Jeu.Menus.MouseMotionManager;
+import xtremvaders.Output.StylizedLogger;
 
 /**
  * ReprÃ©sente un petit jeu simple
  * @author aguidet
  */
 public class XtremVaders2021 extends Game {
+    public static String kBuildVersion = "2.0.0";
+    //Debuging logs
+    public static boolean kDebugPauseMode = false;
+    public static boolean kDebugGameControls = true;
 
-    //Environnement
-    //private final boolean kHitBoxMode = EnvConfig.HITBOX_MODE;
-   // private final boolean kGameCursor = EnvConfig.MOUSE_MODE;
-    //private final boolean kDebugPauseMode = EnvConfig.DEBUG_PAUSE_MODE;
-    private final boolean kHitBoxMode = false;
-    private final boolean kGameCursor = true;
-    private final boolean kDebugPauseMode = false;
+    public static boolean kLargeMode = false;
+    public static boolean kHitBoxDisplay = false;
+    public static boolean kGameCursor = true;
+
+    public static boolean kDisableMusic = true;
+    public static boolean kDisableSfx = true;
 
     //Gameplay related
     GameSpeed gameSpeed;
     
     private static Joueur joueur;
     private Partie partie;
+    private BalanceConfig difficulty;
    
     //Event related
     MouseMotionManager motionManager;
     MouseClickManager clickManager; 
     CursorItem mousecursor;
 
+    //Menu
     private MainMenuPanel mainMenu;
-
     private PausePanel pauseMenu;
+
+    private final GameInputHandler gameInputHandler;
+    
     
     /**
      * @param aArgs the command line arguments Fonction principal (main)
      * Fonction principale du jeu
      */
     public static void main(String[] aArgs) {
-        GameRuntime.init(new GameSpeed());
-        AudioDirector.getInstance().onLaunchGame();
-        XtremVaders2021 jeu = new XtremVaders2021(1024, 800);
+
+        int width = 1024;
+        int height = 800;
+
+        if(kLargeMode == true) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            width = screenSize.width - 200;
+            height = screenSize.height - 100;
+        }
+
+        // Tu peux ensuite créer ton jeu avec cette taille, par exemple :
+        XtremVaders2021 jeu = new XtremVaders2021(width, height);
         jeu.play();
+        jeu.setFocusable(true);
+        jeu.requestFocusInWindow();
     }
 
     /**
@@ -69,10 +91,24 @@ public class XtremVaders2021 extends Game {
      */
     public XtremVaders2021(int width, int height) {
         super(width, height, "XtremeVaders");
-        //Debug hitboxes
-        GameItem.DRAW_HITBOX=kHitBoxMode;
-    }
+        StylizedLogger.printGameLaunch(kBuildVersion, "buildChanges: ");
 
+        //Debug hitboxes
+        GameItem.DRAW_HITBOX=kHitBoxDisplay;
+         //Keyboard mapping atm
+        gameInputHandler = new GameInputHandler();
+        GameRuntime.init(new GameSpeed());
+        AudioDirector.getInstance().onLaunchGame();
+
+        ///
+        difficulty = BalanceConfigFactory.createConfig(BalanceConfigFactory.getCurrentDifficulty());
+        joueur = new Joueur(
+            this, 
+            0.35d, 
+            difficulty.getTimeBeforeNextShotMs()
+        );
+        gameInputHandler.addActionListener(joueur);
+    }
 
     /**
      * Crée les items au début du jeu
@@ -85,12 +121,6 @@ public class XtremVaders2021 extends Game {
     }
 
     private void startNewGame() {
-        BalanceConfig difficulty = BalanceConfigFactory.createConfig(BalanceConfigFactory.getCurrentDifficulty());
-        joueur = new Joueur(
-            this, 
-            0.35d, 
-            difficulty.getTimeBeforeNextShotMs()
-        );
         // Give onPressEscape callback to player, 
         // -> he can pause menu
         // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
@@ -109,6 +139,8 @@ public class XtremVaders2021 extends Game {
         joueur.resetJoueur();
         this.partie.startNewGame(difficulty);
         hideCursor();
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
 
     /**
@@ -148,7 +180,7 @@ public class XtremVaders2021 extends Game {
         this.remove(motionManager.getCursor());
     }
 
-        public void initGameCursor() {
+    public void initGameCursor() {
         mousecursor = new CursorItem(this, "cursor/cursor", 200, 200);
         this.addItem(mousecursor); 
 
@@ -176,11 +208,13 @@ public class XtremVaders2021 extends Game {
 
             mainMenu.setStartGameCallback(() -> {
                 System.out.println("Lancement du jeu !");
-                mainMenu.requestFocusInWindow();
+                mainMenu.setVisible(false);
+                mainMenu.setFocusable(false);
                 startNewGame();
-                 // On redonne le focus clavier à la couche principale (this)
+                this.setFocusable(true);
                 this.requestFocusInWindow();
             });
+
 
 
             if (frame != null) {
@@ -211,11 +245,13 @@ public class XtremVaders2021 extends Game {
             // callback de resume game
             pauseMenu.setResumeGameCallback(() -> {
                 System.out.println("Reprise de la partie");
-                pauseMenu.requestFocusInWindow();
+                pauseMenu.setVisible(false);
+                pauseMenu.setFocusable(false);
                 resumeGame();
-                 // On redonne le focus clavier à la couche principale (this)
+                this.setFocusable(true);
                 this.requestFocusInWindow();
             });
+
 
             if (frame != null) {
                 int x = (getWidth() - modaleWidth) / 2;

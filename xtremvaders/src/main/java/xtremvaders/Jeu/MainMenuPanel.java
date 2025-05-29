@@ -53,6 +53,9 @@ private SettingsOverlayPanel settingsDialog;
 
         initSettingsDialog();  // instanciation et ajout du settingsOverlay
         initButtons();
+
+        this.setFocusable(false);
+        this.setRequestFocusEnabled(false);
     }
 
     public void setStartGameCallback(Runnable callback) {
@@ -135,12 +138,6 @@ private SettingsOverlayPanel settingsDialog;
         // Voile semi-transparent
         g.setColor(new Color(0, 0, 0, 0));
         g.fillRect(0, 0, getWidth(), getHeight());
-
-        // Texte
-        g.setColor(Color.WHITE);
-        String text = "PAUSE";
-        int textWidth = g.getFontMetrics().stringWidth(text);
-        g.drawString(text, (getWidth() - textWidth) / 2, 100);
     }
 
     @Override

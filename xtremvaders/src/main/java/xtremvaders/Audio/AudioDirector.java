@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import xtremvaders.Jeu.XtremVaders2021;
+
 public class AudioDirector {
 
     private static AudioDirector instance;
@@ -45,6 +47,7 @@ public class AudioDirector {
 
     // Joue une musique (interrompt l'ancienne si nécessaire)
     public void playMusic(String musicToPlay) {
+        if(XtremVaders2021.kDisableMusic == true) return;
         
         if (currentMusic != null && !currentMusic.equals(musicToPlay)) {
             System.out.println("MUSIC - Stopping: " + currentMusic + "& Playing " + musicToPlay);
@@ -59,6 +62,7 @@ public class AudioDirector {
 
     // Joue un effet sonore (ne coupe pas la musique)
     public void playSFX(String sfxName) {
+        if(XtremVaders2021.kDisableMusic == true) return;
         //System.out.println("🔊 Playing " + sfxName);
         AudioPlayer.play(sfxName); // Ex : "sfx/explosion1"
     }

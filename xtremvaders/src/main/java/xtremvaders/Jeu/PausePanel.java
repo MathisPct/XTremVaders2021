@@ -37,6 +37,9 @@ private SettingsOverlayPanel settingsDialog;
 
         initSettingsDialog();  // instanciation et ajout du settingsOverlay
         initButtons();
+
+        this.setFocusable(false);
+        this.setRequestFocusEnabled(false);
     }
 
     public void setResumeGameCallback(Runnable callback) {
