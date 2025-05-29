@@ -5,10 +5,10 @@
  */
 package xtremvaders.Objets.Missiles.Joueur;
 
-import xtremvaders.Graphics.SpritesAnimes.ExplosionNuke;
+import xtremvaders.Graphics.Animation.ItemAnime;
+import xtremvaders.Graphics.Animation.TypeAnimation;
+import xtremvaders.Graphics.Animation.AnimatedSprites.ExplosionNuke;
 import xtremvaders.Entites.Vaisseau;
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.TypeAnimation;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;

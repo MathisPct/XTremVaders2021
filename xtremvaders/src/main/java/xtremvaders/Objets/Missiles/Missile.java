@@ -3,9 +3,9 @@ package xtremvaders.Objets.Missiles;
 import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Entites.Vaisseau;
-import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Utilities.Utilite;
 
 public abstract class Missile extends BoxGameItem {

@@ -2,10 +2,10 @@ package xtremvaders.Objets.Shields;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Graphics.SpritesAnimes.ImpactShield;
-import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.XtremVaders2021;
+import xtremvaders.Graphics.Animation.AnimatedSprites.ImpactShield;
 import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
+import xtremvaders.Runtime.GameRuntime;
 
 
 /**

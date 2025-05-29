@@ -1,6 +1,6 @@
 package xtremvaders.Utilities;
 
-import xtremvaders.Audio.AudioV2;
+import xtremvaders.Audio.Player.AudioV2;
 
 public class ManagedAudio implements Runnable {
     private final AudioV2 audio;

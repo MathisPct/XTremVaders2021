@@ -1,6 +1,6 @@
 package xtremvaders.Objets.BonusJoueur.temporal;
 
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;

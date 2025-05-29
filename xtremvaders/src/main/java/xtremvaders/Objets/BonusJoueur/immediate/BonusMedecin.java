@@ -1,10 +1,10 @@
 package xtremvaders.Objets.BonusJoueur.immediate;
 
 import iut.Game;
-import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
+import xtremvaders.Runtime.GameRuntime;
 
 /**
  * Bonus donnant un point de vie au joueur

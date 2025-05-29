@@ -2,7 +2,7 @@ package xtremvaders.Objets.Missiles.Joueur;
 
 
 import xtremvaders.Entites.Vaisseau;
-import xtremvaders.Graphics.SpritesAnimes.ImpactMissile;
+import xtremvaders.Graphics.Animation.AnimatedSprites.ImpactMissile;
 import xtremvaders.Objets.Missiles.TypeMissile;
 import iut.Game;
 import iut.GameItem;

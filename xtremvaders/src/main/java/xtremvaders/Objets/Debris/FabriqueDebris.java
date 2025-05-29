@@ -1,8 +1,8 @@
 package xtremvaders.Objets.Debris;
 
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.TypeAnimation;
 import iut.Game;
+import xtremvaders.Graphics.Animation.ItemAnime;
+import xtremvaders.Graphics.Animation.TypeAnimation;
 
 /**
  * Fabrique a Debris

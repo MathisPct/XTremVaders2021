@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import xtremvaders.Jeu.GameConfig;
+import xtremvaders.Audio.Player.AudioPlayer;
+import xtremvaders.Audio.Tracks.AudioTrack;
+import xtremvaders.Audio.Tracks.TrackID;
+import xtremvaders.Runtime.GameConfig;
 
 public class AudioDirector {
 

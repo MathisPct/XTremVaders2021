@@ -4,16 +4,16 @@ import java.util.Random;
 
 import iut.Game;
 import iut.GameItem;
+import xtremvaders.XtremVaders2021;
 import xtremvaders.Audio.AudioDirector;
-import xtremvaders.Graphics.SpritesAnimes.EnnemiExplosion;
-import xtremvaders.Graphics.VFX.Animation;
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Jeu.GameRuntime;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.Graphics.Animation.Animation;
+import xtremvaders.Graphics.Animation.ItemAnime;
+import xtremvaders.Graphics.Animation.AnimatedSprites.EnnemiExplosion;
 import xtremvaders.Objets.BonusJoueur.Bonus;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Objets.Missiles.Missile;
+import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Utilities.Direction;
 import xtremvaders.Utilities.InvaderBoundaryListener;
 import xtremvaders.Utilities.Utilite;
@@ -143,7 +143,7 @@ public abstract class Invader extends Vaisseau{
         if (tempAvantTir <= 0) {
             tirer();
 
-            float timeSpeed = GameRuntime.getGameSpeed().getTimeSpeed();
+            float timeSpeed = GameRuntime.getTimeSpeed();
             float minDelay = 3000.0f * timeSpeed;
             float maxDelay = 10000.0f * timeSpeed; // 3000 + 10000 (entre 3 à 10 secondes)
 

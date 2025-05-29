@@ -1,8 +1,8 @@
 package xtremvaders.Objets.BonusJoueur;
 
-import xtremvaders.Graphics.VFX.ItemAnime;
-import xtremvaders.Graphics.VFX.TypeAnimation;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.XtremVaders2021;
+import xtremvaders.Graphics.Animation.ItemAnime;
+import xtremvaders.Graphics.Animation.TypeAnimation;
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Utilities.Utilite;

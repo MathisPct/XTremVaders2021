@@ -9,7 +9,7 @@ package xtremvaders.Entites;
 import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Jeu.XtremVaders2021;
+import xtremvaders.XtremVaders2021;
 
 /**
  * Vaisseau du jeu
