@@ -30,15 +30,14 @@ import xtremvaders.Output.StylizedLogger;
  * @author aguidet
  */
 public class XtremVaders2021 extends Game {
+
     public static String kBuildVersion = "2.0.0";
-    //Debuging logs
     public static boolean kDebugPauseMode = false; //false in release
     public static boolean kDebugGameControls = false; //false in release
-
+     public static boolean kAutoLaunchGame = true; //false in release
     public static boolean kLargeMode = false; // true in release when operationnal
     public static boolean kHitBoxDisplay = false; // false obsviously
     public static boolean kGameCursor = true; //true in release
-
     public static boolean kDisableMusic = false; //false in release
     public static boolean kDisableSfx = false; // false
 
@@ -108,8 +107,6 @@ public class XtremVaders2021 extends Game {
             difficulty.getTimeBeforeNextShotMs()
         );
         gameInputHandler.addActionListener(joueur);
-
-
     }
 
     /**
@@ -120,9 +117,19 @@ public class XtremVaders2021 extends Game {
     protected void createItems() { 
         ensureControlsInitialized();
         showMainMenu();
+        if(kAutoLaunchGame == true) {
+            startNewGame();
+        }
     }
 
     private void startNewGame() {
+        System.out.println("startNewGame");
+        if(mainMenu != null) {
+            mainMenu.setVisible(false);
+            mainMenu.setFocusable(false);
+        }
+        hideCursor();
+
         // Give onPressEscape callback to player, 
         // -> he can pause menu
         // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
@@ -133,15 +140,12 @@ public class XtremVaders2021 extends Game {
         joueur.setPtVie(3);
 
 
-        this.partie = new Partie(
-            this, 
-            joueur
-        );
+        this.partie = new Partie(this, joueur);
         this.addItem(joueur);
         this.addItem(partie);
         joueur.resetJoueur();
+
         this.partie.startNewGame(difficulty);
-        hideCursor();
         this.setFocusable(true);
         this.requestFocusInWindow();
     }
@@ -206,19 +210,11 @@ public class XtremVaders2021 extends Game {
                 180, 
                 getWidth(), 
                 getHeight()
-                
             );
 
             mainMenu.setStartGameCallback(() -> {
-                System.out.println("Lancement du jeu !");
-                mainMenu.setVisible(false);
-                mainMenu.setFocusable(false);
                 startNewGame();
-                this.setFocusable(true);
-                this.requestFocusInWindow();
             });
-
-
 
             if (frame != null) {
                 mainMenu.setBounds(0, 0, getWidth(), getHeight());
