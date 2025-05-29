@@ -9,9 +9,10 @@ import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Jeu.GameRuntime;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
+import xtremvaders.Output.StylizedLogger;
+import xtremvaders.Utilities.Direction;
 import xtremvaders.Utilities.EtatMouvement;
 import xtremvaders.Utilities.InvaderBoundaryListener;
-import xtremvaders.Utilities.Direction;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -110,8 +111,8 @@ public class VagueInvaders extends GameItem implements InvaderBoundaryListener {
      */
     public void genererVague(){
         nbVagues++;
+        StylizedLogger.printWaveAnnouncement(nbVagues);
         AudioDirector.getInstance().playSFX("newSounds/newWave");
-        System.out.println("Nb vague = " + nbVagues);
         //initialisation de la liste des bonus de la vague
         listeBonus = new ArrayList<>();
         this.directionHorizontale = Direction.DROITE;

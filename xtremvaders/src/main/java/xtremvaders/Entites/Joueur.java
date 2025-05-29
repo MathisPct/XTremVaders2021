@@ -1,15 +1,15 @@
 package xtremvaders.Entites;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Graphics.VFX.Animation;
 import xtremvaders.Graphics.VFX.ItemAnime;
 import xtremvaders.Graphics.VFX.TypeAnimation;
+import xtremvaders.Input.GameAction;
+import xtremvaders.Input.GameActionListener;
 import xtremvaders.Jeu.GameRuntime;
+import xtremvaders.Jeu.XtremVaders2021;
 import xtremvaders.Objets.Canon;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
@@ -20,7 +20,7 @@ import xtremvaders.Objets.Shields.Shield;
  * Joueur du petitjeu
  * @author aguidet
  */
-public class Joueur extends Vaisseau implements KeyListener {
+public class Joueur extends Vaisseau implements GameActionListener {
     /**
      * Le score du joueur
      */
@@ -118,17 +118,15 @@ public class Joueur extends Vaisseau implements KeyListener {
     @Override
     public void tirer() {
         //si les actions du vaisseaux ne sont pas freezées
-        if(!estActionFreeze){
-            //si le joueur peut tirer
-            if(this.canShoot){
-                AudioDirector director = AudioDirector.getInstance();
-                director.playSFX("newSounds/spaceShoot");
-                this.canShoot = false;
-                this.missile = FabriqueMissile.fabriquerUnMissile(getGame(), getMiddleX()-5, getMiddleY()-50, typeMissile, this);
-                getGame().addItem(missile);
-                itemAnime.setLifeSpend(0);
-                itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_SHOOT);
-            }
+        //si le joueur peut tirer
+        if(this.canShoot){
+            AudioDirector director = AudioDirector.getInstance();
+            director.playSFX("newSounds/spaceShoot");
+            this.canShoot = false;
+            this.missile = FabriqueMissile.fabriquerUnMissile(getGame(), getMiddleX()-5, getMiddleY()-50, typeMissile, this);
+            getGame().addItem(missile);
+            itemAnime.setLifeSpend(0);
+            itemAnime.setAnimationType(TypeAnimation.SPACESHIP3_SHOOT);
         }
     }
     
@@ -190,73 +188,6 @@ public class Joueur extends Vaisseau implements KeyListener {
     @Override
     public String getItemType() {
         return "Joueur";
-    }
-    
-    /**
-     * Evènement appelé lorsqu'une touche est pressée. Gère les mouvements 
-     * du 
-     * @param e la touche qui est pressée
-     */
-    @Override
-    public void keyPressed(KeyEvent e) {
-        try{
-            switch(e.getKeyCode()){
-                case KeyEvent.VK_LEFT:
-                    left = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    right = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
-                case KeyEvent.VK_Q:
-                    left = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
-                case KeyEvent.VK_D:
-                    right = true;
-                    setVitesse(getVitesse() + 0.005); //accélération + on appuie
-                    break;
-
-                case KeyEvent.VK_SPACE:
-                   tirer();
-                   break;
-                case KeyEvent.VK_A:
-                   this.canon.tirer();
-                   break;
-                case KeyEvent.VK_ESCAPE: // cas ECHAP
-                    onPressEscape.run();
-                    
-            }
-        }catch(Exception x){}
-    }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-    
-    @Override
-    public void keyReleased(KeyEvent e) {
-        try{
-            switch(e.getKeyCode()){
-                case KeyEvent.VK_LEFT:
-                    left = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    right = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-                case KeyEvent.VK_Q:
-                    left = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-                case KeyEvent.VK_D:
-                    right = false;
-                    setVitesse(0.25); //réinitialisation de la vitesse
-                    break;
-            }
-        }catch(Exception x){}
     }
 
     public int getScore() {
@@ -395,4 +326,50 @@ public class Joueur extends Vaisseau implements KeyListener {
         this.canon     = new Canon(getGame(), this);
         getGame().addItem(canon);
     }
+
+    @Override
+    public void onActionPressed(GameAction action) {
+        if(XtremVaders2021.kDebugGameControls == true) {
+            System.out.println("kDebugGameControls: " + this.getClass().getName() + " onActionPressed() ");
+        }
+        switch (action) {
+            case MOVE_LEFT:
+                left = true;
+                setVitesse(getVitesse() + 0.005); // accélération
+                break;
+            case MOVE_RIGHT:
+                right = true;
+                setVitesse(getVitesse() + 0.005); // accélération
+                break;
+            case FIRE:
+                tirer();
+                break;
+            case FIRE_ALT:
+                this.canon.tirer();
+                break;
+            case PAUSE:
+                onPressEscape.run();
+                break;
+        }
+    }
+
+    @Override
+    public void onActionReleased(GameAction action) {
+        if(XtremVaders2021.kDebugGameControls == true) {
+            System.out.println("kDebugGameControls: " + this.getClass().getName() + " onActionReleased() ");
+        }
+        switch (action) {
+            case MOVE_LEFT:
+                left = false;
+                setVitesse(0.25); // réinitialisation
+                break;
+            case MOVE_RIGHT:
+                right = false;
+                setVitesse(0.25); // réinitialisation
+                break;
+            default:
+                break; // Rien à faire pour FIRE, FIRE_ALT, PAUSE
+        }
+    }
+
 }

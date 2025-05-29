@@ -10,7 +10,6 @@ import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Jeu.XtremVaders2021;
-import xtremvaders.Objets.Missiles.Missile;
 
 /**
  * Vaisseau du jeu
@@ -22,9 +21,7 @@ public abstract class Vaisseau extends BoxGameItem {
 
     // Le nombre de vie que possède un vaisseau
     private int ptVie;
-    
-    private Missile missile;
-    
+        
     /**
      * Initialise la balle
      * @param aG le jeu
@@ -35,15 +32,18 @@ public abstract class Vaisseau extends BoxGameItem {
         super(aG, sprite, aX, aY);
         this.vitesse = vitesse;
     }
-
+    
+    @Override
     public void collideEffect(GameItem aO) {
         
     }
 
+    @Override
     public void evolve(long aDt) {
         if(!XtremVaders2021.getJoueur().estVivant() && false == this.getItemType().equals("Joueur")) getGame().remove(this);
     }
 
+    @Override
     public String getItemType() {
         return "Vaisseau";
     }
@@ -92,7 +92,7 @@ public abstract class Vaisseau extends BoxGameItem {
     @Deprecated
     public void deleteVaisseau(){
         //si le vaisseau n'ets pas le vaisseau du Joueur on le supprime
-        if(this.getItemType() != "Joueur"){
+        if(this.getItemType().equals("Joueur")){
             getGame().remove(this);
         }        
     } 
