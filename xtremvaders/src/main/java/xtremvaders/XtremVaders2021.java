@@ -156,7 +156,6 @@ public class XtremVaders2021 extends Game {
      * 
      */
     protected void pauseGame(){
-        System.out.println("pause game");
         if(GameConfig.kDebugPauseMode == false) {
             showPauseMenu();
         }
@@ -167,8 +166,12 @@ public class XtremVaders2021 extends Game {
      * 
      */
     private void resumeGame() {
+        pauseMenu.setVisible(false);
+        pauseMenu.setFocusable(false);
         GameRuntime.resume();
         AudioDirector.getInstance().onResumeGame();
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
 
 
@@ -233,12 +236,7 @@ public class XtremVaders2021 extends Game {
 
             // callback de resume game
             pauseMenu.setResumeGameCallback(() -> {
-                System.out.println("Reprise de la partie");
-                pauseMenu.setVisible(false);
-                pauseMenu.setFocusable(false);
                 resumeGame();
-                this.setFocusable(true);
-                this.requestFocusInWindow();
             });
 
 

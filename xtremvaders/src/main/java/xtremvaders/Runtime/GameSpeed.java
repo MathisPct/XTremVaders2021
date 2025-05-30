@@ -37,7 +37,6 @@ public class GameSpeed {
 
     // Met en pause (vitesse à 0 mais sauvegarde l'ancienne vitesse)
     protected void pause() {
-        System.out.println("PAUSED GAME");
         if (timespeed > 0) {
             lastNonZeroSpeed = timespeed;
             timespeed = 0;

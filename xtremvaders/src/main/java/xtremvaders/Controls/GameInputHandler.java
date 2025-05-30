@@ -11,6 +11,7 @@ import iut.Game;
 import iut.GameItem;
 import xtremvaders.Gameplay.Actions.GameAction;
 import xtremvaders.Runtime.GameConfig;
+import xtremvaders.Runtime.GameRuntime;
 
 
 /**
@@ -90,10 +91,12 @@ public class GameInputHandler extends GameItem implements KeyListener {
         }
         
        // Récupère l'action reliée
-        GameAction action = keyBindings.get(e.getKeyCode()); 
+        GameAction action = keyBindings.get(e.getKeyCode());
+
+        boolean addToInGameActionPool = action != null && !actionStates.get(action) && action.isInGameAction() && GameRuntime.isPaused() == false;
 
         // Si trouvée ET pas déjà active
-        if (action != null && !actionStates.get(action)) {
+        if (addToInGameActionPool) {
             
             // Marque l'action comme étant active (touche enfoncée)
             actionStates.put(action, true);
@@ -109,7 +112,7 @@ public class GameInputHandler extends GameItem implements KeyListener {
             System.out.println("kDebugGameControls: keyReleased Event KeyListener" + e.getKeyCode());
         }
         GameAction action = keyBindings.get(e.getKeyCode());
-        if (action != null) {
+        if (action != null && action.isInGameAction() && GameRuntime.isPaused() == false) {
             actionStates.put(action, false);
             notifyActionReleased(action);
         }

@@ -7,19 +7,25 @@ public class GameRuntime {
         gameSpeed = gs;
     }
 
+    public static boolean isPaused() {
+       return gameSpeed.isPaused();
+    }
+
     public static void pause() {
-        if(gameSpeed.isPaused()) {
-            System.err.println("Cannot pause game again, game already paused, watch your implementation");
+        if(gameSpeed.isPaused() == true) {
+            System.err.println("GameRuntime: Cannot pause game again, game already paused, watch your implementation");
             return;
-        } 
+        }
+        System.out.println("GameRuntime: Mise en pause de la partie");
         gameSpeed.pause();
     }
 
     public static void resume() {
-        if(gameSpeed.isPaused()) {
-            System.err.println("Cannot resume game again, game already resumed, watch your implementation");
+        if(gameSpeed.isPaused() == false) {
+            System.err.println("GameRuntime: Cannot resume game again, game already playing, watch your implementation");
             return;
         }
+        System.out.println("GameRuntime: Reprise de la partie");
         gameSpeed.resume();
     }
 
