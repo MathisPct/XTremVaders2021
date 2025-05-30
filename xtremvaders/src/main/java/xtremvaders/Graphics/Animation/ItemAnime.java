@@ -138,7 +138,7 @@ public class ItemAnime extends GameItem{
          if(lifeSpend >= animation.getLifeSpan()) {
              this.estFinie = true;
          }
-        lifeSpend += l*vitesse/10;
+        lifeSpend += l*vitesse/100;
         int nbFrame = 40;
         int frameStep = (int)lifeSpend/nbFrame;
         int mod = frameStep % getAnimation().getNombreFrame();

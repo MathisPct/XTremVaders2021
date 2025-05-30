@@ -6,10 +6,11 @@ import java.util.Random;
 import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.XtremVaders2021;
 import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Entites.VagueInvaders;
+import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Utilities.RangProba;
+import xtremvaders.XtremVaders2021;
 
 /**
  * Le bonus appartenant à un vaisseau
@@ -81,7 +82,9 @@ public abstract class Bonus extends BoxGameItem {
      */
     @Override
     public void evolve(long dt) {
-        bouger(dt);
+        long scaledDt = GameRuntime.getScaledDt(dt);
+
+        bouger(scaledDt);
         if(!XtremVaders2021.getJoueur().estVivant()){
             getGame().remove(this);
         }

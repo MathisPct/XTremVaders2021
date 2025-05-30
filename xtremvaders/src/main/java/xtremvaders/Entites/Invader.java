@@ -4,11 +4,10 @@ import java.util.Random;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.XtremVaders2021;
 import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Graphics.Animation.AnimatedSprites.EnnemiExplosion;
 import xtremvaders.Graphics.Animation.Animation;
 import xtremvaders.Graphics.Animation.ItemAnime;
-import xtremvaders.Graphics.Animation.AnimatedSprites.EnnemiExplosion;
 import xtremvaders.Objets.BonusJoueur.Bonus;
 import xtremvaders.Objets.BonusJoueur.BonusManager;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
@@ -17,6 +16,7 @@ import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Utilities.Direction;
 import xtremvaders.Utilities.InvaderBoundaryListener;
 import xtremvaders.Utilities.Utilite;
+import xtremvaders.XtremVaders2021;
 
 /**
  * Classe général des invaders
@@ -119,7 +119,7 @@ public abstract class Invader extends Vaisseau{
 
     @Override
     public String getItemType() {
-        return "Invader";
+            return "Invader";
     }
 
     public static int getNombreEnnemi() {
@@ -132,7 +132,7 @@ public abstract class Invader extends Vaisseau{
         long scaledDt = GameRuntime.getScaledDt(dt);
 
         itemAnime.loopAnimation(
-            scaledDt + Utilite.randomBetweenRange(0, 120),
+            scaledDt + Utilite.randomBetweenRange(0, 120) * scaledDt,
             Animation.getAnimationSpeed()
         );
 

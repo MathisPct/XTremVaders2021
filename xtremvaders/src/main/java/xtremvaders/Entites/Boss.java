@@ -5,13 +5,14 @@ import java.util.Random;
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Graphics.Animation.AnimatedSprites.BossExplosion;
 import xtremvaders.Graphics.Animation.Animation;
 import xtremvaders.Graphics.Animation.ItemAnime;
 import xtremvaders.Graphics.Animation.TypeAnimation;
-import xtremvaders.Graphics.Animation.AnimatedSprites.BossExplosion;
 import xtremvaders.Objets.Missiles.FabriqueMissile;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Objets.Missiles.TypeMissile;
+import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Utilities.Direction;
 import xtremvaders.Utilities.Utilite;
 
@@ -96,10 +97,11 @@ public class Boss extends Vaisseau{
      */
     @Override
     public void evolve(long dt) {
+        long scaledDt = GameRuntime.getScaledDt(dt);
         super.evolve(dt);
-        itemAnime.loopAnimation(dt+Utilite.randomBetweenRange(0, 120),  Animation.getAnimationSpeed());
-        bougerBoss(dt);
-        tempsAvantTirer -= dt;
+        itemAnime.loopAnimation(scaledDt+Utilite.randomBetweenRange(0, 120) * scaledDt,  Animation.getAnimationSpeed());
+        bougerBoss(scaledDt);
+        tempsAvantTirer -= scaledDt;
         if(tempsAvantTirer <= 0){
             tirer();
             Random r = new Random();

@@ -57,7 +57,7 @@ public class Background extends GameItem{
         int frequence = calculerFrequence();
 
         scheduler.schedule(() -> {
-            System.out.println("Fonction exécutée à " + java.time.LocalTime.now());
+            System.out.println("asteroidSpawingRoutine() à " + java.time.LocalTime.now());
 
             spawnAsteroid();
 
