@@ -31,11 +31,12 @@ public class StylizedLogger {
         printBoxed(new String[]{
             "CONFIGURATION",
             "Version: " + GameConfig.kBuildVersion,
-            "DebugPause: " + GameConfig.kDebugPauseMode,
-            "AutoLaunch: " + GameConfig.kAutoLaunchGame,
-            "LargeMode: " + GameConfig.kLargeMode,
-            "HitboxDisplay: " + GameConfig.kHitBoxDisplay,
-            "GameCursor: " + GameConfig.kGameCursor,
+            "kDebugPauseMode: " + GameConfig.kDebugPauseMode,
+            "kAutoLaunchGame: " + GameConfig.kAutoLaunchGame,
+            "kDebugGameControls: " + GameConfig.kDebugGameControls,
+            "kLargeMode: " + GameConfig.kLargeMode,
+            "kHitBoxDisplay: " + GameConfig.kHitBoxDisplay,
+            "kGameCursor: " + GameConfig.kGameCursor,
             "DisableMusic: " + GameConfig.kDisableMusic,
             "DisableSfx: " + GameConfig.kDisableSfx
         }, CYAN, YELLOW);

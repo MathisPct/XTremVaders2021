@@ -4,7 +4,7 @@ public class GameConfig {
     public static String kBuildVersion = "2.0.0";
     public static boolean kDebugPauseMode = false;
     public static boolean kDebugGameControls = false;
-    public static boolean kAutoLaunchGame = true;
+    public static boolean kAutoLaunchGame = false;
     public static boolean kLargeMode = false;
     public static boolean kHitBoxDisplay = false;
     public static boolean kGameCursor = true;

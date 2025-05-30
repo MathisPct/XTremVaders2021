@@ -27,6 +27,7 @@ import xtremvaders.Jeu.Partie;
 import xtremvaders.Menus.MainMenuPanel;
 import xtremvaders.Menus.PausePanel;
 import xtremvaders.Output.StylizedLogger;
+import xtremvaders.Runtime.ConfigManager;
 import xtremvaders.Runtime.GameConfig;
 import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Runtime.GameSpeed;
@@ -60,6 +61,9 @@ public class XtremVaders2021 extends Game {
      * Fonction principale du jeu
      */
     public static void main(String[] aArgs) {
+
+        ConfigManager propertiesManager = new ConfigManager("config/properties");
+        propertiesManager.load();
 
         int width = 1024;
         int height = 800;
