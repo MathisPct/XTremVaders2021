@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Output.StylizedLogger;
 import xtremvaders.Runtime.GameRuntime;

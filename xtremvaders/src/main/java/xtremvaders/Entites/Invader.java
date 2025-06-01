@@ -4,7 +4,7 @@ import java.util.Random;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Graphics.Animation.AnimatedSprites.EnnemiExplosion;
 import xtremvaders.Graphics.Animation.Animation;
 import xtremvaders.Graphics.Animation.ItemAnime;

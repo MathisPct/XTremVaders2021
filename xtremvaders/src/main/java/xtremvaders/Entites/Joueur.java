@@ -2,8 +2,8 @@ package xtremvaders.Entites;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Controls.GameActionListener;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Gameplay.Actions.GameAction;
 import xtremvaders.Graphics.Animation.Animation;
 import xtremvaders.Graphics.Animation.ItemAnime;
