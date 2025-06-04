@@ -18,7 +18,10 @@ import xtremvaders.Controls.CursorItem;
 import xtremvaders.Controls.GameInputHandler;
 import xtremvaders.Controls.MouseClickManager;
 import xtremvaders.Controls.MouseMotionManager;
+import xtremvaders.Directors.AIDirector;
 import xtremvaders.Directors.AudioDirector;
+import xtremvaders.Directors.EmotionnalState;
+import xtremvaders.Directors.GameState;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Gameplay.Balance.BalanceConfig;
@@ -37,6 +40,13 @@ import xtremvaders.Runtime.GameSpeed;
  * @author aguidet
  */
 public class XtremVaders2021 extends Game {
+
+    private AIDirector director;
+
+    private GameState gameState;
+
+    private  EmotionnalState emotionnalState;
+
     //Gameplay related
     GameSpeed gameSpeed;
     
@@ -90,6 +100,10 @@ public class XtremVaders2021 extends Game {
         super(width, height, "XtremeVaders");
         StylizedLogger.printGameLaunch(GameConfig.kBuildVersion, "buildChanges: ");
         StylizedLogger.printPropertiesConfig();
+
+        EmotionnalState emotionnalState = new EmotionnalState(1);
+
+        director = new AIDirector(gameState, null, null);
 
         //Debug hitboxes
         GameItem.DRAW_HITBOX=GameConfig.kHitBoxDisplay;
