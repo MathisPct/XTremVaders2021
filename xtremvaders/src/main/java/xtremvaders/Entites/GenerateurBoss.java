@@ -1,45 +1,31 @@
 package xtremvaders.Entites;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Directors.AudioDirector;
+import xtremvaders.Graphics.Animation.AnimatedSprites.BossExplosion;
 
 /**
  * Le générateur de boss ne s'affiche pas. Il sert à créer un boss suivant 
  * le nombre de vague qui se sont déroulées
  * @author Mathis Poncet
  */
-public class GenerateurBoss extends GameItem{
-    
-    /**
-     * Utile pour générer une seul fois le boss
-     * dans les vagues divisibles par 4 
-     */
-    private boolean peutGenererBoss;
-    
-    /**
-     * Utile pour générer une seul fois le boss
-     * dans les vagues divisibles par 4 
-     */
-    private int ancienneVague;
-    
-    // frequence apparition boss
-    private int frequence;
-    
-    private Boss boss;   
+public class GenerateurBoss extends GameItem {
+
+    private List<Boss> bosses;   
     
     public GenerateurBoss(Game game) {
         super(game, "", -1, -1);
-        this.ancienneVague = 1;
-        this.peutGenererBoss = false;
-        this.frequence = 4;
+        this.bosses = new ArrayList<>();
     }
 
     @Override
     public void draw(Graphics grphcs) throws Exception {
-
+        // Ne rien dessiner, c'est un objet logique
     }
 
     @Override
@@ -49,6 +35,7 @@ public class GenerateurBoss extends GameItem{
 
     @Override
     public void collideEffect(GameItem gi) {
+        // Aucun effet de collision
     }
 
     @Override
@@ -57,27 +44,45 @@ public class GenerateurBoss extends GameItem{
     }
 
     @Override
-    public void evolve(long dt) {      
-        //CONDITION QUI PERMET DE RESET LE PEUTGENERERBOSS A TRUE
-        //AFIN DE GENERER UNE SEULE FOIS UN BOSS
-        if(ancienneVague != VagueInvaders.getNbVagues() ){
-            peutGenererBoss = true;
-            ancienneVague = VagueInvaders.getNbVagues();
-        }
-        
-        //SI LE NOMBRE DE VAGUE EST UNE VAGUE QUI GENERE UN BOSS (TOUT LES 4 vagues)
-        if(peutGenererBoss && VagueInvaders.getNbVagues()%frequence == 0){        
-            genererBoss();
-            peutGenererBoss = false;
-        }
+    public void evolve(long dt) {
+        // Peut-être gérer ici le timing de spawn
     }
     
-    /**
-     * Méthode qui génère le boss et l'ajoute au jeu
-     */
-    private void genererBoss(){
+    public void spawnBoss() {
         AudioDirector.getInstance().playSFX("newSounds/bossSpawn");
-        this.boss = new Boss(getGame(), getGame().getWidth()/2, 5, 0.15, 60);
-        getGame().addItem(boss);
+        Boss newBoss = new Boss(
+            getGame(), 
+            getGame().getWidth()/2,
+            5, 
+            0.15,
+            60
+        );
+        newBoss.setOnGotKilled(() -> {
+            removeBoss(newBoss);
+        });
+        bosses.add(newBoss); //TODO implement removal corrctely
+        getGame().addItem(newBoss);
     }
+
+    public List<Boss> getBosses() {
+        return bosses;
+    }
+
+    public void removeBoss(Boss boss) {
+        System.out.println("Removing boss from generator");
+        BossExplosion explosion = new BossExplosion(getGame(), this.getMiddleX(), this.getMiddleY());
+        AudioDirector.getInstance().playSFX("newSounds/bossDeath");
+        getGame().addItem(explosion);
+        boss.tirerMissileMortel();
+        getGame().remove(this);
+              
+        bosses.remove(boss);
+        getGame().remove(boss);
+    }
+
+    public boolean getIsBossActive() {
+        return bosses.isEmpty() == false;
+    }
+
+
 }

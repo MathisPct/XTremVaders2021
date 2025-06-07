@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Objets.BonusJoueur.TypeBonus;
 import xtremvaders.Output.StylizedLogger;
 import xtremvaders.Runtime.GameRuntime;
@@ -72,6 +72,10 @@ public class VagueInvaders extends GameItem implements InvaderBoundaryListener {
         nbVagues = 0;
     }
 
+    public int getEnemiesOnScreen() {
+        return invaders.size();
+    }
+
     @Override
     public boolean isCollide(GameItem gi) {
         return false;
@@ -94,13 +98,7 @@ public class VagueInvaders extends GameItem implements InvaderBoundaryListener {
     
     @Override
     public void evolve(long dt) {
-        long scaledDt = GameRuntime.getScaledDt(dt);
-
-        //génération de la vague s'il n'y a pas d'invaders sur la carte
-        if(invaders.isEmpty()){
-            this.genererVague();
-        }
-        bouger(scaledDt * Invader.getVitesseInvaders());
+        bouger(GameRuntime.getScaledDt(dt) * Invader.getVitesseInvaders());
     }
     
     /**
@@ -109,7 +107,8 @@ public class VagueInvaders extends GameItem implements InvaderBoundaryListener {
      * incrémenté. Les invaders générés sont ajoutés à la liste des invaders de
      * la vague
      */
-    public void genererVague(){
+    public void spawnWave(){
+        //if(invaders.isEmpty() == false) return;
         nbVagues++;
         StylizedLogger.printWaveAnnouncement(nbVagues);
         AudioDirector.getInstance().playSFX("newSounds/newWave");

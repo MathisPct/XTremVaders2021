@@ -6,7 +6,7 @@ import java.util.Random;
 import iut.BoxGameItem;
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Utilities.RangProba;

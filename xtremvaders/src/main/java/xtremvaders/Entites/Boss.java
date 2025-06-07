@@ -4,8 +4,6 @@ import java.util.Random;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Audio.AudioDirector;
-import xtremvaders.Graphics.Animation.AnimatedSprites.BossExplosion;
 import xtremvaders.Graphics.Animation.Animation;
 import xtremvaders.Graphics.Animation.ItemAnime;
 import xtremvaders.Graphics.Animation.TypeAnimation;
@@ -41,6 +39,8 @@ public class Boss extends Vaisseau{
      * Utile pour générer le nombre de missile à la mort de boss
      */
     private static int agressivite = 10;
+
+    private Runnable onGotKilled;
     
     
     /**
@@ -60,6 +60,10 @@ public class Boss extends Vaisseau{
         //agressivite = 
     }
 
+    public void setOnGotKilled(Runnable runnable) {
+        onGotKilled = runnable;
+    }
+
     @Override
     public void tirer() {
         Missile m = FabriqueMissile.fabriquerUnMissile(getGame(), getMiddleX()-30, getMiddleY()-20, TypeMissile.MISSILE_BOSS, this);
@@ -76,6 +80,9 @@ public class Boss extends Vaisseau{
         if(g.getItemType().equals("MissileJoueur")){
             Missile m = (Missile) g;
             this.setPtVie(getPtVie() - m.getDegat(this));
+            if(this.estVivant() == false) {
+                onGotKilled.run();
+            }
         }
     }
 
@@ -108,13 +115,7 @@ public class Boss extends Vaisseau{
             tempsAvantTirer= r.nextInt(5000) + 5000; //entre 5s et 10s
         }
         //si le boss n'est plus vivant
-        if(!estVivant()) {
-            BossExplosion explosion = new BossExplosion(getGame(), this.getMiddleX(), this.getMiddleY());
-            AudioDirector.getInstance().playSFX("newSounds/bossDeath");
-            getGame().addItem(explosion);
-            tirerMissileMortel();
-            getGame().remove(this);
-        }       
+
     } 
     
     /**

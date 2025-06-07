@@ -1,11 +1,11 @@
 package xtremvaders.Objets.Missiles.Joueur;
 
 
+import iut.Game;
+import iut.GameItem;
 import xtremvaders.Entites.Vaisseau;
 import xtremvaders.Graphics.Animation.AnimatedSprites.ImpactMissile;
 import xtremvaders.Objets.Missiles.TypeMissile;
-import iut.Game;
-import iut.GameItem;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

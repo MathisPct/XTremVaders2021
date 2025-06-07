@@ -19,9 +19,9 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Audio.Tracks.AudioTrack;
 import xtremvaders.Audio.Tracks.TrackID;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Gameplay.Balance.BalanceConfigFactory;
 import xtremvaders.Gameplay.Balance.BalanceConfigFactory.DifficultyLevel;
 

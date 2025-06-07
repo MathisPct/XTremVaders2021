@@ -2,11 +2,12 @@ package xtremvaders.Jeu;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.Entites.GenerateurBoss;
+import xtremvaders.Directors.AIDirector;
+import xtremvaders.Directors.DirectorCommands;
+import xtremvaders.Directors.EmotionnalState;
+import xtremvaders.Directors.GameState;
 import xtremvaders.Entites.Joueur;
-import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Gameplay.Balance.BalanceConfig;
-import xtremvaders.Graphics.Background;
 import xtremvaders.Graphics.HUD.InGameGUI;
 
 /**
@@ -16,23 +17,10 @@ import xtremvaders.Graphics.HUD.InGameGUI;
  */
 public class Partie extends GameItem {
 
-    /**
-     * Fond étoilé du jeu
-     * Ce fond génére aussi les débris
-     */
-    private Background background;
-    
-    /**
-     * Attibut permettant de générer les vagues d'invaders
-     */
-    private VagueInvaders vagueInvaders;   
-    
-    /**
-     * Attribut permettant de générer le boss
-     */
-    private GenerateurBoss generateurBoss;
-
-
+    private final AIDirector director;
+    private final DirectorCommands directorCommands;
+    private final GameState gameState;
+    private final EmotionnalState emotionnalState;
     private final InGameGUI gameGUI;
 
     public Partie(
@@ -41,7 +29,13 @@ public class Partie extends GameItem {
         ) {
         super(g, "transparent", 0, 0);
         this.gameGUI = new InGameGUI(g);
+        emotionnalState = new EmotionnalState(1);
+        gameState = new GameState();
+        directorCommands = new DirectorCommands(g);
+        director = new AIDirector(gameState, emotionnalState, directorCommands);
     }
+
+
 
     @Override
     public boolean isCollide(GameItem gi) {
@@ -59,7 +53,7 @@ public class Partie extends GameItem {
 
     @Override
     public void evolve(long l) {       
-        
+        director.update(l);
     }
     
     /**
@@ -67,22 +61,7 @@ public class Partie extends GameItem {
     * (sauf le joueur déja créé dans la classe du jeu)
     */
     public void startNewGame(BalanceConfig config){
-        //ITEM DE JEU
-        if(vagueInvaders != null){
-            getGame().remove(vagueInvaders);
-        }
-        if(generateurBoss != null){
-            getGame().remove(generateurBoss);
-        }
-        if(background != null){
-            getGame().remove(background);
-        }
         gameGUI.onGameStarted();
-        this.background = new Background(getGame());
-        this.vagueInvaders = new VagueInvaders(getGame(), 5, 3);
-        this.generateurBoss = new GenerateurBoss(getGame());
-        getGame().addItem(background);
-        getGame().addItem(vagueInvaders);
-        getGame().addItem(generateurBoss);
+        directorCommands.onGameStarted();
     }
 }

@@ -14,11 +14,11 @@ import javax.swing.SwingUtilities;
 import iut.Game;
 import iut.GameItem;
 import iut.Vector;
-import xtremvaders.Audio.AudioDirector;
 import xtremvaders.Controls.CursorItem;
 import xtremvaders.Controls.GameInputHandler;
 import xtremvaders.Controls.MouseClickManager;
 import xtremvaders.Controls.MouseMotionManager;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Gameplay.Balance.BalanceConfig;
@@ -37,12 +37,15 @@ import xtremvaders.Runtime.GameSpeed;
  * @author aguidet
  */
 public class XtremVaders2021 extends Game {
+
+
+
     //Gameplay related
     GameSpeed gameSpeed;
     
     private static Joueur joueur;
     private Partie partie;
-    private BalanceConfig difficulty;
+    private final BalanceConfig difficulty;
    
     //Event related
     MouseMotionManager motionManager;
@@ -133,11 +136,8 @@ public class XtremVaders2021 extends Game {
         }
         hideCursor();
 
-        // Give onPressEscape callback to player, 
-        // -> he can pause menu
-        // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
-        // ca ne dvrait pas etre le joueur qui porte de Keyboard listener, 
-        // mais plutot un GameMediator ou autre router d'action
+
+        // Give onPressEscape callback to player,
         joueur.setOnPressEscape(() -> pauseGame());
         joueur.setPtVie(3);
 

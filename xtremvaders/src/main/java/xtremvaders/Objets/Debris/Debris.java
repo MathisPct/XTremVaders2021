@@ -2,13 +2,13 @@ package xtremvaders.Objets.Debris;
 
 import iut.Game;
 import iut.GameItem;
-import xtremvaders.XtremVaders2021;
-import xtremvaders.Audio.AudioDirector;
+import xtremvaders.Directors.AudioDirector;
 import xtremvaders.Graphics.Animation.ItemAnime;
 import xtremvaders.Objets.BonusJoueur.immediate.BonusShield;
 import xtremvaders.Objets.Missiles.Missile;
 import xtremvaders.Runtime.GameRuntime;
 import xtremvaders.Utilities.Utilite;
+import xtremvaders.XtremVaders2021;
 
 
 /**
