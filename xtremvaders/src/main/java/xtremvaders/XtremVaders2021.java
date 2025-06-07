@@ -18,10 +18,7 @@ import xtremvaders.Controls.CursorItem;
 import xtremvaders.Controls.GameInputHandler;
 import xtremvaders.Controls.MouseClickManager;
 import xtremvaders.Controls.MouseMotionManager;
-import xtremvaders.Directors.AIDirector;
 import xtremvaders.Directors.AudioDirector;
-import xtremvaders.Directors.EmotionnalState;
-import xtremvaders.Directors.GameState;
 import xtremvaders.Entites.Joueur;
 import xtremvaders.Entites.VagueInvaders;
 import xtremvaders.Gameplay.Balance.BalanceConfig;
@@ -41,18 +38,14 @@ import xtremvaders.Runtime.GameSpeed;
  */
 public class XtremVaders2021 extends Game {
 
-    private AIDirector director;
 
-    private GameState gameState;
-
-    private  EmotionnalState emotionnalState;
 
     //Gameplay related
     GameSpeed gameSpeed;
     
     private static Joueur joueur;
     private Partie partie;
-    private BalanceConfig difficulty;
+    private final BalanceConfig difficulty;
    
     //Event related
     MouseMotionManager motionManager;
@@ -101,10 +94,6 @@ public class XtremVaders2021 extends Game {
         StylizedLogger.printGameLaunch(GameConfig.kBuildVersion, "buildChanges: ");
         StylizedLogger.printPropertiesConfig();
 
-        EmotionnalState emotionnalState = new EmotionnalState(1);
-
-        director = new AIDirector(gameState, null, null);
-
         //Debug hitboxes
         GameItem.DRAW_HITBOX=GameConfig.kHitBoxDisplay;
          //Keyboard mapping atm
@@ -147,11 +136,8 @@ public class XtremVaders2021 extends Game {
         }
         hideCursor();
 
-        // Give onPressEscape callback to player, 
-        // -> he can pause menu
-        // TODO on devrait lui passer des controls ou un ensemble d'action  implementer
-        // ca ne dvrait pas etre le joueur qui porte de Keyboard listener, 
-        // mais plutot un GameMediator ou autre router d'action
+
+        // Give onPressEscape callback to player,
         joueur.setOnPressEscape(() -> pauseGame());
         joueur.setPtVie(3);
 
