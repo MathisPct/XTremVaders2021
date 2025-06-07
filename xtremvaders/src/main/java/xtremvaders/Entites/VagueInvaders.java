@@ -72,6 +72,10 @@ public class VagueInvaders extends GameItem implements InvaderBoundaryListener {
         nbVagues = 0;
     }
 
+    public int getEnemiesOnScreen() {
+        return invaders.size();
+    }
+
     @Override
     public boolean isCollide(GameItem gi) {
         return false;

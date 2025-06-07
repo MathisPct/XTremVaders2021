@@ -16,18 +16,15 @@ public class AIDirector {
         this.gameState = gameState;
         this.emotionalState = emotionalState;
         this.directorCommands = directorCommands;
-        gameState.timeSinceLastWave = 8000;
     }
 
     public void update(long dt) {
-        System.out.println("AI Director update()" + java.time.LocalTime.now());
         long scaledDt = GameRuntime.getScaledDt(dt);
-
-        
         gameState.timeSinceLastWave =  gameState.timeSinceLastWave + scaledDt;
         gameState.timeSinceLastBoss =  gameState.timeSinceLastBoss + scaledDt;
         gameState.totalElapsedTime =  gameState.totalElapsedTime + dt;
         gameState.bossActive = directorCommands.getIsBossActive();
+        gameState.enemiesOnScreen = directorCommands.getEnemiesOnScreen();
 
         // Calcul du stress (pression)
         /*
@@ -38,13 +35,13 @@ public class AIDirector {
         */
 
         // Si le stress est bas, on peut remettre une vague
-        if (gameState.timeSinceLastWave > 10000) {
+        if (gameState.timeSinceLastWave > 20 * 1000 || gameState.enemiesOnScreen == 0) {
             directorCommands.spawnWave();
             gameState.timeSinceLastWave = 0;
         }
 
         // Boss logique
-        if (gameState.timeSinceLastBoss > 20000) {
+        if (gameState.timeSinceLastBoss > 45 * 1000 &&  gameState.bossActive == false) {
             directorCommands.spawnBoss();
             gameState.timeSinceLastBoss = 0;
         }

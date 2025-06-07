@@ -1,13 +1,13 @@
 package xtremvaders.Objets.Missiles;
 
-import xtremvaders.Objets.Missiles.Joueur.MissileNuke;
-import xtremvaders.Objets.Missiles.Joueur.MissileCanon;
-import xtremvaders.Objets.Missiles.Joueur.MissileRapide;
-import xtremvaders.Objets.Missiles.Joueur.MissileNormal;
-import xtremvaders.Objets.Missiles.Ennemis.MissileInvader;
-import xtremvaders.Objets.Missiles.Ennemis.MissileBoss;
-import xtremvaders.Entites.Vaisseau;
 import iut.Game;
+import xtremvaders.Entites.Vaisseau;
+import xtremvaders.Objets.Missiles.Ennemis.MissileBoss;
+import xtremvaders.Objets.Missiles.Ennemis.MissileInvader;
+import xtremvaders.Objets.Missiles.Joueur.MissileCanon;
+import xtremvaders.Objets.Missiles.Joueur.MissileNormal;
+import xtremvaders.Objets.Missiles.Joueur.MissileNuke;
+import xtremvaders.Objets.Missiles.Joueur.MissileRapide;
 import xtremvaders.Utilities.Utilite;
 
 /**
@@ -20,6 +20,7 @@ public class FabriqueMissile {
         switch(typeMissile){
             case NORMAL:
                 missile = new MissileNormal(g, x, y, v);
+                missile.setVitesse(0.6);
                 break;
             case INVADERDEFAUT:
                 missile = new MissileInvader(g, x, y, v);
@@ -28,7 +29,7 @@ public class FabriqueMissile {
                 break;
             case RAPIDE:
                 missile = new MissileRapide(g, x, y, v);
-                missile.setVitesse(0.5);
+                missile.setVitesse(1);
                 break;
             case NUKE:
                 missile = new MissileNuke(g, x, y, v);

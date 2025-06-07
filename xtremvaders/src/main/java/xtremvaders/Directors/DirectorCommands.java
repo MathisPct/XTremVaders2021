@@ -49,7 +49,8 @@ public class DirectorCommands implements  IDirectorCommands {
         game.addItem(background);
         game.addItem(vagueInvaders);
         game.addItem(generateurBoss);
-        
+
+        this.spawnWave();
     }
 
 
@@ -66,6 +67,11 @@ public class DirectorCommands implements  IDirectorCommands {
     @Override
     public boolean getIsBossActive() {
         return generateurBoss.getIsBossActive();
+    }
+
+    @Override
+    public int getEnemiesOnScreen() {
+       return vagueInvaders.getEnemiesOnScreen();
     }
 
 }
