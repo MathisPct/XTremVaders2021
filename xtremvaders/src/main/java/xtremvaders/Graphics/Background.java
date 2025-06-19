@@ -1,10 +1,6 @@
 package xtremvaders.Graphics;
 
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import iut.Game;
 import iut.GameItem;
 import xtremvaders.Objets.Debris.Debris;
@@ -23,20 +19,21 @@ import xtremvaders.XtremVaders2021;
  *
  * @author lr468444
  */
-public class Background extends GameItem{
+public class Background extends GameItem {
     private long lifeSpend;
     private long vitesseCiel;
     private int frequenceAsteroid;
-      private  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private long timeSinceLastAsteroid; // en ms
+    private int frequenceCourante; // en secondes
 
-    
     public Background(Game g) {
         super(g, "background/background_1", 0, 0);
         this.lifeSpend = 0;
         this.vitesseCiel = 15;
         this.frequenceAsteroid = 6;
+        this.timeSinceLastAsteroid = 0;
+        this.frequenceCourante = calculerFrequence();
         moveXY(0, -getGame().getHeight());
-        asteroidSpawingRoutine();
     }
 
     @Override
@@ -45,33 +42,18 @@ public class Background extends GameItem{
     }
 
     @Override
-    public void collideEffect(GameItem gi) {
-    }
+    public void collideEffect(GameItem gi) {}
 
     @Override
     public String getItemType() {
         return "background";
     }
 
-    private void asteroidSpawingRoutine() {
-        int frequence = calculerFrequence();
-
-        scheduler.schedule(() -> {
-            System.out.println("asteroidSpawingRoutine() à " + java.time.LocalTime.now());
-
-            spawnAsteroid();
-
-            // Relancer avec la fréquence ajustée
-            asteroidSpawingRoutine();
-        }, frequence, TimeUnit.SECONDS);
-    }
-
     private int calculerFrequence() {
         int vie = XtremVaders2021.getJoueur().getPtVie();
-
         if (vie <= 30) return 8;
         else if (vie <= 60) return 5;
-        else return 3; // plus rapide si plus de vie, par exemple
+        else return 3;
     }
 
     private void spawnAsteroid() {
@@ -79,13 +61,23 @@ public class Background extends GameItem{
         getGame().addItem(debris);
     }
 
-
     @Override
     public void evolve(long dt) {
         long scaledDt = GameRuntime.getScaledDt(dt);
-        this.moveXY(0, scaledDt*vitesseCiel/100);
-        if(this.getTop()>0){
-            moveXY(0, -this.getHeight()/2);
+
+        // Déplacement du fond
+        this.moveXY(0, scaledDt * vitesseCiel / 100);
+        if (this.getTop() > 0) {
+            moveXY(0, -this.getHeight() / 2);
+        }
+
+        // Gestion du spawn d'astéroïdes
+        timeSinceLastAsteroid += scaledDt;
+        long frequenceMs = frequenceCourante * 1000L;
+        if (timeSinceLastAsteroid >= frequenceMs) {
+            spawnAsteroid();
+            timeSinceLastAsteroid = 0;
+            frequenceCourante = calculerFrequence(); // recalcule dynamique
         }
     }
 }
